@@ -24,6 +24,12 @@
     pkgs.neovim
   ];
 
+  home.file.".vimrc".source = ./vimrc;
+  home.file.".vim-spell" = {
+    source = ./vim-spell;
+    recursive = true;
+  };
+
   # TODO
   # - Alacritty
 
