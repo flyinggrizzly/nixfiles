@@ -22,7 +22,11 @@
   home.packages = [
     pkgs.tmux
     pkgs.neovim
+    pkgs.git
   ];
+
+  # Git config
+  home.file.".gitconfig".source = ./gitconfig;
 
   # VIM config
   home.file.".vim" = {
@@ -39,48 +43,4 @@
 
   # TODO
   # - Alacritty
-
-  programs.git = {
-    enable = true;
-
-    userName = "Sean DMR";
-    userEmail = "sean@flyinggrizzly.net";
-
-    aliases = {
-      l        = "log --pretty=colored";
-      st       = "status";
-      d        = "diff";
-      dd       = "difftool";
-      hist     = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit";
-      branches = "for-each-ref --sort=-committerdate --format=\"%(color:blue)%(authordate:relative)\t%(color:red)%(authorname)\t%(color:white)%(color:bold)%(refname:short)\" refs/remotes";
-      ci       = "commit -v";
-      co       = "checkout";
-      cp       = "cherry-pick";
-      po       = "!git push -u origin \"$(git rev-parse --abbrev-ref HEAD)\"";
-      ctags    = "!.git/hooks/ctags";
-      cane     = "commit --amend --no-edit";
-    };
-
-    extraConfig = {
-      core = {
-        editor = "$(which nvim)";
-      };
-
-      commit = {
-        verbose = true;
-      };
-
-      diff = {
-        tool = "$(which vimdiff)";
-      };
-
-      difftool = {
-        prompt = false;
-      };
-
-      pretty = {
-        colored = "format:%Cred%h%Creset %s %Cgreen(%cr) %C(bold blue)%an%Creset";
-      };
-    };
-  };
 }
