@@ -26,6 +26,7 @@
     pkgs.neovim
 
     pkgs.git
+    pkgs.gh
 
     pkgs.tree
   ];
