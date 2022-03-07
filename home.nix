@@ -29,6 +29,7 @@
     source = ./vim;
     recursive = true;
   };
+  home.file.".config/nvim/init.vim".source = ./nvim/init.vim;
   home.file.".vimrc".source = ./vimrc;
   home.file.".vimrc.bundles".source = ./vimrc.bundles;
   home.file.".vim-spell" = {
@@ -38,10 +39,6 @@
 
   # TODO
   # - Alacritty
-
-  programs.neovim = {
-    coc.enable = true;
-  };
 
   programs.git = {
     enable = true;
