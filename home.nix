@@ -25,6 +25,7 @@
   ];
 
   home.file.".vimrc".source = ./vimrc;
+  home.file.".vimrc.bundles".source = ./vimrc.bundles;
   home.file.".vim-spell" = {
     source = ./vim-spell;
     recursive = true;

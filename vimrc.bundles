@@ -1,0 +1,130 @@
+if &compatible
+  set nocompatible
+end
+
+let g:has_async = v:version >= 800 || has('nvim')
+
+call plug#begin('~/.vim/bundle')
+
+" Define bundles via Github repos
+Plug 'christoomey/vim-run-interactive'
+
+" If fzf has already been installed via Homebrew, use the existing fzf
+" Otherwise, install fzf. The `--all` flag makes fzf accessible outside of vim
+if isdirectory("/usr/local/opt/fzf")
+  Plug '/usr/local/opt/fzf'
+else
+  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+endif
+
+Plug 'junegunn/fzf.vim'
+Plug 'elixir-lang/vim-elixir'
+Plug 'fatih/vim-go'
+Plug 'janko-m/vim-test'
+Plug 'pangloss/vim-javascript'
+Plug 'pbrisbin/vim-mkdir'
+Plug 'slim-template/vim-slim'
+Plug 'tpope/vim-bundler'
+Plug 'tpope/vim-endwise'
+Plug 'tpope/vim-eunuch'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-projectionist'
+Plug 'tpope/vim-rails'
+Plug 'tpope/vim-rake'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-rhubarb'
+Plug 'tpope/vim-surround'
+Plug 'vim-ruby/vim-ruby'
+Plug 'vim-scripts/tComment'
+
+
+" BEGIN PERSONAL
+
+Plug 'ngmy/vim-rubocop'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+Plug 'davidoc/taskpaper.vim'
+Plug 'godlygeek/tabular'
+Plug 'elzr/vim-json'
+Plug 'plasticboy/vim-markdown'
+
+" Javascript, React and JSX
+Plug 'jxnblk/vim-mdx-js'
+Plug 'mattn/emmet-vim'
+Plug 'leafgarland/typescript-vim'
+Plug 'peitalin/vim-jsx-typescript'
+
+Plug 'rking/ag.vim'
+Plug 'Chun-Yang/vim-action-ag'
+
+" File navigation and git
+Plug 'scrooloose/nerdtree'
+Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'dhruvasagar/vim-zoom'
+
+" Indent guides
+Plug 'nathanaelkane/vim-indent-guides'
+
+" File formatting
+Plug 'junegunn/vim-easy-align'
+Plug 'tpope/vim-sleuth'
+
+" Following taken from styrmis/dotfiles {
+Plug 'jgdavey/tslime.vim'
+Plug 'janko-m/vim-test'
+
+" Common UNIX commands, like :Mkdir
+Plug 'tpope/vim-eunuch'
+
+" Git Undo
+Plug 'sjl/gundo.vim'
+
+Plug 'tpope/vim-bundler'
+Plug 'tpope/vim-rake'
+Plug 'tpope/vim-rails'
+Plug 'tpope/vim-haml'
+Plug 'rust-lang/rust.vim'
+Plug 'cespare/vim-toml'
+
+Plug 'tpope/vim-dispatch'
+
+Plug 'ecomba/vim-ruby-refactoring'
+
+Plug 'jiangmiao/auto-pairs' " Auto-complete closing brackets
+
+Plug 'airblade/vim-gitgutter'
+
+Plug 'junegunn/vim-easy-align'
+
+Plug 'styrmis/molokai'
+
+Plug 'wellle/tmux-complete.vim'
+Plug 'christoomey/vim-tmux-navigator'
+"Plug 'benmills/vimux'
+
+Plug 'scrooloose/nerdcommenter'
+Plug 'ervandew/supertab'
+Plug 'easymotion/vim-easymotion'
+Plug 'bronson/vim-trailing-whitespace'
+
+Plug 'haya14busa/incsearch.vim'
+Plug 'styrmis/greplace', { 'branch':'allow-blank-filename-list' }
+
+Plug 'machakann/vim-highlightedyank'
+
+Plug 'mileszs/ack.vim'
+
+Plug 'vim-scripts/indentpython.vim'
+Plug 'nvie/vim-flake8'
+
+" Vim text objects for Ruby blocks
+Plug 'kana/vim-textobj-user'
+Plug 'nelstrom/vim-textobj-rubyblock'
+
+Plug 'wikitopian/hardmode'
+
+Plug 't9md/vim-ruby-xmpfilter'
+
+Plug 'craigemery/vim-autotag'
+
+call plug#end()
