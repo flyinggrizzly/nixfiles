@@ -55,6 +55,7 @@
     recursive = true;
   };
   home.file.".gitmessage".source = ./gitmessage;
+  home.file.".Brewfile".source = ./Brewfile;
 
   # ZSH
   home.file.".zshrc".source = ./zshrc;
