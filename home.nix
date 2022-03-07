@@ -37,6 +37,7 @@
     source = ./bin;
     recursive = true;
   };
+  home.file.".gitmessage".source = ./gitmessage;
 
   # ZSH
   home.file.".zshrc".source = ./zshrc;
