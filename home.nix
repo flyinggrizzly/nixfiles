@@ -58,6 +58,12 @@
   home.file.".gitmessage".source = ./gitmessage;
   home.file.".Brewfile".source = ./Brewfile;
 
+  # Karabiner config (OSX only)
+  home.file.".config/karabiner" = {
+    source = ./karabiner;
+    recursive = true;
+  };
+
   # ZSH
   home.file.".zshrc".source = ./zshrc;
   home.file.".zsh" = {
