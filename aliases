@@ -28,8 +28,8 @@ alias ga="git add"
 alias gb="git branch -vv --sort=committerdate"
 alias gd="git diff"
 alias gco="git checkout"
-alias grm="git rebase main"
-alias grim="git rebase -i main"
+alias grm="git rebase $(git-main-branch)"
+alias grim="git rebase -i $(git-main-branch)"
 
 alias gcp="git cherry-pick"
 
