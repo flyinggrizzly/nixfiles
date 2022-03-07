@@ -1,0 +1,28 @@
+alias ls='ls -l'
+
+# Git
+
+# http://codeinthehole.com/writing/tips-for-using-a-git-pre-commit-hook/
+alias gc="git commit"
+
+alias ga="git add"
+alias gb="git branch -vv --sort=committerdate"
+alias gd="git diff"
+alias gco="git checkout"
+alias grm="git rebase main"
+alias grim="git rebase -i main"
+
+alias gcp="git cherry-pick"
+
+alias gfp="git fetch -p"
+alias gp="git pull"
+alias gfpp="git fetch -p && git pull"
+alias gpf="git push --force-with-lease"
+
+alias ggone="git branch -vv | grep ': gone' | cut -c 3- | awk '{ print \$1 }'"
+
+alias grc="git rebase --continue"
+
+# Bundler
+alias b="bundle"
+alias be="bundle exec"

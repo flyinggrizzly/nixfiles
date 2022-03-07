@@ -21,13 +21,22 @@
 
   home.packages = [
     pkgs.tmux
+    pkgs.tmuxinator
+
     pkgs.neovim
+
     pkgs.git
+
     pkgs.tree
   ];
 
   home.file.".tmux.conf".source = ./tmux.conf;
   home.file.".gitconfig".source = ./gitconfig;
+  home.file.".aliases".source = ./aliases;
+  home.file.".bin" = {
+    source = ./bin;
+    recursive = true;
+  };
 
   # ZSH
   home.file.".zshrc".source = ./zshrc;
