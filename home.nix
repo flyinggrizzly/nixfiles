@@ -19,7 +19,12 @@
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
+  nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.allowUnsupportedSystem = true;
+
   home.packages = [
+    pkgs.alacritty
+
     pkgs.tmux
     pkgs.tmuxinator
 
@@ -28,7 +33,18 @@
     pkgs.git
     pkgs.gh
 
+    pkgs.ripgrep
     pkgs.tree
+
+    pkgs.chruby
+
+    pkgs.nerdfonts
+
+    # pkgs._1password-gui
+    # pkgs.dropbox
+    # pkgs.firefox
+    # pkgs.google-chrome
+    pkgs.vscode-with-extensions
   ];
 
   home.file.".tmux.conf".source = ./tmux.conf;
