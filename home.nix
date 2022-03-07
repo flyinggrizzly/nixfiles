@@ -35,6 +35,7 @@
 
     pkgs.ripgrep
     pkgs.tree
+    pkgs.youtube-dl
 
     pkgs.chruby
     pkgs.docker
