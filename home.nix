@@ -23,10 +23,18 @@
     pkgs.tmux
     pkgs.neovim
     pkgs.git
+    pkgs.tree
   ];
 
-  # Git config
+  home.file.".tmux.conf".source = ./tmux.conf;
   home.file.".gitconfig".source = ./gitconfig;
+
+  # ZSH
+  home.file.".zshrc".source = ./zshrc;
+  home.file.".zsh" = {
+    source = ./zsh;
+    recursive = true;
+  };
 
   # VIM config
   home.file.".vim" = {
@@ -43,4 +51,8 @@
 
   # TODO
   # - Alacritty
+  # - zsh
+  # - tmux
+  # - chruby
+  # - ruby-install
 }
