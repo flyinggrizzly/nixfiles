@@ -1,9 +1,12 @@
 function brew-dump() {
   current_dir="$(pwd)"
   cd ~/nixfiles
+
+  echo "Updating Brewfile tracked in git..."
   brew bundle dump -f
-  git add Brewfile
-  git commit -m "Updating Brewfile"
+  git add Brewfile > /dev/null
+  git commit -m "Updating Brewfile" > /dev/null
+
   cd $current_dir
-  return
+  echo "Done!"
 }
