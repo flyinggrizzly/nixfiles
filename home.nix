@@ -37,6 +37,7 @@
     pkgs.tree
 
     pkgs.chruby
+    pkgs.docker
 
     pkgs.nerdfonts
 
