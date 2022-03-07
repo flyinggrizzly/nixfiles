@@ -45,3 +45,7 @@ alias grc="git rebase --continue"
 # Bundler
 alias b="bundle"
 alias be="bundle exec"
+
+# Home-manager
+alias hu="home-manager switch"
+alias he="e ~/nixfiles/home.nix"
