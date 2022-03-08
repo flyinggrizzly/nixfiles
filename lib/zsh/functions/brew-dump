@@ -1,6 +1,6 @@
 function brew-dump() {
   current_dir="$(pwd)"
-  cd $(nix-source-dir)
+  cd $(nix-source-dir)/lib
 
   echo "Updating Brewfile tracked in git..."
   brew bundle dump -f
