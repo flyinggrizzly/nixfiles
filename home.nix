@@ -86,5 +86,12 @@
 
   # TODO
   # - chruby via nix
-  # - ruby-install
+  # - move GUI apps out to own file
+  # - ensure separation of personal/work concerns
+  # - handle NVM and non-GUI apps for non-Mac situations (still depending on Homebrew atm) (this might just be ruby-install)
+
+  # Shopify specific installations
+
+  #shopify_env = builtins.pathExists ~/.shopify-env;
+  # if shopify_env then import(./shopify.nix)
 }
