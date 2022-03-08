@@ -5,6 +5,12 @@ function hu() {
   home-manager switch -b backup
   echo "...done!"
 
+  if is-mac; then
+    echo "Installing Homebrew packages..."
+    brew bundle --file ~/.Brewfile
+    echo "...done!"
+  fi
+
   echo "Installing Neovim plugins..."
   nvim --headless +PlugInstall +qa
   echo "...done!"
