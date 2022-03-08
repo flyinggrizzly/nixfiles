@@ -1,5 +1,0 @@
-#!/bin/bash
-
-home-manager switch -f $HOME/nixfiles/home.nix -b backup
-
-nvim --headless +PlugInstall +qall

@@ -1,0 +1,14 @@
+function hu() {
+  current_dir="$(pwd)"
+  cd ~/nixfiles
+
+  echo "Applying ~/nixfiles/home.nix..."
+  home-manager switch -f ./home.nix -b backup
+  echo "...done!"
+
+  echo "Installing Neovim plugins..."
+  nvim --headless +PlugInstall +qa
+  echo "...done!"
+
+  cd $current_dir
+}
