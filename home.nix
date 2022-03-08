@@ -22,31 +22,56 @@
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.allowUnsupportedSystem = true;
 
-  home.packages = [
-    pkgs.alacritty
+  home.packages = if builtins.pathExists ~/.shopify-env then
+    [
+      pkgs.tmux
+      pkgs.tmuxinator
 
-    pkgs.tmux
-    pkgs.tmuxinator
+      pkgs.neovim
 
-    pkgs.neovim
+      pkgs.git
+      pkgs.gh
 
-    pkgs.git
-    pkgs.gh
+      pkgs.ripgrep
+      pkgs.tree
+      pkgs.youtube-dl
 
-    pkgs.ripgrep
-    pkgs.tree
-    pkgs.youtube-dl
+      pkgs.docker
 
-    pkgs.docker
+      pkgs.nerdfonts
 
-    pkgs.nerdfonts
+      # pkgs._1password-gui
+      # pkgs.dropbox
+      # pkgs.firefox
+      # pkgs.google-chrome
+      pkgs.vscode-with-extensions
+    ]
+  else
+    [
+      pkgs.alacritty
 
-    # pkgs._1password-gui
-    # pkgs.dropbox
-    # pkgs.firefox
-    # pkgs.google-chrome
-    pkgs.vscode-with-extensions
-  ];
+      pkgs.tmux
+      pkgs.tmuxinator
+
+      pkgs.neovim
+
+      pkgs.git
+      pkgs.gh
+
+      pkgs.ripgrep
+      pkgs.tree
+      pkgs.youtube-dl
+
+      pkgs.docker
+
+      pkgs.nerdfonts
+
+      # pkgs._1password-gui
+      # pkgs.dropbox
+      # pkgs.firefox
+      # pkgs.google-chrome
+      pkgs.vscode-with-extensions
+    ];
 
   home.file.".tmux.conf".source = ./lib/tmux.conf;
   home.file.".gitconfig".source = ./lib/gitconfig;
