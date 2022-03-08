@@ -1,5 +1,9 @@
 #!/usr/bin/ruby
 
+def create_initial_links!
+  puts `bin/link-config`
+end
+
 def identify_shopify_env!
   shopify_env_file_path = File.expand_path("~/.shopify-env")
   not_shopify_env_file_path = File.expand_path("~/.not-shopify-env")
@@ -30,13 +34,16 @@ end
 
 puts "Setting up your environment...\n\n"
 
+create_initial_links!
+
 identify_shopify_env!
 
 instructions = <<~TEXT
 
-  0. Clone this repo to ~/nixfiles (elsewhere is OK too, but there are a couple aliases that expect ~/nixfiles)
+  0. Clone this repo to ~/nixfiles (elsewhere is OK too)
   1. Install Nix: https://nixos.org/download.html#download-nix
   3. Install Nix home-manager: https://nix-community.github.io/home-manager/index.html#ch-installation
+  4. Run `bin/link-config`
   4. Install nvm: https://github.com/nvm-sh/nvm#install--update-script
 
   ## Mac only
