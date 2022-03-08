@@ -37,7 +37,6 @@
     pkgs.tree
     pkgs.youtube-dl
 
-    pkgs.chruby
     pkgs.docker
 
     pkgs.nerdfonts
@@ -86,9 +85,6 @@
   };
 
   # TODO
-  # - Alacritty
-  # - zsh
-  # - tmux
-  # - chruby
+  # - chruby via nix
   # - ruby-install
 }

@@ -71,4 +71,7 @@ if [[ in-shopify -ne 0 ]]; then
   [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
   export FZF_DEFAULT_COMMAND="ag --nocolor --ignore node_modules -g"
+
+  source /opt/homebrew/opt/chruby/share/chruby/chruby.sh
+  source /opt/homebrew/opt/chruby/share/chruby/auto.sh
 fi
