@@ -53,6 +53,10 @@ function in-shopify() {
   fi
 }
 
+function in-personal() {
+  return $(! in-shopify)
+}
+
 export EDITOR="$(which nvim)"
 export SHELL="$(which zsh)"
 
@@ -64,7 +68,7 @@ export PATH="$HOME/.scripts:$PATH"
 # Tmuxinator shell completions
 source ~/.zsh/etc/tmuxinator.zsh
 
-if ! in-shopify; then
+if in-personal; then
   # NVM config
   export NVM_DIR="$HOME/.nvm"
   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -75,3 +79,4 @@ if ! in-shopify; then
   source /opt/homebrew/opt/chruby/share/chruby/chruby.sh
   source /opt/homebrew/opt/chruby/share/chruby/auto.sh
 fi
+
