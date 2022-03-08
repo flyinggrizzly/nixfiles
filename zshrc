@@ -64,7 +64,7 @@ export PATH="$HOME/.scripts:$PATH"
 # Tmuxinator shell completions
 source ~/.zsh/etc/tmuxinator.zsh
 
-if [[ in-shopify -ne 0 ]]; then
+if ! in-shopify; then
   # NVM config
   export NVM_DIR="$HOME/.nvm"
   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
