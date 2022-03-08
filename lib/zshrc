@@ -57,6 +57,7 @@ function in-personal() {
   return $(! in-shopify)
 }
 
+export NIX_SOURCE_DIR="$(nix-source-dir)"
 export EDITOR="$(which nvim)"
 export SHELL="$(which zsh)"
 

@@ -1,6 +1,6 @@
 function he() {
   current_dir="$(pwd)"
-  cd ~/nixfiles
+  cd $(nix-source-dir)
 
   nvim home.nix
 
