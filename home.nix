@@ -48,47 +48,41 @@
     pkgs.vscode-with-extensions
   ];
 
-  home.file.".tmux.conf".source = ./tmux.conf;
-  home.file.".gitconfig".source = ./gitconfig;
-  home.file.".aliases".source = ./aliases;
+  home.file.".tmux.conf".source = ./lib/tmux.conf;
+  home.file.".gitconfig".source = ./lib/gitconfig;
+  home.file.".aliases".source = ./lib/aliases;
   home.file.".bin" = {
-    source = ./bin;
+    source = ./lib/bin;
     recursive = true;
   };
-  home.file.".gitmessage".source = ./gitmessage;
-  home.file.".Brewfile".source = ./Brewfile;
+  home.file.".gitmessage".source = ./lib/gitmessage;
+  home.file.".Brewfile".source = ./lib/Brewfile;
 
   # Karabiner config (OSX only)
   home.file.".config/karabiner" = {
-    source = ./karabiner;
+    source = ./lib/karabiner;
     recursive = true;
   };
 
   # ZSH
-  home.file.".zshrc".source = ./zshrc;
+  home.file.".zshrc".source = ./lib/zshrc;
   home.file.".zsh" = {
-    source = ./zsh;
+    source = ./lib/zsh;
     recursive = true;
   };
 
   # VIM config
   home.file.".vim" = {
-    source = ./vim;
+    source = ./lib/vim;
     recursive = true;
   };
-  home.file.".config/nvim/init.vim".source = ./nvim/init.vim;
-  home.file.".vimrc".source = ./vimrc;
-  home.file.".vimrc.bundles".source = ./vimrc.bundles;
+  home.file.".config/nvim/init.vim".source = ./lib/nvim/init.vim;
+  home.file.".vimrc".source = ./lib/vimrc;
+  home.file.".vimrc.bundles".source = ./lib/vimrc.bundles;
   home.file.".vim-spell" = {
-    source = ./vim-spell;
+    source = ./lib/vim-spell;
     recursive = true;
   };
-
-  # TODO
-  # - chruby via nix
-  # - move GUI apps out to own file
-  # - ensure separation of personal/work concerns
-  # - handle NVM and non-GUI apps for non-Mac situations (still depending on Homebrew atm) (this might just be ruby-install)
 
   # Shopify specific installations
 

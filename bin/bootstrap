@@ -1,8 +1,18 @@
+#!/usr/bin/ruby
+
 def identify_shopify_env!
   shopify_env_file_path = File.expand_path("~/.shopify-env")
   not_shopify_env_file_path = File.expand_path("~/.not-shopify-env")
 
-  return if File.exist?(shopify_env_file_path) || File.exist?(not_shopify_env_file_path)
+  if File.exist?(shopify_env_file_path)
+    puts "This has already been identified as a Shopify machine. If this is not correct remove the ~/.shopify-env flag file and rerun"
+    return
+  end
+
+  if File.exist?(not_shopify_env_file_path)
+    puts "This has already been identified as a personal machine. If this is not correct remove the ~/.not-shopify-env flag file and rerun"
+    return
+  end
 
   shopify_env = nil
 
@@ -18,11 +28,12 @@ def identify_shopify_env!
   end
 end
 
-puts "Setting up your environment..."
+puts "Setting up your environment...\n\n"
 
 identify_shopify_env!
 
 instructions = <<~TEXT
+
   0. Clone this repo to ~/nixfiles (elsewhere is OK too, but there are a couple aliases that expect ~/nixfiles)
   1. Install Nix: https://nixos.org/download.html#download-nix
   3. Install Nix home-manager: https://nix-community.github.io/home-manager/index.html#ch-installation
@@ -34,3 +45,4 @@ instructions = <<~TEXT
   2. Use Homebrew to install the Brewfile linked at `% brew bundle --file ~/.Brewfile` to install GUI apps
 TEXT
 
+puts instructions
