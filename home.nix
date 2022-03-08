@@ -50,6 +50,7 @@
 
   home.file.".tmux.conf".source = ./lib/tmux.conf;
   home.file.".gitconfig".source = ./lib/gitconfig;
+  home.file.".gitignore".source = ./lib/gitignore;
   home.file.".aliases".source = ./lib/aliases;
   home.file.".bin" = {
     source = ./lib/bin;
