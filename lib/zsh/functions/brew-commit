@@ -1,4 +1,4 @@
-function brew-dump() {
+function brew-commit() {
   current_dir="$(pwd)"
   cd $(nix-source-dir)/lib
 
