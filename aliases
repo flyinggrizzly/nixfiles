@@ -47,5 +47,5 @@ alias b="bundle"
 alias be="bundle exec"
 
 # Home-manager
-alias hu="home-manager switch"
+alias hu="home-manager switch -b backup"
 alias he="e ~/nixfiles/home.nix"
