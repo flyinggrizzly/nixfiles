@@ -36,3 +36,14 @@ The other important one is the `~/.shopify-env` dotfile, which is empty. But,
 if it is present, will change the packages installed to comply with allowed
 internal usage. This conditional config is pretty ugly for now, but it'll get
 better as I get my head more around the Nix expression language.
+
+## Tools for managing config
+
+1. `bin/link-config` makes the two foundational symlinks
+2. `bin/bootstrap` will eventually manage the whole set up and update process
+3. Zsh functions
+  - `brew-commit` updates the active Homebrew packages commit to this repo
+  - `brew-up` installs packages from Homebrew defined in `lib/Brewfile`
+  - `hu` is shorthand for `home-manager switch -b backup` to update config
+  - `he` opens the `home.nix` config for editing
+  - `nix-source-dir` reads out the content of `~/.nix-source-dir`, which is set up by `bin/link`. This is mostly for the dotfile tooling to use, but can be handy
