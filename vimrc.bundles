@@ -127,4 +127,6 @@ Plug 't9md/vim-ruby-xmpfilter'
 
 Plug 'craigemery/vim-autotag'
 
+Plug 'LnL7/vim-nix'
+
 call plug#end()
