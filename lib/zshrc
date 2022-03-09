@@ -81,4 +81,3 @@ if in-personal; then
   chruby ruby 3
 fi
 
-chruby ruby 3
