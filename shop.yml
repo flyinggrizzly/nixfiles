@@ -42,50 +42,32 @@ root: ~/
 # post: tmux -CC attach -t ma
 
 windows:
-  - neuron:
-      root: ~/neuron
+  - shopify/core:
+      root: ~/src/github.com/Shopify/shopify
       layout: bf9f,204x51,0,0{142x51,0,0,0,61x51,143,0[61x37,143,0,7,61x13,143,38{27x13,143,38,9,33x13,171,38,10}]}
       panes:
         - nvim
         - 
         - 
-        - neuron rib -wS
-  - blog:
-      root: ~/flying-grizzly
-      layout: 16c4,159x35,0,0[159x27,0,0,0,159x7,0,28{119x7,0,28,20,39x7,120,28,21}]
-      # Synchronize all panes of this window, can be enabled before or after the pane commands run.
-      # 'before' represents legacy functionality and will be deprecated in a future release, in favour of 'after'
-      # synchronize: after
-      panes:
-        - nvim
         - 
-        - 
-  - blog-next:
-      root: ~/projects/next.flyinggrizzly.net
-      layout: 16c4,159x35,0,0[159x27,0,0,0,159x7,0,28{119x7,0,28,20,39x7,120,28,21}]
-      # Synchronize all panes of this window, can be enabled before or after the pane commands run.
-      # 'before' represents legacy functionality and will be deprecated in a future release, in favour of 'after'
-      # synchronize: after
+  - shopify/core--runner:
+      root: ~/src/github.com/Shopify/shopify
+      layout: tiled
       panes:
-        - nvim
+        - dev up
+        - 
         - 
         - 
   - zsh:
-  - dotfiles:
+  - nixfiles:
       layout: main-vertical
-      root: ~/dotfiles-local/
+      root: ~/nixfiles/
       panes:
         - nvim
         - zsh
   - notes:
       layout: main-vertical
-      root: ~/Dropbox/Apps/Editorial/
-      panes:
-        - nvim
-        - zsh
-  - medialog:
-      root: ~/projects/book-log
-      layout: main-vertical
+      root: ~/shopify-notes/
       panes:
         - nvim
         - zsh
