@@ -91,7 +91,7 @@
   };
 
   # ZSH
-  home.file.".zshrc".source = ./lib/zshrc;
+  home.file."._zshrc".source = ./lib/zshrc;
   home.file.".zsh" = {
     source = ./lib/zsh;
     recursive = true;

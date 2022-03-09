@@ -4,6 +4,10 @@ def create_initial_links!
   puts `bin/link-config`
 end
 
+def seed_zshrc!
+  puts `bin/seed-zshrc`
+end
+
 def identify_shopify_env!
   shopify_env_file_path = File.expand_path("~/.shopify-env")
   not_shopify_env_file_path = File.expand_path("~/.not-shopify-env")
@@ -35,6 +39,8 @@ end
 puts "Setting up your environment...\n\n"
 
 create_initial_links!
+
+seed_zshrc!
 
 identify_shopify_env!
 
