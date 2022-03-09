@@ -32,10 +32,8 @@ the dotfiles can point back to the actual sourcefiles, for things like updating
 vim spellings. Obviously if you move or rename the repo, this will need to get
 updated.
 
-The other important one is the `~/.shopify-env` dotfile, which is empty. But,
-if it is present, will change the packages installed to comply with allowed
-internal usage. This conditional config is pretty ugly for now, but it'll get
-better as I get my head more around the Nix expression language.
+The other important one is the `~/.machine-identifier--xxxx` dotfile, which is empty. But,
+if it is present, it can be used to switch the nix profile used by home-manager.
 
 ## Tools for managing config
 

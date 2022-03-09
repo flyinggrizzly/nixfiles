@@ -22,7 +22,7 @@
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.allowUnsupportedSystem = true;
 
-  imports = if builtins.pathExists ~/.shopify-env then
+  imports = if builtins.pathExists ~/.machine-identifier--shopify then
     [ ./shopify.nix ]
   else
     [ ./personal.nix ];

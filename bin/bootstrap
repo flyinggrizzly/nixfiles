@@ -1,5 +1,7 @@
 #!/usr/bin/ruby
 
+require 'fileutils'
+
 def create_initial_links!
   puts `bin/link-config`
 end
@@ -8,41 +10,37 @@ def seed_zshrc!
   puts `bin/seed-zshrc`
 end
 
-def identify_shopify_env!
-  shopify_env_file_path = File.expand_path("~/.shopify-env")
-  not_shopify_env_file_path = File.expand_path("~/.not-shopify-env")
+def machine_identifier_file_name
+  path = File.expand_path('~')
 
-  if File.exist?(shopify_env_file_path)
-    puts "This has already been identified as a Shopify machine. If this is not correct remove the ~/.shopify-env flag file and rerun"
-    return
-  end
+  Dir.entries(path).filter {|e| e.start_with?('.machine-identifier--')}.first
+end
 
-  if File.exist?(not_shopify_env_file_path)
-    puts "This has already been identified as a personal machine. If this is not correct remove the ~/.not-shopify-env flag file and rerun"
-    return
-  end
+def machine_identifier
+  return if machine_identifier_file_name.nil?
 
-  shopify_env = nil
+  machine_identifier_file_name.split('--').last
+end
 
-  while shopify_env.nil?
-    puts "Is this a Shopify machine? y/n"
-    shopify_env = gets
-  end
+def identify_machine!
+  return unless machine_identifier.nil?
 
-  if ['y', 'Y'].include?(shopify_env)
-    puts `touch #{shopify_env_file_path}`
-  else
-    puts `touch #{not_shopify_env_file_path}`
-  end
+  instructions = <<~INSTRUCTIONS
+    Please give this machine an identifier. The identifier should consist only of letters, numbers, hypens (-), or underscores (_). It should start with a letter or a number. This is not validated by this script, but will likely cause you pain later.
+  INSTRUCTIONS
+
+  puts instructions
+  print '> '
+  identifier = gets.chomp
+
+  FileUtils.touch(File.expand_path('~') + "/.machine-identifier--#{identifier}")
 end
 
 puts "Setting up your environment...\n\n"
 
+identify_machine!
 create_initial_links!
-
 seed_zshrc!
-
-identify_shopify_env!
 
 instructions = <<~TEXT
 

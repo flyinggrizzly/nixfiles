@@ -44,7 +44,7 @@ _load_settings "$HOME/.zsh/configs"
 
 # In this file to ensure availability during setup
 function in-shopify() {
-  shopify_env_file=~/.shopify-env
+  shopify_env_file=~/.machine-identifier--shopify
 
   if test -f $shopify_env_file; then
     return 0
