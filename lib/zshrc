@@ -34,28 +34,10 @@ _load_settings() {
 }
 _load_settings "$HOME/.zsh/configs"
 
-# Local config
-[[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
-
 # aliases
 [[ -f ~/.aliases ]] && source ~/.aliases
 
 # BEGIN PERSONAL
-
-# In this file to ensure availability during setup
-function in-shopify() {
-  shopify_env_file=~/.machine-identifier--shopify
-
-  if test -f $shopify_env_file; then
-    return 0
-  else
-    return 1
-  fi
-}
-
-function in-personal() {
-  return $(! in-shopify)
-}
 
 export NIX_SOURCE_DIR="$(nix-source-dir)"
 export EDITOR="$(which nvim)"

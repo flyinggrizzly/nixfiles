@@ -32,8 +32,9 @@ the dotfiles can point back to the actual sourcefiles, for things like updating
 vim spellings. Obviously if you move or rename the repo, this will need to get
 updated.
 
-The other important one is the `~/.machine-identifier--xxxx` dotfile, which is empty. But,
-if it is present, it can be used to switch the nix profile used by home-manager.
+The other important one is the `~/.machine-identifier` dotfile, which holds the
+machine identifier. This is used by home-manager to determine which profile to
+apply, and can support zsh functionality as well.
 
 ## Tools for managing config
 

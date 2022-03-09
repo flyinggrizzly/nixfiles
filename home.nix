@@ -1,6 +1,15 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
-{
+let
+  identifier_mapping = {
+    "shopify"  = [ ./shopify.nix ];
+    "personal" = [ ./personal.nix ];
+  };
+
+  # If the file is edited by hand, many editors leave a newline.
+  raw_identifier = builtins.readFile ~/.machine-identifier;
+  identifier = lib.removeSuffix "\n" raw_identifier;
+in {
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
   home.username = "seandmr";
@@ -22,8 +31,5 @@
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.allowUnsupportedSystem = true;
 
-  imports = if builtins.pathExists ~/.machine-identifier--shopify then
-    [ ./shopify.nix ]
-  else
-    [ ./personal.nix ];
+  imports = builtins.getAttr identifier identifier_mapping;
 }

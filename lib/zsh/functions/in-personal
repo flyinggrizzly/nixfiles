@@ -1,0 +1,4 @@
+function in-personal() {
+  return $(! in-shopify)
+}
+

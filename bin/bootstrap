@@ -1,7 +1,5 @@
 #!/usr/bin/ruby
 
-require 'fileutils'
-
 def create_initial_links!
   puts `bin/link-config`
 end
@@ -10,16 +8,14 @@ def seed_zshrc!
   puts `bin/seed-zshrc`
 end
 
-def machine_identifier_file_name
-  path = File.expand_path('~')
-
-  Dir.entries(path).filter {|e| e.start_with?('.machine-identifier--')}.first
+def machine_identifier_file_path
+  File.expand_path('~/.machine-identifier')
 end
 
 def machine_identifier
-  return if machine_identifier_file_name.nil?
+  return unless File.exist?(machine_identifier_file_path)
 
-  machine_identifier_file_name.split('--').last
+  File.read(machine_identifier_file_path)
 end
 
 def identify_machine!
@@ -33,7 +29,7 @@ def identify_machine!
   print '> '
   identifier = gets.chomp
 
-  FileUtils.touch(File.expand_path('~') + "/.machine-identifier--#{identifier}")
+  File.write(machine_identifier_file_path, identifier)
 end
 
 puts "Setting up your environment...\n\n"
