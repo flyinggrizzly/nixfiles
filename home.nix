@@ -10,10 +10,6 @@ let
   raw_identifier = builtins.readFile ~/.machine-identifier;
   identifier = lib.removeSuffix "\n" raw_identifier;
 in {
-  # Home Manager needs a bit of information about you and the
-  # paths it should manage.
-  home.username = "seandmr";
-  home.homeDirectory = "/Users/seandmr";
 
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage
