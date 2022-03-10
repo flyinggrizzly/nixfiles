@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  identifier_mapping = {
+  profiles_mapping = {
     "shopify"  = [ ./shopify.nix ];
     "personal" = [ ./personal.nix ];
   };
@@ -27,5 +27,5 @@ in {
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.allowUnsupportedSystem = true;
 
-  imports = builtins.getAttr identifier identifier_mapping;
+  imports = builtins.getAttr identifier profiles_mapping;
 }
