@@ -18,6 +18,7 @@
 
   home.file.".gitconfig".source = ../lib/gitconfig;
 
+  home.file."Library/Application Support/Alfred/prefs.json".source = ../lib/alfred-prefs.json;
   home.file."Library/Application Support/Alfred/Alfred.alfredpreferences" = {
     source = ../lib/Alfred.alfredpreferences;
     recursive = true;
