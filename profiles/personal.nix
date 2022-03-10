@@ -18,6 +18,11 @@
 
   home.file.".gitconfig".source = ../lib/gitconfig;
 
+  home.file."Library/Application Support/Alfred/Alfred.alfredpreferences" = {
+    source = ../lib/Alfred.alfredpreferences;
+    recursive = true;
+  };
+
   home.file.".Brewfile".source = ../lib/Brewfile.personal;
 
   # Karabiner config (OSX only)
