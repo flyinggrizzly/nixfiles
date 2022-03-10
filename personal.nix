@@ -20,12 +20,5 @@
     source = ./lib/karabiner;
     recursive = true;
   };
-
-  # ZSH
-  home.file."._zshrc".source = ./lib/zshrc;
-  home.file.".zsh" = {
-    source = ./lib/zsh;
-    recursive = true;
-  };
 }
 
