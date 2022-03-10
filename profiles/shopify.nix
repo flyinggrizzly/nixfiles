@@ -7,22 +7,16 @@
   home.homeDirectory = "/Users/seandmr";
 
   imports = [
-    ./terminal.nix
-    ./git.nix
-    ./vim.nix
+    ../configs/terminal.nix
+    ../configs/git.nix
+    ../configs/vim.nix
   ];
 
-  home.packages = [
-    pkgs.alacritty
-  ];
-
-  home.file.".gitconfig".source = ./lib/gitconfig;
-
-  home.file.".Brewfile".source = ./lib/Brewfile.personal;
+  home.file.".Brewfile".source = ../lib/Brewfile.shopify;
 
   # Karabiner config (OSX only)
   home.file.".config/karabiner" = {
-    source = ./lib/karabiner;
+    source = ../lib/karabiner;
     recursive = true;
   };
 }

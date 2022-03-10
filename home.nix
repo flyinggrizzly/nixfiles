@@ -2,8 +2,8 @@
 
 let
   profiles_mapping = {
-    "shopify"  = [ ./shopify.nix ];
-    "personal" = [ ./personal.nix ];
+    "shopify"  = [ ./profiles/shopify.nix ];
+    "personal" = [ ./profiles/personal.nix ];
   };
 
   # If the file is edited by hand, many editors leave a newline.
