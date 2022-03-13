@@ -1,6 +1,6 @@
 function in-shopify() {
 
-  if machine-identifier == 'shopify'; then
+  if [ $(machine-identifier) == 'shopify' ]; then
     return 0
   else
     return 1

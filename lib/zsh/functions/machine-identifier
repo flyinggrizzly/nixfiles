@@ -1,6 +1,6 @@
 function machine-identifier() {
   value=`cat ~/.machine-identifier`
 
-  return value | xargs
+  echo $value
 }
 
