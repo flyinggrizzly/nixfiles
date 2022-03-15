@@ -1,0 +1,10 @@
+function up() {
+  # Update home-manager config from other machines if applicable
+  cd $(nix-source-dir)
+  git pull --quiet
+  hu
+
+  cd
+
+  tmuxinator ${1:?"A tmuxinator config name is required."}
+}
