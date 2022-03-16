@@ -17,6 +17,7 @@
     source = ../lib/vim-spell;
     recursive = true;
   };
+  home.file.".coc.nvim.vimrc".source = ../lib/coc.nvim.vimrc;
 }
 
 

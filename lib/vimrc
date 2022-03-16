@@ -428,7 +428,7 @@ let g:coc_global_extensions = [
   \ 'coc-tsserver'
 \ ]
 
-silent! so ~/.coc.nvim.vimrc.local
+silent! so ~/.coc.nvim.vimrc
 
 augroup ale
   autocmd!
