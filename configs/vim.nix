@@ -18,6 +18,7 @@
     recursive = true;
   };
   home.file.".coc.nvim.vimrc".source = ../lib/coc.nvim.vimrc;
+  home.file.".config/nvim/coc-settings.json".source = ../lib/coc-settings.json;
 }
 
 
