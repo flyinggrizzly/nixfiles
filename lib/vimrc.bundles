@@ -41,7 +41,10 @@ Plug 'vim-scripts/tComment'
 " BEGIN PERSONAL
 
 Plug 'ngmy/vim-rubocop'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'neovim/nvim-lspconfig'
+Plug 'williamboman/nvim-lsp-installer'
+
+Plug 'Shopify/vim-sorbet', { 'branch': 'main' }
 
 Plug 'davidoc/taskpaper.vim'
 Plug 'godlygeek/tabular'
