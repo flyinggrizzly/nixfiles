@@ -42,6 +42,8 @@ Plug 'vim-scripts/tComment'
 
 Plug 'ngmy/vim-rubocop'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'Shopify/vim-sorbet', { 'branch': 'main' }
+Plug 'Shopify/shadowenv.vim'
 
 Plug 'davidoc/taskpaper.vim'
 Plug 'godlygeek/tabular'
