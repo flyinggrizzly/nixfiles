@@ -171,3 +171,4 @@ source ~/.config/nvim/config/rspec.vim
 source ~/.config/nvim/config/nix.vim
 
 call plug#end()
+doautocmd User PlugLoaded
