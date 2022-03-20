@@ -44,7 +44,8 @@ Plug 'ngmy/vim-rubocop'
 Plug 'neovim/nvim-lspconfig'
 Plug 'williamboman/nvim-lsp-installer'
 
-Plug 'Shopify/vim-sorbet', { 'branch': 'main' }
+"Plug 'Shopify/vim-sorbet', { 'branch': 'main' }
+Plug 'zackhsi/sorbet.vim'
 
 Plug 'davidoc/taskpaper.vim'
 Plug 'godlygeek/tabular'
