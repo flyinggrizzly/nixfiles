@@ -35,7 +35,7 @@ set colorcolumn=+1
 
 " Numbers
 set number
-set numberwidth=5
+"set numberwidth=5
 
 " Switch syntax highlighting on, when the terminal has colors
 " Also switch on highlighting the last used search pattern.
@@ -154,6 +154,8 @@ if empty(glob(data_dir . '/autoload/plug.vim'))
 endif
 
 call plug#begin('~/.config/nvim/bundle')
+source ~/.config/nvim/config/airline.vim
+
 source ~/.config/nvim/config/why_arent_these_in_vim.vim
 source ~/.config/nvim/config/fzf.vim
 source ~/.config/nvim/config/git.vim
