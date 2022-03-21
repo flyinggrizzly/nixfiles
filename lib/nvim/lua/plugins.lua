@@ -108,8 +108,7 @@ packer.startup(function(use)
   use { 'neovim/nvim-lspconfig' }
   use { 'hrsh7th/nvim-compe' }
   use {
-    'glepnir/lspsaga.nvim',
-    branch = 'main',
+    'tami5/lspsaga.nvim',
     after = { 'nvim-lspconfig', 'nvim-compe' },
     config = function()
       require 'plugin_config/lsp'
