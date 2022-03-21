@@ -37,6 +37,12 @@ return require('packer').startup(function(use)
       require 'plugin_config/airline'
     end
   }
+  use {
+    'edkolev/tmuxline.vim',
+    config = function()
+      require 'plugin_config/tmuxline'
+    end
+  }
 
   use { 'tpope/vim-endwise' }
   use { 'vim-scripts/tComment' }
