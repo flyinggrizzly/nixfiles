@@ -1,11 +1,5 @@
 function sps() {
   spin up shopify --wait
 
-  # Kitty needs some help with SSH
-  # https://sw.kovidgoyal.net/kitty/faq/#i-get-errors-about-the-terminal-being-unknown-or-opening-the-terminal-failing-when-sshing-into-a-different-computer
-  if [[ $TERM == xterm-kitty ]]; then
-    kitty +kitten ssh $(spin show --output fqdn shopify)
-  else
-    spin ssh
-  fi
+  spin shell
 }
