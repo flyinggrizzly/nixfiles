@@ -105,6 +105,7 @@ packer.startup(function(use)
   }
   use { 'LnL7/vim-nix' }
 
+  use { 'dracula/vim', as = 'dracula' }
   use { 'neovim/nvim-lspconfig' }
   use { 'hrsh7th/nvim-compe' }
   use {
