@@ -86,10 +86,10 @@ nvim_lsp.tsserver.setup {
 nvim_lsp.sorbet.setup{}
 
 saga.init_lsp_saga {
-  error_sign = '!',
-  warn_sign = '!',
-  hint_sign = '!',
-  infor_sign = '!',
+  error_sign = 'TE',
+  warn_sign = 'TW',
+  hint_sign = 'T?',
+  infor_sign = 'T!',
   border_style = "round",
 }
 
