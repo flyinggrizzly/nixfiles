@@ -12,7 +12,7 @@ function hu() {
   fi
 
   echo "Installing Neovim plugins..."
-  nvim --headless +PlugInstall +qa
+  nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
   echo "...done!"
 
   cd $current_dir

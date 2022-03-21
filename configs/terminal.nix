@@ -2,6 +2,9 @@
 
 {
   home.packages = [
+    pkgs.powerline-fonts
+    pkgs.powerline-symbols
+
     pkgs.tmux
     pkgs.tmuxinator
 
@@ -9,6 +12,7 @@
     pkgs.gh
 
     pkgs.ripgrep
+    pkgs.fzf
     pkgs.tree
     pkgs.youtube-dl
   ];
@@ -18,6 +22,7 @@
     source = ../lib/tmuxinator;
     recursive = true;
   };
+  home.file.".kitty.conf".source = ../lib/kitty.conf;
   home.file.".gitignore".source = ../lib/gitignore;
   home.file.".aliases".source = ../lib/aliases;
   home.file.".bin" = {
