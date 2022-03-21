@@ -92,7 +92,7 @@ packer.startup(function(use)
   use { 'tpope/vim-rails' }
   use { 'tpope/vim-rake' }
   use { 'vim-ruby/vim-ruby' }
-  use { 'Shopify/vim-sorbet', branch = 'main' }
+  use { 'Shopify/vim-sorbet' }
   use { 'zackhsi/sorbet.vim' }
   use { 'tpope/vim-bundler' }
   use { 'ngmy/vim-rubocop' }
