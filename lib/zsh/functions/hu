@@ -11,9 +11,5 @@ function hu() {
     echo "...done!"
   fi
 
-  echo "Installing Neovim plugins..."
-  nvim --headless +PlugInstall +qa
-  echo "...done!"
-
   cd $current_dir
 }

@@ -12,6 +12,7 @@
     pkgs.gh
 
     pkgs.ripgrep
+    pkgs.fzf
     pkgs.tree
     pkgs.youtube-dl
   ];

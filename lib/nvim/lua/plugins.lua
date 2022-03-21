@@ -38,12 +38,10 @@ packer.startup(function(use)
 
   use { 'tpope/vim-dispatch' }
   use { 'jiangmiao/auto-pairs' } --- Auto-complete closing brackets
-  use { 'junegunn/vim-easy-align' }
   use { 'scrooloose/nerdcommenter' }
   use { 'ervandew/supertab' }
   use { 'easymotion/vim-easymotion' }
   use { 'wikitopian/hardmode' }
-  use { 'janko-m/vim-test' }
   use { 'godlygeek/tabular' }
   use { 'elzr/vim-json' }
   use { 'plasticboy/vim-markdown' }
@@ -51,7 +49,15 @@ packer.startup(function(use)
   use { 'christoomey/vim-run-interactive' }
 
   use {
+    'junegunn/fzf',
+    run = function()
+      vim.fun['fzf#install']()
+    end
+  }
+
+  use {
     'junegunn/fzf.vim',
+    after = 'fzf',
     config = function()
       require 'plugin_config/fzf'
     end
@@ -72,14 +78,13 @@ packer.startup(function(use)
   use { 'dhruvasagar/vim-zoom' }
   use { 'haya14busa/incsearch.vim' }
   use { 'wellle/tmux-complete.vim' }
-  use { 'christoomey/vim-tmux-navigator' }
   use { 'janko-m/vim-test' }
   use { 'pangloss/vim-javascript' }
   use { 'jxnblk/vim-mdx-js' }
   use { 'leafgarland/typescript-vim' }
 
   use {
-    'mattn/emmet-vim'
+    'mattn/emmet-vim',
     config = function()
       require 'plugin_config/emmet'
     end

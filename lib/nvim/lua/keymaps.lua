@@ -5,8 +5,6 @@ vim.g.maplocalleader = ' '
 
 keymap('', 'gf', ':edit <cfile><CR>')
 
-keymap('n', )
-
 vim.cmd [[
   " Get off my lawn
   nnoremap <Left> :echoe "Use h"<CR>
