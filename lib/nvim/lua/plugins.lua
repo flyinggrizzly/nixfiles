@@ -22,15 +22,15 @@ packer.startup(function(use)
     end
   }
 
-  --use {
-    --'vim-airline/vim-airline',
-    --requires = {
-      --'vim-airline/vim-airline-themes'
-    --},
-    --config = function()
-      --require 'plugin_config/airline'
-    --end
-  --}
+  use {
+    'vim-airline/vim-airline',
+    requires = {
+      'vim-airline/vim-airline-themes'
+    },
+    config = function()
+      require 'plugin_config/airline'
+    end
+  }
 
   use { 'tpope/vim-endwise' }
   use { 'vim-scripts/tComment' }
