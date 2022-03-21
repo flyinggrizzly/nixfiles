@@ -3,6 +3,7 @@ local packer = require 'lib/packer_init'
 packer.startup(function(use)
   use { 'wbthomason/packer.nvim' } -- Let packer manage itself
 
+  use { 'Shopify/shadowenv.vim' }
   use { 'christoomey/vim-tmux-navigator' }
   use { 'tpope/vim-commentary' }
   use { 'tpope/vim-repeat' }
