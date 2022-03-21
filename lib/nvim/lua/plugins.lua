@@ -92,7 +92,7 @@ packer.startup(function(use)
   use { 'tpope/vim-rails' }
   use { 'tpope/vim-rake' }
   use { 'vim-ruby/vim-ruby' }
-  use { 'Shopify/vim-soraet', branch = 'main' }
+  use { 'Shopify/vim-sorbet', branch = 'main' }
   use { 'zackhsi/sorbet.vim' }
   use { 'tpope/vim-bundler' }
   use { 'ngmy/vim-rubocop' }
@@ -104,5 +104,16 @@ packer.startup(function(use)
     end
   }
   use { 'LnL7/vim-nix' }
+
+  use { 'neovim/nvim-lspconfig' }
+  use { 'hrsh7th/nvim-compe' }
+  use {
+    'glepnir/lspsaga.nvim',
+    branch = 'main',
+    after = { 'nvim-lspconfig', 'nvim-compe' },
+    config = function()
+      require 'plugin_config/lsp'
+    end
+  }
 
 end)
