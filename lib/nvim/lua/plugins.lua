@@ -107,24 +107,14 @@ packer.startup(function(use)
 
   use { 'dracula/vim', as = 'dracula' }
   use { 'neovim/nvim-lspconfig' }
-
-  --use {
-    --'ray-x/navigator.lua',
-    --requires = {'ray-x/guihua.lua', run = 'cd lua/fzy && make'},
-    --config = function()
-      --require 'plugin_config/navigator_cfg'
-    --end
-  --}
-  --use { 'nvim-treesitter/nvim-treesitter' }
-
-  use { 'hrsh7th/nvim-compe' }
   use {
     'tami5/lspsaga.nvim',
     branch = 'main',
-    after = { 'nvim-lspconfig', 'nvim-compe' },
+    after = { 'nvim-lspconfig' },
     config = function()
       require 'plugin_config/lsp'
     end
   }
+  use { 'weilbith/nvim-code-action-menu' }
 
 end)

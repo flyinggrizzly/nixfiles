@@ -1,95 +1,53 @@
---- Source: https://mark-story.com/posts/view/switching-to-neovim-native-lsp
+--- https://github.com/bartzon/dotfiles/blob/main/config/nvim/plugins/nvim-lsp.vim
 
-local nvim_lsp = require("lspconfig")
-local saga = require("lspsaga")
-local compe = require("compe")
+vim.lsp.stop_client(vim.lsp.get_active_clients())
 
-vim.o.completeopt = "menuone,noselect"
+local nvim_lsp = require'lspconfig'
 
-compe.setup {
-  enabled = true;
-  autocomplete = true;
-  throttle_time = 200;
-  source_timeout = 150;
-  source = {
-    -- only read from lsp and lua as I find buffer, path and others noisy.
-    nvim_lsp = true;
-    nvim_lua = true;
+local nnoremap = function (lhs, rhs)
+  vim.api.nvim_buf_set_keymap(0, 'n', lhs, rhs, {noremap = true, silent = true})
+end
+
+local on_attach = function ()
+  local mappings = {
+    ['K'] = "<cmd>lua require('lspsaga.hover').render_hover_doc()<CR>",
+    ['gd'] = "<cmd>lua vim.lsp.buf.definition()<CR>",
+    ['gi'] = "<cmd>lua vim.lsp.buf.implementation()<CR>",
+    ['gh'] = "<cmd>lua require'lspsaga.provider'.lsp_finder()<CR>",
+    ['gl'] = "<cmd>lua vim.lsp.buf.signature_help()<CR>",
+    ['rn'] = "<cmd>lua vim.lsp.buf.rename()<CR>",
+
+    ['[d'] = "<cmd>lua vim.diagnostic.goto_prev()<CR>",
+    [']d'] = "<cmd>lua vim.diagnostic.goto_next()<CR>",
+  }
+
+  for lhs, rhs in pairs(mappings) do
+    nnoremap(lhs, rhs)
+  end
+end
+
+--local configs = require 'lspconfig.configs'
+--if not configs.rubocop_lsp then
+  --configs.rubocop_lsp = {
+    --default_config = {
+      --cmd = {'bundle', 'exec', 'rubocop-lsp'};
+      --filetypes = {'ruby'};
+      --root_dir = function(fname)
+        --return nvim_lsp.util.find_git_ancestor(fname)
+      --end;
+      --settings = {};
+    --};
+  --}
+--end
+
+nvim_lsp.sorbet.setup{
+  cmd = {'srb', 'tc', '--lsp'};
+  on_attach = on_attach,
+  completion = {
+    autocomplete = false,
   }
 }
 
--- short cut methods.
-local t = function(str)
-  return vim.api.nvim_replace_termcodes(str, true, true, true)
-end
+require'lspsaga'.init_lsp_saga{}
 
-local check_back_space = function ()
-  local col = vim.fn.col('.') - 1
-  return col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') ~= nil
-end
-
--- Global function used to send <C-n> to compe
-_G.tab_complete = function()
-  if vim.fn.pumvisible() == 1 then
-    return t "<C-n>"
-  elseif check_back_space() then
-    return t "<Tab>"
-  else
-    return vim.fn['compe#complete']()
-  end
-end
-
--- Handler to attach LSP keymappings to buffers using LSP.
-local on_attach = function(client, bufnr)
-  -- helper methods for setting keymaps
-  local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
-  local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
-
-  vim.opt_local.omnifunc = "v:lua.vim.lsp.omnifunc"
-
-  --- Mappings
-  local opts = { noremap=true, silent=true }
-  buf_set_keymap('n', 'gh', "<cmd>lua require('lspsaga.provider').lsp_finder()<CR>", opts)
-  buf_set_keymap('n', 'K', "<cmd>lua require('lspsaga.hover').render_hover_doc()<CR>", opts)
-
-  -- Scroll down in popups
-  buf_set_keymap('n', '<C-b>', "<cmd>lua require('lspsaga.action').smart_scroll_with_saga(1)<CR>", opts)
-
-  -- Navigate and preview
-  buf_set_keymap('n', 'gs', "<cmd>lua require('lspsaga.signaturehelp').signature_help()<CR>", opts)
-  buf_set_keymap('n', 'gd', "<cmd>lua require('lspsaga.provider').preview_definition()<CR>", opts)
-  buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-  buf_set_keymap('n', 'gr', "<cmd>lua require('lspsaga.rename').rename()<CR>", opts)
-
-  -- View diagnostics
-  buf_set_keymap('n', '<space>e', "<cmd>lua require('lspsaga.diagnostic').show_line_diagnostics()<CR>", opts)
-  buf_set_keymap('n', '[d', "<cmd>lua require('lspsaga.diagnostic').lsp_jump_diagnostic_prev()<CR>", opts)
-  buf_set_keymap('n', ']d', "<cmd>lua require('lspsaga.diagnostic').lsp_jump_diagnostic_next()<CR>", opts)
-
-  -- Autocomplete
-  buf_set_keymap("i", "<C-Space>", 'compe#complete()', {noremap = true, silent = true, expr = true})
-  buf_set_keymap("i", "<CR>", "compe#confirm('<CR>')", {noremap = true, silent = true, expr = true})
-  buf_set_keymap("i", "<Esc>", "compe#close('<Esc>')", {noremap = true, silent = true, expr = true})
-  buf_set_keymap("i", "<Tab>", "v:lua.tab_complete()", {expr = true})
-end
-
--- Typescript
-nvim_lsp.tsserver.setup {
-  on_attach = function(client, bufnr)
-    -- Disable tsserver formatting as prettier/eslint does that.
-    client.resolved_capabilities.document_formatting = false
-    on_attach(client, bufnr)
-  end
-}
-
--- Ruby/Sorbet
-nvim_lsp.sorbet.setup{}
-
-saga.init_lsp_saga {
-  error_sign = 'TE',
-  warn_sign = 'TW',
-  hint_sign = 'T?',
-  infor_sign = 'T!',
-  border_style = "round",
-}
-
+vim.diagnostic.config({virtual_text = false})
