@@ -8,6 +8,11 @@ vim.o.showcmd = true       --- display incomplete commands
 vim.o.incsearch = true     --- do incremental searching
 vim.o.laststatus = 2       --- Always display the status line
 vim.o.autowrite = true     --- Automatically :write before running commands
+vim.cmd [[
+  set noswapfile
+  set nobackup
+  set nowritebackup
+]]
 
 --- Softtabs, 2 spaces
 vim.o.shiftwidth = 2
