@@ -20,7 +20,12 @@ return require('packer').startup(function(use)
 
   use { 'tpope/vim-projectionist' }
 
-
+  use {
+    'dracula/vim',
+    config = function()
+      require 'plugin_config/colorscheme'
+    end
+  }
   use {
     'airblade/vim-gitgutter',
     config = function()
@@ -43,12 +48,7 @@ return require('packer').startup(function(use)
       require 'plugin_config/tmuxline'
     end
   }
-  use {
-    'nathanaelkane/vim-indent-guides',
-    config = function()
-      require 'plugin_config/indent_guides'
-    end
-  }
+  use { 'lukas-reineke/indent-blankline.nvim' }
 
   use { 'tpope/vim-endwise' }
   use { 'vim-scripts/tComment' }
