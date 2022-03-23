@@ -43,6 +43,12 @@ return require('packer').startup(function(use)
       require 'plugin_config/tmuxline'
     end
   }
+  use {
+    'nathanaelkane/vim-indent-guides',
+    config = function()
+      require 'plugin_config/indent_guides'
+    end
+  }
 
   use { 'tpope/vim-endwise' }
   use { 'vim-scripts/tComment' }
