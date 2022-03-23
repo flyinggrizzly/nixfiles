@@ -8,7 +8,7 @@ return require('packer').startup(function(use)
   -- My plugins here
   use { 'wbthomason/packer.nvim' } -- Let packer manage itself
 
-  --use { 'Shopify/shadowenv.vim' }
+  use { 'Shopify/shadowenv.vim' }
   use { 'christoomey/vim-tmux-navigator' }
   use { 'tpope/vim-commentary' }
   use { 'tpope/vim-repeat' }
