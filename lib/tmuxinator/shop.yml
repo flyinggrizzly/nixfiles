@@ -42,11 +42,9 @@ root: ~/
 windows:
   - shopify/core:
       root: ~/src/github.com/Shopify/shopify
-      layout: bf9f,204x51,0,0{142x51,0,0,0,61x51,143,0[61x37,143,0,7,61x13,143,38{27x13,143,38,9,33x13,171,38,10}]}
+      layout: main-vertical 
       panes:
         - nvim
-        - 
-        - 
         - 
   - shopify/core--runner:
       root: ~/src/github.com/Shopify/shopify
@@ -56,16 +54,18 @@ windows:
         - 
         - 
         - 
+        - 
+        - 
   - zsh:
   - nixfiles:
       layout: main-vertical
       root: ~/nixfiles/
       panes:
         - nvim
-        - zsh
+        - 
   - notes:
       layout: main-vertical
       root: ~/shopify-notes/
       panes:
         - nvim
-        - zsh
+        - 
