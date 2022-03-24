@@ -4,11 +4,28 @@ if fn.empty(fn.glob(install_path)) > 0 then
   packer_bootstrap = fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
 end
 
+
+local in_shopify = function()
+  local machine_identifier_f = io.popen('machine-identifier')
+  local machine_identifier = machine_identifier_f:read('*a')
+  machine_identifier_f:close()
+
+  return machine_identifier == 'shopify'
+end
+
 return require('packer').startup(function(use)
   -- My plugins here
   use { 'wbthomason/packer.nvim' } -- Let packer manage itself
 
-  use { 'Shopify/shadowenv.vim' }
+  use {
+    'Shopify/shadowenv.vim',
+    cond = { in_shopify }
+  }
+  use {
+    'Shopify/vim-sorbet',
+    cond = { in_shopify }
+  }
+
   use { 'christoomey/vim-tmux-navigator' }
   use { 'tpope/vim-commentary' }
   use { 'tpope/vim-repeat' }
@@ -110,7 +127,6 @@ return require('packer').startup(function(use)
   use { 'tpope/vim-rails' }
   use { 'tpope/vim-rake' }
   use { 'vim-ruby/vim-ruby' }
-  use { 'Shopify/vim-sorbet' }
   use { 'zackhsi/sorbet.vim' }
   use { 'tpope/vim-bundler' }
   use { 'ngmy/vim-rubocop' }
