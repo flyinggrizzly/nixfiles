@@ -1,6 +1,13 @@
 function hu() {
   current_dir="$(pwd)"
 
+  if [[ $1 == '--pull' ]]; then
+    echo "Pulling nixfiles updates..."
+    cd $(nix-source-dir)
+    git pull
+    cd $current_dir
+  fi
+
   echo "Applying home.nix..."
   home-manager switch -b backup
   echo "...done!"
