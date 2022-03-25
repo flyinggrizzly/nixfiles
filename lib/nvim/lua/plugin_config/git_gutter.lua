@@ -1,7 +1,7 @@
 vim.cmd [[
   " Configure custom shortcuts for moving between git hunks
-  nmap ]h <Plug>GitGutterNextHunk
-  nmap [h <Plug>GitGutterPrevHunk
+  nmap ]h <Plug>(GitGutterNextHunk)
+  nmap [h <Plug>(GitGutterPrevHunk)
 
   let g:gitgutter_updatetime = 100
 
