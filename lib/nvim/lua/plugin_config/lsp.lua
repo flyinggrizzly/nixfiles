@@ -1,5 +1,7 @@
 --- https://github.com/bartzon/dotfiles/blob/main/config/nvim/plugins/nvim-lsp.vim
 
+vim.lsp.set_log_level("debug")
+
 vim.lsp.stop_client(vim.lsp.get_active_clients())
 
 local nvim_lsp = require'lspconfig'
