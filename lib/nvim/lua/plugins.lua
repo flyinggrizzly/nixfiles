@@ -151,6 +151,11 @@ return require('packer').startup(function(use)
   }
   use { 'weilbith/nvim-code-action-menu' }
 
+  use {
+    'glacambre/firenvim',
+    run = function() vim.fn['firenvim#install'](0) end 
+  }
+
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
   if packer_bootstrap then
