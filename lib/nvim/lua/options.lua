@@ -1,6 +1,5 @@
 vim.o.encoding = 'utf-8'
 
-
 vim.o.backspace = '2'
 vim.o.history = 50
 vim.o.ruler = true         --- show the cursor position all the time
@@ -40,3 +39,5 @@ vim.o.number = true
 vim.o.splitright = true
 vim.o.splitbelow = true
 
+--- Disable folding by default
+vim.o.foldenable = false
