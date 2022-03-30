@@ -152,7 +152,10 @@ return require('packer').startup(function(use)
 
   use {
     'glacambre/firenvim',
-    run = function() vim.fn['firenvim#install'](0) end 
+    run = function() vim.fn['firenvim#install'](0) end ,
+    config = function()
+      require 'plugin_config/firenvim'
+    end
   }
 
   -- Automatically set up your configuration after cloning packer.nvim
