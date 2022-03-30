@@ -17,6 +17,7 @@ local on_attach = function ()
     ['gi'] = "<cmd>lua vim.lsp.buf.implementation()<CR>",
     ['gh'] = "<cmd>lua require'lspsaga.provider'.lsp_finder()<CR>",
     ['gl'] = "<cmd>lua vim.lsp.buf.signature_help()<CR>",
+    ['gr'] = "<cmd>lua vim.lsp.buf.references()<CR>",
     ['rn'] = "<cmd>lua vim.lsp.buf.rename()<CR>",
 
     ['[d'] = "<cmd>lua vim.diagnostic.goto_prev()<CR>",
