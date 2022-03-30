@@ -79,7 +79,6 @@ return require('packer').startup(function(use)
   use { 'wikitopian/hardmode' }
   use { 'godlygeek/tabular' }
   use { 'elzr/vim-json' }
-  use { 'plasticboy/vim-markdown' }
   use { 'junegunn/vim-easy-align' }
   use { 'christoomey/vim-run-interactive' }
 

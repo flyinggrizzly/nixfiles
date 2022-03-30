@@ -40,4 +40,8 @@ vim.o.splitright = true
 vim.o.splitbelow = true
 
 --- Disable folding by default
-vim.o.foldenable = false
+vim.cmd [[
+  let g:markdown_folding = 0
+  set nofoldenable
+  let g:vim_markdown_folding_disabled = 1
+]]
