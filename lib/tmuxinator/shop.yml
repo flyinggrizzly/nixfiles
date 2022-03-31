@@ -41,7 +41,7 @@ root: ~/
 
 windows:
   - core:
-      layout: main-vertical 
+      layout: a7bc,491x109,0,0{365x109,0,0,0,125x109,366,0,5}
       root: ~/src/github.com/Shopify/shopify/
       panes:
         - nvim
