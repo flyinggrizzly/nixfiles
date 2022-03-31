@@ -40,13 +40,13 @@ root: ~/
 # post: tmux -CC attach -t ma
 
 windows:
-  - shopify/core:
-      root: ~/src/github.com/Shopify/shopify
+  - core:
       layout: main-vertical 
+      root: ~/src/github.com/Shopify/shopify/
       panes:
         - nvim
         - 
-  - shopify/core--runner:
+  - runners:
       root: ~/src/github.com/Shopify/shopify
       layout: tiled
       panes:
