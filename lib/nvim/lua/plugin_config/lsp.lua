@@ -43,6 +43,10 @@ end
   --}
 --end
 
+nvim_lsp.tsserver.setup{
+  on_attach = on_attach
+}
+
 nvim_lsp.sorbet.setup{
   cmd = {'srb', 'tc', '--lsp'};
   on_attach = on_attach,
