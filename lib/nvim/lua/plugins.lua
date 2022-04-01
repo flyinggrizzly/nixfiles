@@ -140,6 +140,7 @@ return require('packer').startup(function(use)
 
   use { 'dracula/vim', as = 'dracula' }
   use { 'neovim/nvim-lspconfig' }
+  use { 'williamboman/nvim-lsp-installer' }
   use {
     'tami5/lspsaga.nvim',
     branch = 'nvim6.0',
