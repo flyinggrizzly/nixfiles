@@ -46,6 +46,18 @@ windows:
       panes:
         - nvim
         - 
+  - web:
+      layout: a7bc,491x109,0,0{365x109,0,0,0,125x109,366,0,5}
+      root: ~/src/github.com/Shopify/web/
+      panes:
+        - nvim
+        - 
+  - storefront-renderer:
+      layout: a7bc,491x109,0,0{365x109,0,0,0,125x109,366,0,5}
+      root: ~/src/github.com/Shopify/storefront-renderer/
+      panes:
+        - nvim
+        - 
   - runners:
       root: ~/src/github.com/Shopify/shopify
       layout: tiled
