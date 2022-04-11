@@ -8,6 +8,7 @@
 
   imports = [
     ../configs/terminal.nix
+    ../configs/languages.nix
     ../configs/git.nix
     ../configs/vim.nix
   ];
