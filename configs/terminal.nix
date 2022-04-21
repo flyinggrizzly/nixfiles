@@ -5,6 +5,8 @@
     pkgs.powerline-fonts
     pkgs.powerline-symbols
 
+    pkgs.mosh
+
     pkgs.tmux
     pkgs.tmuxinator
 
