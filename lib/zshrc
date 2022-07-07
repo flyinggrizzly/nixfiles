@@ -45,6 +45,8 @@ export SHELL="$(which zsh)"
 
 export PATH="/usr/sbin:$PATH"
 
+export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
+
 # Add personal scripts to path
 export PATH="$HOME/.scripts:$PATH"
 

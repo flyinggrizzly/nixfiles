@@ -19,6 +19,7 @@
     pkgs.youtube-dl
   ];
 
+  home.file.".ripgreprc".source = ../lib/ripgreprc;
   home.file.".tmux.conf".source = ../lib/tmux.conf;
   home.file.".tmuxinator" = {
     source = ../lib/tmuxinator;
