@@ -36,7 +36,6 @@ brew "shopify/shopify/shopify-imagemagick@6", link: true
 cask "1password"
 cask "alfred"
 cask "chromedriver"
-cask "docker"
 cask "fellow"
 cask "google-cloud-sdk"
 cask "iterm2"

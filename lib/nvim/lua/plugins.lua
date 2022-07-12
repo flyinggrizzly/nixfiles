@@ -38,7 +38,7 @@ return require('packer').startup(function(use)
   use { 'tpope/vim-projectionist' }
 
   use {
-    'NLKNguyen/papercolor-theme',
+    'dracula/vim',
     config = function()
       require 'plugin_config/colorscheme'
     end
