@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# File used by nix-source-dir function and env var to help with keeping dependencies up to date
+test -f $HOME/.nix-source-dir || echo $(pwd) > $HOME/.nix-source-dir
+

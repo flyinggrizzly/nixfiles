@@ -1,12 +1,5 @@
 #!/bin/bash
 
-# File used by nix-source-dir function and env var to help with keeping dependencies up to date
-test -f $HOME/.nix-source-dir || echo $(pwd) > $HOME/.nix-source-dir
+./set-nix-source-dir
 
-# Move the config file to the default location so we don't have to provide a path all the time
-if [ ! $(test -f $HOME/.config/nixpkgs) ]; then
-  mkdir -p $HOME/.config/nixpkgs 
-fi
-if [ ! -L $HOME/.config/nixpkgs/home.nix ]; then
-  ln -s $(pwd)/home.nix $HOME/.config/nixpkgs/home.nix
-fi
+./copy-homefile-to-nix-home
