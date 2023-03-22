@@ -4,4 +4,12 @@
 test -f $HOME/.nix-source-dir || echo $(pwd) > $HOME/.nix-source-dir
 
 # Move the config file to the default location so we don't have to provide a path all the time
-test -f $HOME/.config/nixpkgs/home.nix || mkdir -p $HOME/.config/nixpkgs && ln -s $(pwd)/home.nix $HOME/.config/nixpkgs/home.nix
+if [ -L $HOME/.config/nixpkgs/home.nix ]; then
+else
+  if [ $(test -f $HOME/.config/nixpkgs) ]; then
+  else
+    mkdir -p $HOME/.config/nixpkgs 
+  fi
+
+  ln -s $(pwd)/home.nix $HOME/.config/nixpkgs/home.nix
+fi
