@@ -55,6 +55,6 @@ nvim_lsp.sorbet.setup{
   }
 }
 
-require'lspsaga'.init_lsp_saga{}
+require('lspsaga').setup({})
 
 vim.diagnostic.config({virtual_text = false})
