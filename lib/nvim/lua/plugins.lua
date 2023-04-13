@@ -142,8 +142,7 @@ return require('packer').startup(function(use)
   use { 'neovim/nvim-lspconfig' }
   use { 'williamboman/nvim-lsp-installer' }
   use {
-    'tami5/lspsaga.nvim',
-    branch = 'nvim6.0',
+    'nvimdev/lspsaga.nvim',
     after = { 'nvim-lspconfig' },
     config = function()
       require 'plugin_config/lsp'
