@@ -1,0 +1,9 @@
+# No args: spin ls
+# With args: initiate a mosh connection to the provided Spin instance
+spm() {
+  if [[ $# -gt 0 ]]; then
+    mosh direct.$(spin show "$@" --output fqdn)
+  else
+    spin ls
+  fi
+}
