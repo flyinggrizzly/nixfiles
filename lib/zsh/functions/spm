@@ -2,7 +2,10 @@
 # With args: initiate a mosh connection to the provided Spin instance
 spm() {
   if [[ $# -gt 0 ]]; then
-    mosh direct.$(spin show "$@" --output fqdn)
+    fqdn=$(spin show $@ --output fqdn)
+
+    echo -n -e "\033]0; $fqdn \007"
+    mosh "direct.$fqdn"
   else
     spin ls
   fi
