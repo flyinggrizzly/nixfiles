@@ -41,23 +41,23 @@ root: ~/
 
 windows:
   - core:
-      layout: a7bc,491x109,0,0{365x109,0,0,0,125x109,366,0,5}
+      layout: 6791,344x78,0,0{76x78,0,0,17,267x78,77,0,7}
+      root: ~/src/github.com/Shopify/shopify
+      panes:
+        - 
+        - nvim
+  - web:
+      layout: 6791,344x78,0,0{76x78,0,0,17,267x78,77,0,7}
+      root: ~/src/github.com/Shopify/web
+      panes:
+        - 
+        - nvim
+  - storefront-renderer:
+      layout: 6791,344x78,0,0{76x78,0,0,17,267x78,77,0,7}
       root: ~/src/github.com/Shopify/shopify/
       panes:
-        - nvim
         - 
-  - web:
-      layout: a7bc,491x109,0,0{365x109,0,0,0,125x109,366,0,5}
-      root: ~/src/github.com/Shopify/web/
-      panes:
         - nvim
-        - 
-  - storefront-renderer:
-      layout: a7bc,491x109,0,0{365x109,0,0,0,125x109,366,0,5}
-      root: ~/src/github.com/Shopify/storefront-renderer/
-      panes:
-        - nvim
-        - 
   - runners:
       root: ~/src/github.com/Shopify/shopify
       layout: tiled

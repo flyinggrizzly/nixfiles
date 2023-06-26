@@ -42,13 +42,13 @@ root: ~/
 windows:
   - main:
       root: ~/
-      layout: main-vertical
+      layout: 6791,344x78,0,0{76x78,0,0,17,267x78,77,0,7}
       panes:
         - nvim
         - zsh
   - zsh:
   - nixfiles:
-      layout: main-vertical
+      layout: 6791,344x78,0,0{76x78,0,0,17,267x78,77,0,7}
       root: ~/nixfiles/
       panes:
         - nvim
