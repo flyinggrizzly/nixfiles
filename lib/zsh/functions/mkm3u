@@ -1,0 +1,98 @@
+#!/usr/bin/ruby
+
+class FileType
+  def initialize(extension, associated_extensions = [])
+    @extension = extension
+    associated_extensions = Array(associated_extensions)
+  end
+  attr_reader :extension, :associated_extensions
+
+  def clean_up_associated_files?
+    associated_extensions.any?
+  end
+end
+
+class DiscFile
+  def initialize(filename:, filetype:, cleanup_after_convert: true)
+    @filename = filename
+    @filetype = filetype
+    @cleanup_after_convert = cleanup_after_convert
+  end
+  attr_reader :filename, :filetype, :cleanup_after_convert
+
+  def convert!
+    convert_to_chd!
+    cleanup if cleanup_after_convert
+
+    "#{basename}.chd"
+  end
+
+  private
+
+  def basename
+    filename.delete_suffix(filetype.extension)
+  end
+
+  def convert_to_chd!
+    puts `chdman createcd -i "#{filename}" -o "#{basename}.chd"`
+  end
+
+  def cleanup
+    puts `rm "#{filename}"`
+
+    return unless filetype.clean_up_associated_files?
+
+    filetype.associated_extensions.each do |ext|
+      puts `rm "#{basename}#{ext}"`
+    end
+  end
+end
+
+class Runner
+  BIN_CUE = FileType.new('.cue', ['.bin'])
+  ISO = FileType.new('.iso')
+
+  FILE_TYPES = [ BIN_CUE, ISO ]
+
+  def execute(dirpath: '.')
+    starting_dir = Dir.pwd
+
+    Dir.chdir(dirpath)
+
+    chd_filenames = files(FILE_TYPES).map {|file| file.convert! }.sort
+
+    write_m3u(chd_filenames)
+  ensure
+    Dir.chdir(starting_dir)
+  end
+
+  private
+
+  def write_m3u(chd_filenames)
+    assumed_base_filename = chd_filenames.first
+
+    m3u_filename = assumed_base_filename.gsub(/\(?dis(c|k) \d\)?/i, '')
+
+    file = File.new("#{basename}.m3u", 'w')
+
+    chd_filenames.each {|fn| file.puts("#{fn}")}
+  end
+
+  def files(filetypes)
+    Dir.children('.')
+      .reject {|filename| File.directory?(filename) }
+      .map do |filename|
+        matches = filetypes.map do |filetype|
+          next unless filename.end_with?(filetype.extension)
+
+          DiscFile.new(filename: filename, filetype: filetype, cleanup_after_convert: true)
+        end
+          .compact
+
+        matches.first
+      end
+        .compact
+  end
+end
+
+Runner.new.execute
