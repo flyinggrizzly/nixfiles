@@ -17,6 +17,10 @@
     pkgs.fzf
     pkgs.tree
     pkgs.youtube-dl
+
+    pkgs.ghc
+    pkgs.haskell-language-server
+    pkgs.cabal-install
   ];
 
   home.file.".ripgreprc".source = ../lib/ripgreprc;
