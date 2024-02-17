@@ -1,0 +1,4 @@
+#!/bin/bash
+
+nix build .#darwinConfigurations.m1-grizzly.system --extra-experimental-features "nix-command flakes" --impure
+
