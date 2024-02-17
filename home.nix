@@ -7,13 +7,16 @@
       homeDirectory = "/Users/${me}";
       stateVersion = "22.11";
 
-      imports = [
-        ./configs/vim.nix
-      ];
 
       packages = [
         pkgs.alacritty
       ];
     };
+
+    imports = [
+      ./configs/vim.nix
+      ./configs/terminal.nix
+    ];
+
     programs.home-manager.enable = true;
   }

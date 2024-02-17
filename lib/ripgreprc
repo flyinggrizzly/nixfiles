@@ -1,0 +1,15 @@
+# Ruby test files
+--type-add
+rbtest:*_{test,spec}.rb
+
+--type-add
+rbt:*_{test,spec}.rb
+
+--type-add
+rake:*.rake
+
+--type-add
+yaml:*.{yml,yaml}
+
+--type-add
+yml:*.{yml,yaml}
