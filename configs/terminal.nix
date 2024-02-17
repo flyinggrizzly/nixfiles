@@ -19,8 +19,6 @@
     pkgs.youtube-dl
   ];
 
-  # TODO: this should move to a declaration block
-  home.file.".gitignore".source = ../lib/gitignore;
   home.file.".ripgreprc".source = ../lib/ripgreprc;
   home.file.".tmux.conf".source = ../lib/tmux.conf;
   home.file.".tmuxinator" = {
