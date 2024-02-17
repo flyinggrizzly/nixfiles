@@ -14,6 +14,7 @@
     };
 
     imports = [
+      ./configs/git.nix
       ./configs/vim.nix
       ./configs/terminal.nix
     ];
