@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>bundleid</key>
+	<string>io.lab.workflow</string>
+	<key>connections</key>
+	<dict>
+		<key>70F719CC-7D05-4F23-8BBD-D0D317E995B3</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>225B479B-1FDD-473B-9044-AD04954FF48D</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+			</dict>
+		</array>
+	</dict>
+	<key>createdby</key>
+	<string>Adam Butler</string>
+	<key>description</key>
+	<string>An Alfred Workflow for managing Alfred Workflows</string>
+	<key>disabled</key>
+	<false/>
+	<key>name</key>
+	<string>Package Manager</string>
+	<key>objects</key>
+	<array>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>escaping</key>
+				<integer>0</integer>
+				<key>script</key>
+				<string>ruby lib/workflow.rb download {query}</string>
+				<key>type</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>225B479B-1FDD-473B-9044-AD04954FF48D</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argumenttype</key>
+				<integer>1</integer>
+				<key>escaping</key>
+				<integer>0</integer>
+				<key>keyword</key>
+				<string>flow</string>
+				<key>runningsubtext</key>
+				<string>Loading</string>
+				<key>script</key>
+				<string>ruby lib/workflow.rb index {query}</string>
+				<key>title</key>
+				<string>Search for Workflows</string>
+				<key>type</key>
+				<integer>0</integer>
+				<key>withspace</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>70F719CC-7D05-4F23-8BBD-D0D317E995B3</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+	</array>
+	<key>readme</key>
+	<string></string>
+	<key>uidata</key>
+	<dict>
+		<key>225B479B-1FDD-473B-9044-AD04954FF48D</key>
+		<dict>
+			<key>ypos</key>
+			<real>200</real>
+		</dict>
+		<key>70F719CC-7D05-4F23-8BBD-D0D317E995B3</key>
+		<dict>
+			<key>ypos</key>
+			<real>200</real>
+		</dict>
+	</dict>
+	<key>webaddress</key>
+	<string>http://workflow.lab.io</string>
+</dict>
+</plist>

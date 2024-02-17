@@ -11,6 +11,14 @@
       packages = [
         pkgs.alacritty
       ];
+
+      file = {
+        "Library/Application Support/Alfred/Alfred.alfredpreferences" = {
+          source = ./lib/Alfred.alfredpreferences;
+          recursive = true;
+        };
+        "Library/Application Support/Alfred/prefs.json".source = ./lib/alfred-prefs.json;
+      };
     };
 
     imports = [
