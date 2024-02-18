@@ -33,6 +33,10 @@
   };
 
   # ZSH
+  # TODO: consider migrating zshrc and zsh/* config to declarative definitions
+  programs.zsh = {
+    enable = true;
+  };
   home.file.".zshrc".source = ../lib/zshrc;
   home.file.".zsh" = {
     source = ../lib/zsh;

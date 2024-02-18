@@ -23,8 +23,9 @@
 
     imports = [
       ./configs/git.nix
-      ./configs/vim.nix
       ./configs/terminal.nix
+      ./configs/vim.nix
+      ./configs/brew.nix
     ];
 
     programs.home-manager.enable = true;
