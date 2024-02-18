@@ -10,6 +10,7 @@
 
       packages = [
         pkgs.alacritty
+        pkgs.git-absorb
       ];
 
       file = {
