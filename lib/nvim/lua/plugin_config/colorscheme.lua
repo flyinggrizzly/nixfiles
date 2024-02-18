@@ -1,9 +1,9 @@
 -- Vim-One
-vim.cmd [[
-  set background=light
-  let g:one_allow_italics = 1
-  colorscheme one
-]]
+--vim.cmd [[
+  --set background=light
+  --let g:one_allow_italics = 1
+  --colorscheme one
+--]]
 
 -- Solarized Light
 --vim.cmd [[
@@ -21,9 +21,9 @@ vim.cmd [[
 --]]
 
 -- Dracula
---vim.cmd [[
-  --colorscheme dracula
+vim.cmd [[
+  colorscheme dracula
 
-  --highlight Normal ctermbg=235
---]]
+  highlight Normal ctermbg=235
+]]
 

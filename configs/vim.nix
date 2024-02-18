@@ -5,6 +5,8 @@
     enable = true;
     viAlias = true;
     vimAlias = true;
+    vimdiffAlias = true;
+    defaultEditor = true;
 
     # Conflicts with dev-managed Ruby and Gem paths
     withRuby = false;

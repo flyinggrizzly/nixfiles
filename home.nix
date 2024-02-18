@@ -1,12 +1,14 @@
 { pkgs, ... }: 
   let
     me = "seandmr";
+    host = "m1-grizzly";
   in {
     home = {
       username = me;
       homeDirectory = "/Users/${me}";
       stateVersion = "22.11";
 
+      file.".machine-identifier".text = host;
 
       packages = [
         pkgs.alacritty
