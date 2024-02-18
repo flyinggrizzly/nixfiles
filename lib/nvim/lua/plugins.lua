@@ -7,8 +7,6 @@ local in_shopify = function()
   return machine_identifier == 'shopify'
 end
 
-local colorscheme = 'dracula'
-
 return {
   {
     "Shopify/shadowenv.vim",
@@ -32,23 +30,7 @@ return {
   "jessarcher/vim-heritage", -- Automatically create parent dirs when saving
   "tpope/vim-projectionist",
 
-  -- I'm indecisive so let's keep them both since lazy loading makes it cheap
-  -- Toggle by changing the `colorscheme` local
-  {
-    "rakr/vim-one",
-    cond = colorscheme == 'rakr/vim-one',
-    config = function()
-      require 'plugin_config/colorscheme'
-    end
-  },
-  {
-    'dracula/vim',
-    name = 'dracula',
-    cond = colorscheme == 'dracula',
-    config = function()
-      require 'plugin_config/colorscheme'
-    end
-  },
+  require 'colorscheme',
 
   {
     "airblade/vim-gitgutter",
