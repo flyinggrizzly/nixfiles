@@ -16,4 +16,9 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-require("lazy").setup("plugins")
+require("lazy").setup("plugins", {
+  -- TODO: this is brittle, we should do something better. It's just hard with the ~/nixfiles dir being an
+  -- implementation detail that isn't to be leaked from the perspect of home-manager, but not doing something here means
+  -- we have a read-only neovim plugin config.
+  lockfile = "~/nixfiles/neovim-lazy-lock.json",
+})

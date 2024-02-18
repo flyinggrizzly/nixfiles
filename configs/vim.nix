@@ -16,7 +16,6 @@
     '';
   };
 
-
   # VIM config
   home.file.".config/nvim" = {
     source = ../lib/nvim;

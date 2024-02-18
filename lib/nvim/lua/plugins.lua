@@ -29,6 +29,7 @@ return {
   "tpope/vim-sleuth", -- Indent autodetection with editorconfig support
   "jessarcher/vim-heritage", -- Automatically create parent dirs when saving
   "tpope/vim-projectionist",
+  "justinmk/vim-sneak",
 
   require 'colorscheme',
 
