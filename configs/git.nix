@@ -23,6 +23,8 @@
       cp = "cherry-pick";
       po = "!git push -u origin \"$(git rev-parse --abbrev-ref HEAD)\"";
       cane = "commit --amend --no-edit";
+
+      squash = "rebase -i --autosquash";
     };
 
     ignores = [
