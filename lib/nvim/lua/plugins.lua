@@ -35,6 +35,9 @@ return require('packer').startup(function(use)
   use { 'tpope/vim-sleuth' } -- Indent autodetection with editorconfig support
   use { 'jessarcher/vim-heritage' } -- Automatically create parent dirs when saving
 
+  use { 'williamboman/mason.nvim' }
+  use { 'williamboman/mason-lspconfig.nvim' }
+
   use { 'tpope/vim-projectionist' }
 
   use {
@@ -139,8 +142,10 @@ return require('packer').startup(function(use)
   use { 'LnL7/vim-nix' }
 
   use { 'dracula/vim', as = 'dracula' }
+
   use { 'neovim/nvim-lspconfig' }
   use { 'williamboman/nvim-lsp-installer' }
+
   use {
     'nvimdev/lspsaga.nvim',
     after = { 'nvim-lspconfig' },

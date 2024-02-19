@@ -4,6 +4,9 @@ vim.lsp.set_log_level("debug")
 
 vim.lsp.stop_client(vim.lsp.get_active_clients())
 
+require('mason').setup()
+require('mason-lspconfig').setup()
+
 local nvim_lsp = require'lspconfig'
 
 local nnoremap = function (lhs, rhs)
