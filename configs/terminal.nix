@@ -17,6 +17,8 @@
     pkgs.fzf
     pkgs.tree
     pkgs.youtube-dl
+
+    pkgs.nix-prefetch
   ];
 
   home.file.".ripgreprc".source = ../lib/ripgreprc;
