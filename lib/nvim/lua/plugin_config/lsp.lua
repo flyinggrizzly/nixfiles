@@ -29,6 +29,20 @@ local on_attach = function ()
   end
 end
 
+--local configs = require 'lspconfig.configs'
+--if not configs.rubocop_lsp then
+  --configs.rubocop_lsp = {
+    --default_config = {
+      --cmd = {'bundle', 'exec', 'rubocop-lsp'};
+      --filetypes = {'ruby'};
+      --root_dir = function(fname)
+        --return nvim_lsp.util.find_git_ancestor(fname)
+      --end;
+      --settings = {};
+    --};
+  --}
+--end
+
 nvim_lsp.tsserver.setup{
   on_attach = on_attach
 }
