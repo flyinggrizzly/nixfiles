@@ -59,10 +59,7 @@ export NVM_DIR="$HOME/.nvm"
 
 # TODO: this shouldn't be here--I'd like to have it injected by the appropriate nix config rather than relying on ZSH
 # functions
-#if in-personal; then
-  #source /opt/homebrew/opt/chruby/share/chruby/chruby.sh
-  #source /opt/homebrew/opt/chruby/share/chruby/auto.sh
+source /opt/homebrew/opt/chruby/share/chruby/chruby.sh
+source /opt/homebrew/opt/chruby/share/chruby/auto.sh
 
-  #chruby ruby 3
-#fi
-
+chruby ruby 3
