@@ -1,5 +1,10 @@
 { config, pkgs, ... }: {
   home.file.".gitmessage".source = ../lib/gitmessage;
+
+  home.packages = [
+    pkgs.git-absorb
+  ];
+
   programs.git = {
     enable = true;
     userName = "Sean DMR";
