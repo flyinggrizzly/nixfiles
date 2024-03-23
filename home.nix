@@ -1,4 +1,4 @@
-{ pkgs, ... }: 
+{ pkgs, ... }:
   let
     me = "seandmr";
     host = "m1-grizzly";
@@ -21,6 +21,12 @@
           recursive = true;
         };
         "Library/Application Support/Alfred/prefs.json".source = ./lib/alfred-prefs.json;
+      };
+
+      # Karabiner config (OSX only)
+      file.".config/karabiner" = {
+        source = ./lib/karabiner;
+        recursive = true;
       };
     };
 
