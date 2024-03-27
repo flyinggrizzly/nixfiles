@@ -137,6 +137,7 @@ in
       vim-projectionist
       vim-repeat
       vim-run-interactive
+      supertab
       vim-surround
       tcomment_vim
       vim-test
