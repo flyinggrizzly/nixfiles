@@ -65,7 +65,3 @@ export NVM_DIR="$HOME/.nvm"
 if [[ -f /opt/dev/dev.sh ]] && [[ $- == *i* ]]; then
   source /opt/dev/dev.sh
 fi
-
-if [[ $SPIN == 1 ]]; then
-  source /etc/zsh/zshrc.default.inc.zsh
-fi
