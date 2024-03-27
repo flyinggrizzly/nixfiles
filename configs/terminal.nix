@@ -38,11 +38,8 @@
   # TODO: consider migrating zshrc and zsh/* config to declarative definitions
   programs.zsh = {
     enable = true;
-    initExtra = ''
-      source $HOME/.zshrc.hm-managed
-    '';
   };
-  home.file.".zshrc.hm-managed".source = ../lib/zshrc;
+  home.file.".zshrc".source = ../lib/zshrc;
   home.file.".zsh" = {
     source = ../lib/zsh;
     recursive = true;
