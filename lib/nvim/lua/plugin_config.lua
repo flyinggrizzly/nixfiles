@@ -1,5 +1,5 @@
 require 'plugin_config/colorscheme'
-require 'plugin_config/airline'
+require 'plugin_config/lualine'
 require 'plugin_config/git_gutter'
 require 'plugin_config/lsp'
 require 'plugin_config/emmet'

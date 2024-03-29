@@ -101,8 +101,8 @@ in
     # plugins: https://search.nixos.org/packages?from=0&size=50&sort=relevance&type=packages&query=vimPlugins
     # more plugins: https://github.com/m15a/nixpkgs-vim-extra-plugins
     plugins = with pkgs.vimPlugins; [
-      vim-airline
-      vim-airline-themes
+      lualine-nvim
+      nvim-web-devicons # required for lualine
 
       # Colorscheme
       #dracula-nvim
