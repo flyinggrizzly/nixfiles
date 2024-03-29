@@ -18,6 +18,7 @@ let
       sha256 = "sha256-mzCdcf7FINhhVLUIPv/eLohm4qMG9ndRJ5H4sFU2vO0=";
     };
   };
+
   sorbet-vim = pkgs.vimUtils.buildVimPlugin {
     name = "sorbet-vim";
     src = pkgs.fetchFromGitHub {
@@ -25,15 +26,6 @@ let
       repo = "sorbet.vim";
       rev = "41fda1edd8d790aa23542f52bd18570cdf739ea3";
       sha256 = "sha256-FYHvIoCyFHE3wWe1VVBBsHm3eet1xDR9yKxVUboaK8g=";
-    };
-  };
-  shadowenv = pkgs.vimUtils.buildVimPlugin {
-    name = "shadowenv";
-    src = pkgs.fetchFromGitHub {
-      owner = "Arkham";
-      repo = "shadowenv.vim";
-      rev = "6422c3a651c3788881d01556cb2a90bdff7bf002";
-      sha256 = "1lfckdxkd9cl0bagcxwfg0gb84bs2sxxscrwd86yrqyhrvm24hik";
     };
   };
 
@@ -119,7 +111,6 @@ in
 
       vim-fugitive
       vim-gitgutter
-      shadowenv
 
       nvim-autopairs
       vim-commentary
