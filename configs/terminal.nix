@@ -19,6 +19,7 @@
     pkgs.youtube-dl
 
     pkgs.nix-prefetch
+    pkgs.shadowenv
   ];
 
   home.file.".ripgreprc".source = ../lib/ripgreprc;
