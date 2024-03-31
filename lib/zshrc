@@ -43,6 +43,7 @@ export EDITOR="$(which nvim)"
 export SHELL="$(which zsh)"
 
 export PATH="/usr/sbin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
 
 export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
 
