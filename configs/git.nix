@@ -15,6 +15,7 @@
       core.editor = "$(which nvim)";
       diff.tool = "vimdiff";
       init.defaultBranch = "main";
+      absorb.maxStack = 50;
     };
 
     aliases = {
