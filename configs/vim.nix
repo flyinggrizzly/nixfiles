@@ -114,6 +114,7 @@ in
       fidget-nvim
       nvim-cmp
       cmp-nvim-lsp
+      conform-nvim
 
       # TODO: investigate adding:
       # https://github.com/aznhe21/actions-preview.nvim
