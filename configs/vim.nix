@@ -111,6 +111,8 @@ in
       # https://github.com/aznhe21/actions-preview.nvim
       # https://github.com/nvim-telescope/telescope.nvim
 
+
+      which-key-nvim
       vim-fugitive
       gitsigns
 
