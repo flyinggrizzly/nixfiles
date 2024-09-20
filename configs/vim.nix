@@ -106,9 +106,6 @@ in
       tokyonight-nvim
 
       nvim-lspconfig
-      mason-nvim
-      mason-lspconfig-nvim
-      #lspsaga-nvim
       nvim-treesitter.withAllGrammars
       mason-tool-installer-nvim
       fidget-nvim
