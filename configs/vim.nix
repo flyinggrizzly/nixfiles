@@ -9,6 +9,17 @@ let
   # 4. set the package def's sha256 to that return value
   ###
 
+  # Gitsigns in nixpkgs is out of date
+  gitsigns = pkgs.vimUtils.buildVimPlugin {
+    name = "gitsigns";
+    src = pkgs.fetchFromGitHub {
+      owner = "lewis6991";
+      repo = "gitsigns.nvim";
+      rev = "1ef74b546732f185d0f806860fa5404df7614f28";
+      sha256 = "sha256-s3y8ZuLV00GIhizcK/zqsJOTKecql7Xn3LGYmH7NLsQ=";
+    };
+  };
+
   sorbet-vim = pkgs.vimUtils.buildVimPlugin {
     name = "sorbet-vim";
     src = pkgs.fetchFromGitHub {
@@ -101,7 +112,7 @@ in
       # https://github.com/nvim-telescope/telescope.nvim
 
       vim-fugitive
-      vim-gitgutter
+      gitsigns
 
       nvim-autopairs
       vim-commentary
