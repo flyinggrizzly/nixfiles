@@ -81,6 +81,10 @@ let
   };
 in
 {
+  home.packages = [
+    pkgs.nixd
+  ];
+
   programs.neovim = {
     enable = true;
     viAlias = true;
@@ -101,11 +105,15 @@ in
       #dracula-nvim
       tokyonight-nvim
 
+      nvim-lspconfig
       mason-nvim
       mason-lspconfig-nvim
-      nvim-lspconfig
-      lspsaga-nvim
+      #lspsaga-nvim
       nvim-treesitter.withAllGrammars
+      mason-tool-installer-nvim
+      fidget-nvim
+      nvim-cmp
+      cmp-nvim-lsp
 
       # TODO: investigate adding:
       # https://github.com/aznhe21/actions-preview.nvim
