@@ -95,7 +95,7 @@ in
     # more plugins: https://github.com/m15a/nixpkgs-vim-extra-plugins
     plugins = with pkgs.vimPlugins; [
       lualine-nvim
-      nvim-web-devicons # required for lualine
+      nvim-web-devicons # required for lualine, telescope
 
       # Colorscheme
       #dracula-nvim
@@ -109,10 +109,13 @@ in
 
       # TODO: investigate adding:
       # https://github.com/aznhe21/actions-preview.nvim
-      # https://github.com/nvim-telescope/telescope.nvim
 
-
+      telescope-nvim
+      telescope-ui-select-nvim
+      telescope-fzf-native-nvim
+      plenary-nvim
       which-key-nvim
+
       vim-fugitive
       gitsigns
 
