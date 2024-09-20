@@ -9,16 +9,6 @@ let
   # 4. set the package def's sha256 to that return value
   ###
 
-  tokyonight = pkgs.vimUtils.buildVimPlugin {
-    name = "tokyonight";
-    src = pkgs.fetchFromGitHub {
-      owner = "folke";
-      repo = "tokyonight";
-      rev = "610179f7f12db3d08540b6cc61434db2eaecbcff";
-      sha256 = "sha256-mzCdcf7FINhhVLUIPv/eLohm4qMG9ndRJ5H4sFU2vO0=";
-    };
-  };
-
   sorbet-vim = pkgs.vimUtils.buildVimPlugin {
     name = "sorbet-vim";
     src = pkgs.fetchFromGitHub {
@@ -98,7 +88,7 @@ in
 
       # Colorscheme
       #dracula-nvim
-      tokyonight
+      tokyonight-nvim
 
       mason-nvim
       mason-lspconfig-nvim
