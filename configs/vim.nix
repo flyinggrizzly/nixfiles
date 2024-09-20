@@ -115,6 +115,9 @@ in
       nvim-cmp
       cmp-nvim-lsp
       conform-nvim
+      cmp-buffer
+      cmp-tmux
+      cmp-path
 
       # TODO: investigate adding:
       # https://github.com/aznhe21/actions-preview.nvim
