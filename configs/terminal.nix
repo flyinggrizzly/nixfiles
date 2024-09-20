@@ -21,6 +21,8 @@
     pkgs.nix-prefetch
   ];
 
+  # TODO: try nerdfots and kitty config: https://discourse.nixos.org/t/setting-up-console-font-nerdfonts/37817/2
+
   home.file.".ripgreprc".source = ../lib/ripgreprc;
   home.file.".tmux.conf".source = ../lib/tmux.conf;
   home.file.".tmuxinator" = {
