@@ -15,3 +15,6 @@
     - https://github.com/chrisportela/dotfiles
     - https://www.chrisportela.com/posts/home-manager-flake/
     - https://www.chrisportela.com/posts/published-nix-dotfiles/
+- [configuring LSP servers without Mason on nix](https://github.com/LazyVim/LazyVim/discussions/1972)
+   - using LazyVim as a reference, but the "add to `extraPackages` part is the important bit"
+   - used [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim/blob/master/init.lua) for a lot of the basic telescope/lsp/etc setup: 
