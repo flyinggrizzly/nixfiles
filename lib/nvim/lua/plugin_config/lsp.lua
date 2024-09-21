@@ -131,6 +131,10 @@ capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp'
 local lsp = require('lspconfig')
 
 local servers = {
+  nixd = {},
+  graphql = {},
+  ts_ls = {},
+
   lua_ls = {
     on_init = function(client)
       local path = client.workspace_folders[1].name
@@ -163,18 +167,26 @@ local servers = {
     },
   },
 
-  ts_ls = {},
   sorbet = {
     cmd = { 'srb', 'tc', '--lsp' },
     filetypes = { 'ruby' },
     root_dir = lsp.util.root_pattern('Gemfile', '.git'),
   },
+
   rubocop = {
     cmd = { 'rubocop', '--lsp' },
     filetypes = { 'ruby' },
     root_dir = lsp.util.root_pattern('Gemfile', '.git'),
   },
-  nixd = {},
+
+  eslint = {
+    on_attach = function(_client, bufnr)
+      vim.api.nvim_create_autocmd("BufWritePre", {
+        buffer = bufnr,
+        command = "EslintFixAll",
+      })
+    end,
+  },
 }
 
 for server_name, config in pairs(servers) do

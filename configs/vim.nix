@@ -172,6 +172,7 @@ in
       rubyPackages.sorbet-runtime
       nixd
       lua-language-server
+      vscode-langservers-extracted
     ];
 
     extraConfig = ''
