@@ -15,6 +15,7 @@
 
     pkgs.wget
     pkgs.ripgrep
+    pkgs.fd
     pkgs.fzf
     pkgs.tree
     pkgs.youtube-dl
