@@ -13,6 +13,7 @@
     pkgs.git
     pkgs.gh
 
+    pkgs.wget
     pkgs.ripgrep
     pkgs.fzf
     pkgs.tree
