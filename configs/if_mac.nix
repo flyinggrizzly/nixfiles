@@ -37,6 +37,11 @@ in
             recursive = true;
           };
         };
+
+        packages = [
+          pkgs.iterm2
+          pkgs.rectangle
+        ];
       };
     })
   ];

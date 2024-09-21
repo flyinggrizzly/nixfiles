@@ -9,16 +9,14 @@ in {
   };
 
   config = {
+    nixpkgs.config.allowUnfree = true;
+
     home = {
       username = me;
       homeDirectory = "/Users/${me}";
       stateVersion = "22.11";
 
       file.".machine-identifier".text = host;
-
-      packages = [
-        pkgs.alacritty
-      ];
     };
 
     programs.home-manager.enable = true;
@@ -28,6 +26,7 @@ in {
     ./configs/git.nix
     ./configs/terminal.nix
     ./configs/vim.nix
+    ./configs/desktop.nix
     ./configs/if_mac.nix
   ];
 }
