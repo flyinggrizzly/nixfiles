@@ -159,7 +159,7 @@ in
       tmuxline-vim
 
       # TODO: what do I get from these/figure out why they don't work
-      vim-heritage # Automatically create parent dirs when saving... but isn't working?
+      vim-heritage
       vim-sleuth
       vim-sneak
       vim-unimpaired
