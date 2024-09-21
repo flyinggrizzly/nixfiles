@@ -71,10 +71,6 @@ let
   };
 in
 {
-  home.packages = [
-    pkgs.nixd
-  ];
-
   programs.neovim = {
     enable = true;
     viAlias = true;
@@ -169,6 +165,13 @@ in
 
       # Nice navigation options
       vim-unimpaired
+    ];
+
+    extraPackages = with pkgs; [
+      typescript-language-server
+      rubyPackages.sorbet-runtime
+      nixd
+      lua-language-server
     ];
 
     extraConfig = ''

@@ -127,3 +127,58 @@ vim.api.nvim_create_autocmd('LspAttach', {
 --  So, we create new capabilities with nvim cmp, and then broadcast that to the servers.
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
+
+local lsp = require('lspconfig')
+
+local servers = {
+  lua_ls = {
+    on_init = function(client)
+      local path = client.workspace_folders[1].name
+      if vim.loop.fs_stat(path .. '/.luarc.json') or vim.loop.fs_stat(path .. '/.luarc.jsonc') then
+        return
+      end
+
+      client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
+        runtime = {
+          -- Tell the language server which version of Lua you're using
+          -- (most likely LuaJIT in the case of Neovim)
+          version = 'LuaJIT'
+        },
+        -- Make the server aware of Neovim runtime files
+        workspace = {
+          checkThirdParty = false,
+          library = {
+            vim.env.VIMRUNTIME
+            -- Depending on the usage, you might want to add additional paths here.
+            -- "${3rd}/luv/library"
+            -- "${3rd}/busted/library",
+          }
+          -- or pull in all of 'runtimepath'. NOTE: this is a lot slower
+          -- library = vim.api.nvim_get_runtime_file("", true)
+        }
+      })
+    end,
+    settings = {
+      Lua = {}
+    },
+  },
+
+  ts_ls = {},
+  sorbet = {
+    cmd = { 'srb', 'tc', '--lsp' },
+    filetypes = { 'ruby' },
+    root_dir = lsp.util.root_pattern('Gemfile', '.git'),
+  },
+  rubocop = {
+    cmd = { 'rubocop', '--lsp' },
+    filetypes = { 'ruby' },
+    root_dir = lsp.util.root_pattern('Gemfile', '.git'),
+  },
+  nixd = {},
+}
+
+for server_name, config in pairs(servers) do
+  config.capabilities = vim.tbl_deep_extend('force', {}, capabilities, config.capabilities or {})
+
+  lsp[server_name].setup(config)
+end
