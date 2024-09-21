@@ -115,9 +115,7 @@ in
       gitsigns
 
       nvim-autopairs
-      vim-commentary
       vim-easy-align
-      vim-easymotion
       vim-endwise
       vim-eunuch # Adds :Rename, :SudoWrite
       fzf-vim
@@ -132,7 +130,6 @@ in
       vim-run-interactive
       supertab
       vim-surround
-      tcomment_vim
       vim-test
       tmux-complete-vim
       tslime-vim
