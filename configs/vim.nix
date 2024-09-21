@@ -158,10 +158,16 @@ in
       vim-tmux-navigator
       tmuxline-vim
 
-      # TODO: what do I get from these/figure out why they don't work
+      # Automatically creates missing directories when writing a file
       vim-heritage
+
+      # Adjusts tabstop and tabwidth intelligently
       vim-sleuth
+
+      # Use `s${search_pattern}` to jump to the next instance of `search_pattern`
       vim-sneak
+
+      # Nice navigation options
       vim-unimpaired
     ];
 
