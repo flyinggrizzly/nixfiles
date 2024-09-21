@@ -1,3 +1,0 @@
-function brew-up() {
-  brew bundle --file $HOME/.Brewfile
-}

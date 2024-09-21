@@ -1,5 +1,0 @@
-function sps() {
-  spin up shopify --wait
-
-  spin shell
-}

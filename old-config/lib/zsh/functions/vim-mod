@@ -1,3 +1,0 @@
-function vim-mod() {
-  git status -s | awk '{ print $2 }' | xargs vim
-}

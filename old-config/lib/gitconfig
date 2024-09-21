@@ -1,6 +1,0 @@
-[user]
-  name = Sean DMR
-  email = sean@flyinggrizzly.net
-
-[include]
-  path = ~/.gitconfig.without-user

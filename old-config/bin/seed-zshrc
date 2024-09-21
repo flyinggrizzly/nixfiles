@@ -1,8 +1,0 @@
-#!/bin/bash
-
-# Seed a non-linked ~/.zshrc for other tooling to append to, which sources the actual zshrc
-
-echo "# This file is a non-symlinked zshrc appendix for dev tooling to safely modify" >> $HOME/.zshrc
-echo "#" >> $HOME/.zshrc
-echo "# The first line in this file should be sourcing the actual zsh config" >> $HOME/.zshrc
-echo "source $HOME/._zshrc" >> $HOME/.zshrc
