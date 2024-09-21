@@ -18,7 +18,7 @@
     pkgs.fd
     pkgs.fzf
     pkgs.tree
-    pkgs.youtube-dl
+    pkgs.yt-dlp
 
     pkgs.nix-prefetch
   ];
