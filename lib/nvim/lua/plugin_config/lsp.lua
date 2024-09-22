@@ -215,7 +215,7 @@ for server_name, config in pairs(servers) do
     )
   else
     vim.notify(
-      string.format("LSP: no executable available for server `%s", server_name),
+      string.format("LSP: no executable available for server `%s`", server_name),
       vim.log.levels.WARN
     )
   end

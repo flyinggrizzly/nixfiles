@@ -3,6 +3,10 @@ local mini_notify = require('mini.notify')
 mini_notify.setup({
   window = {
     max_width_share = 0.65,
+    config = function()
+      local row = vim.o.lines - vim.o.cmdheight - (vim.o.laststatus >= 2 and 1 or 0)
+      return { border = 'solid', anchor = 'SE', row = row }
+    end,
   },
 })
 
