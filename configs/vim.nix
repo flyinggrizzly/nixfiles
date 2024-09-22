@@ -101,6 +101,7 @@ in
       cmp-buffer
       cmp-tmux
       cmp-path
+      mini-nvim # currently just for notify
 
       # TODO: investigate adding:
       # https://github.com/aznhe21/actions-preview.nvim

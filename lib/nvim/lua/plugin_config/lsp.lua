@@ -180,8 +180,43 @@ local servers = {
   },
 }
 
-for server_name, config in pairs(servers) do
-  config.capabilities = vim.tbl_deep_extend('force', {}, capabilities, config.capabilities or {})
+local function lsp_binary_exists(defaults, config)
+  local composed_config = vim.tbl_deep_extend(
+    'force',
+    defaults.document_config.default_config or {},
+    config or {}
+  )
 
-  lsp[server_name].setup(config)
+  local valid_config = type(composed_config.cmd) == "table" and
+      #defaults.document_config.default_config.cmd >= 1
+
+  if not valid_config then
+    return false
+  end
+
+  local binary = composed_config.cmd[1]
+
+  return vim.fn.executable(binary) == 1
+end
+
+for server_name, config in pairs(servers) do
+  local server = lsp[server_name]
+
+  -- Not every server will always be available, especially for more Ruby and JS-like projecst where the server will be
+  -- part of the application package.
+  --
+  -- Only enable servers if we have an executable to avoid the annoying red popup
+  if lsp_binary_exists(server, config) then
+    config.capabilities = vim.tbl_deep_extend('force', {}, capabilities, config.capabilities or {})
+    server.setup(config)
+    vim.notify(
+      string.format("LSP: started server `%s`", server_name),
+      vim.log.levels.INFO
+    )
+  else
+    vim.notify(
+      string.format("LSP: no executable available for server `%s", server_name),
+      vim.log.levels.WARN
+    )
+  end
 end

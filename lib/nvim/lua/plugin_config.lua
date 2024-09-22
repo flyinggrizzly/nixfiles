@@ -1,3 +1,5 @@
+require 'plugin_config/notify'
+
 require 'plugin_config/colorscheme'
 require 'plugin_config/lualine'
 require 'plugin_config/gitsigns'
