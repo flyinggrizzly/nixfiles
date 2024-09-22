@@ -178,15 +178,6 @@ local servers = {
     filetypes = { 'ruby' },
     root_dir = lsp.util.root_pattern('Gemfile', '.git'),
   },
-
-  eslint = {
-    on_attach = function(_client, bufnr)
-      vim.api.nvim_create_autocmd("BufWritePre", {
-        buffer = bufnr,
-        command = "EslintFixAll",
-      })
-    end,
-  },
 }
 
 for server_name, config in pairs(servers) do
