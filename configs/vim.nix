@@ -121,7 +121,6 @@ in
       vim-easy-align
       vim-endwise
       vim-eunuch # Adds :Rename, :SudoWrite
-      fzf-vim
       incsearch-vim
       indent-blankline-nvim
       nerdtree
