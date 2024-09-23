@@ -111,6 +111,7 @@ in
       telescope-fzf-native-nvim
       plenary-nvim
       which-key-nvim
+      trouble-nvim
 
       vim-fugitive
       gitsigns
