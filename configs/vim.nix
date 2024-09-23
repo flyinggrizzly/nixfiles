@@ -50,16 +50,6 @@ let
     };
   };
 
-  vim-mdx-js = pkgs.vimUtils.buildVimPlugin {
-    name = "vim-mdx-js";
-    src = pkgs.fetchFromGitHub {
-      owner = "nake89";
-      repo = "vim-mdx-js";
-      rev = "e578775a0be4de62091b1e34719bc788e222489d";
-      sha256 = "sha256-/ADzScsG0u6RJbEtfO23Gup2NYdhPkExqqOPVcQa7aQ=";
-    };
-  };
-
   vim-run-interactive = pkgs.vimUtils.buildVimPlugin {
     name = "vim-run-interactive";
     src = pkgs.fetchFromGitHub {
@@ -143,7 +133,6 @@ in
       vim-haml
       vim-javascript
       vim-json
-      vim-mdx-js
       vim-nix
       vim-rails
       vim-ruby
