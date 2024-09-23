@@ -21,6 +21,7 @@
     pkgs.yt-dlp
 
     pkgs.nix-prefetch
+    pkgs.nix-search-cli
   ];
 
   # TODO: try nerdfots and kitty config: https://discourse.nixos.org/t/setting-up-console-font-nerdfonts/37817/2
