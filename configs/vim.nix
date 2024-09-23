@@ -94,6 +94,7 @@ in
 
       nvim-lspconfig
       nvim-treesitter.withAllGrammars
+      nvim-treesitter-textobjects
       mason-tool-installer-nvim
       fidget-nvim
       nvim-cmp

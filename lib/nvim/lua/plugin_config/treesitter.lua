@@ -1,3 +1,5 @@
+local textobjects = require('plugin_config/treesitter/textobjects')
+
 require('nvim-treesitter.configs').setup({
   highlight = {
     enable = true,
@@ -6,5 +8,6 @@ require('nvim-treesitter.configs').setup({
   indent = {
     enable = true,
     disable = { 'ruby' },
-  }
+  },
+  textobjects = textobjects.map().configure(),
 })
