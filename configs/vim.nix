@@ -90,6 +90,7 @@ in
       # Colorscheme
       #dracula-nvim
       tokyonight-nvim
+      twilight-nvim
 
       nvim-lspconfig
       nvim-treesitter.withAllGrammars
