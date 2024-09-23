@@ -9,13 +9,25 @@ let
   # 4. set the package def's sha256 to that return value
   ###
 
+  # Gitsigns in nixpkgs is out of date
+  gitsigns = pkgs.vimUtils.buildVimPlugin {
+    name = "gitsigns";
+    src = pkgs.fetchFromGitHub {
+      owner = "lewis6991";
+      repo = "gitsigns.nvim";
+      rev = "1ef74b546732f185d0f806860fa5404df7614f28";
+      sha256 = "sha256-s3y8ZuLV00GIhizcK/zqsJOTKecql7Xn3LGYmH7NLsQ=";
+    };
+  };
+
+  # Tokyonight doesn't work in Spin from nixpkgs
   tokyonight = pkgs.vimUtils.buildVimPlugin {
     name = "tokyonight";
     src = pkgs.fetchFromGitHub {
       owner = "folke";
-      repo = "tokyonight";
-      rev = "610179f7f12db3d08540b6cc61434db2eaecbcff";
-      sha256 = "sha256-mzCdcf7FINhhVLUIPv/eLohm4qMG9ndRJ5H4sFU2vO0=";
+      repo = "tokyonight.nvim";
+      rev = "817bb6ffff1b9ce72cdd45d9fcfa8c9cd1ad3839";
+      sha256 = "sha256-d0izq6GCa5XWigiQMY3ODrdJ3jV8Lw8KCTADQA6GbXc=";
     };
   };
 
@@ -49,16 +61,6 @@ let
     };
   };
 
-  vim-mdx-js = pkgs.vimUtils.buildVimPlugin {
-    name = "vim-mdx-js";
-    src = pkgs.fetchFromGitHub {
-      owner = "nake89";
-      repo = "vim-mdx-js";
-      rev = "e578775a0be4de62091b1e34719bc788e222489d";
-      sha256 = "sha256-/ADzScsG0u6RJbEtfO23Gup2NYdhPkExqqOPVcQa7aQ=";
-    };
-  };
-
   vim-run-interactive = pkgs.vimUtils.buildVimPlugin {
     name = "vim-run-interactive";
     src = pkgs.fetchFromGitHub {
@@ -66,16 +68,6 @@ let
       repo = "vim-run-interactive";
       sha256 = "sha256-Dar5OOLRXutTHCIiDDjUEX0C3QnPWpDEnjnNcTctHUI=";
       rev = "6ae33c719bdf185325c3c1836978bb4352157c82";
-    };
-  };
-
-  vim-zoom = pkgs.vimUtils.buildVimPlugin {
-    name = "vim-zoom";
-    src = pkgs.fetchFromGitHub {
-      owner = "dhruvasagar";
-      repo = "vim-zoom";
-      rev = "01c737005312c09e0449d6518decf8cedfee32c7";
-      sha256 = "sha256-/ADzScsG0u6RJbEtfO23Gup2NYdhPkExqqOPVcQa7aQ=";
     };
   };
 in
@@ -94,31 +86,43 @@ in
     # more plugins: https://github.com/m15a/nixpkgs-vim-extra-plugins
     plugins = with pkgs.vimPlugins; [
       lualine-nvim
-      nvim-web-devicons # required for lualine
+      nvim-web-devicons # required for lualine, telescope
 
       # Colorscheme
       #dracula-nvim
       tokyonight
+      twilight-nvim
 
-      mason-nvim
-      mason-lspconfig-nvim
       nvim-lspconfig
-      lspsaga-nvim
+      nvim-treesitter.withAllGrammars
+      nvim-treesitter-textobjects
+      mason-tool-installer-nvim
+      fidget-nvim
+      nvim-cmp
+      cmp-nvim-lsp
+      conform-nvim
+      cmp-buffer
+      cmp-tmux
+      cmp-path
+      mini-nvim # currently just for notify
 
       # TODO: investigate adding:
       # https://github.com/aznhe21/actions-preview.nvim
-      # https://github.com/nvim-telescope/telescope.nvim
+
+      telescope-nvim
+      telescope-ui-select-nvim
+      telescope-fzf-native-nvim
+      plenary-nvim
+      which-key-nvim
+      trouble-nvim
 
       vim-fugitive
-      vim-gitgutter
+      gitsigns
 
       nvim-autopairs
-      vim-commentary
       vim-easy-align
-      vim-easymotion
       vim-endwise
       vim-eunuch # Adds :Rename, :SudoWrite
-      fzf-vim
       incsearch-vim
       indent-blankline-nvim
       nerdtree
@@ -130,19 +134,16 @@ in
       vim-run-interactive
       supertab
       vim-surround
-      tcomment_vim
       vim-test
       tmux-complete-vim
       tslime-vim
       yescapsquit-vim
-      vim-zoom
 
       # Languages
       emmet-vim
       vim-haml
       vim-javascript
       vim-json
-      vim-mdx-js
       vim-nix
       vim-rails
       vim-ruby
@@ -153,11 +154,25 @@ in
       vim-tmux-navigator
       tmuxline-vim
 
-      # TODO: what do I get from these/figure out why they don't work
-      vim-heritage # Automatically create parent dirs when saving... but isn't working?
+      # Automatically creates missing directories when writing a file
+      vim-heritage
+
+      # Adjusts tabstop and tabwidth intelligently
       vim-sleuth
+
+      # Use `s${search_pattern}` to jump to the next instance of `search_pattern`
       vim-sneak
+
+      # Nice navigation options
       vim-unimpaired
+    ];
+
+    extraPackages = with pkgs; [
+      typescript-language-server
+      rubyPackages.sorbet-runtime
+      nixd
+      lua-language-server
+      vscode-langservers-extracted
     ];
 
     extraConfig = ''

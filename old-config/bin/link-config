@@ -1,5 +1,0 @@
-#!/bin/bash
-
-./set-nix-source-dir
-
-./copy-homefile-to-nix-home

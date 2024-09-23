@@ -1,8 +1,0 @@
-function he() {
-  current_dir="$(pwd)"
-  cd $(nix-source-dir)
-
-  nvim home.nix
-
-  cd $current_dir
-}

@@ -1,5 +1,4 @@
-{ config, pkgs, ... }:
-
+{ lib, pkgs, ... }:
 {
   home.packages = [
     pkgs.powerline-fonts
@@ -13,12 +12,15 @@
     pkgs.git
     pkgs.gh
 
+    pkgs.wget
     pkgs.ripgrep
+    pkgs.fd
     pkgs.fzf
     pkgs.tree
-    pkgs.youtube-dl
+    pkgs.yt-dlp
 
     pkgs.nix-prefetch
+    pkgs.nix-search-cli
   ];
 
   home.file.".ripgreprc".source = ../lib/ripgreprc;
@@ -27,7 +29,6 @@
     source = ../lib/tmuxinator;
     recursive = true;
   };
-  home.file.".kitty.conf".source = ../lib/kitty.conf;
   home.file.".aliases".source = ../lib/aliases;
   home.file.".bin" = {
     source = ../lib/bin;
@@ -44,5 +45,3 @@
     recursive = true;
   };
 }
-
-
