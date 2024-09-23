@@ -20,6 +20,17 @@ let
     };
   };
 
+  # Tokyonight doesn't work in Spin from nixpkgs
+  tokyonight = pkgs.vimUtils.buildVimPlugin {
+    name = "tokyonight";
+    src = pkgs.fetchFromGitHub {
+      owner = "folke";
+      repo = "tokyonight.nvim";
+      rev = "817bb6ffff1b9ce72cdd45d9fcfa8c9cd1ad3839";
+      sha256 = "sha256-d0izq6GCa5XWigiQMY3ODrdJ3jV8Lw8KCTADQA6GbXc=";
+    };
+  };
+
   sorbet-vim = pkgs.vimUtils.buildVimPlugin {
     name = "sorbet-vim";
     src = pkgs.fetchFromGitHub {
@@ -79,7 +90,7 @@ in
 
       # Colorscheme
       #dracula-nvim
-      tokyonight-nvim
+      tokyonight
       twilight-nvim
 
       nvim-lspconfig
