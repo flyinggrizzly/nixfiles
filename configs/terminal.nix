@@ -1,4 +1,11 @@
 { lib, pkgs, ... }:
+let
+  jetbrains_mono_pkg = pkgs.jetbrains-mono;
+  nerdfont_jetbrains_mono_pkg = "JetBrainsMono";
+  nerdfont_jetbrains_mono_name = "JetBrains Mono Nerd Font";
+  nerdfont_symbols_only_pkg = "NerdFontsSymbolsOnly";
+  nerdfont_symbols_only_name = "Symbols Nerd Font";
+in
 {
   home.packages = [
     pkgs.powerline-fonts
@@ -21,6 +28,9 @@
 
     pkgs.nix-prefetch
     pkgs.nix-search-cli
+
+    jetbrains_mono_pkg
+    (pkgs.nerdfonts.override { fonts = [ nerdfont_jetbrains_mono_pkg nerdfont_symbols_only_pkg ]; })
   ];
 
   home.file.".ripgreprc".source = ../lib/ripgreprc;

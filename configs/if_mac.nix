@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }: 
+{ config, pkgs, lib, ... }:
 let
   inherit (pkgs.stdenv) isDarwin;
   inherit (lib) mkMerge mkIf types;
@@ -119,9 +119,6 @@ in
 
           pkgs.alacritty
           pkgs.kitty-themes
-
-          jetbrains_mono_pkg
-          (pkgs.nerdfonts.override { fonts = [ nerdfont_jetbrains_mono_pkg nerdfont_symbols_only_pkg ]; })
         ];
       };
     })
