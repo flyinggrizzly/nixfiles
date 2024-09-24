@@ -6,9 +6,9 @@ vim.cmd [[
   let ruby_indent_block_style = 'do'
 
   " Automated testing
-  autocmd FileType ruby map <silent> <leader>s :TestNearest<CR>
-  autocmd FileType ruby map <silent> <leader>t :TestFile<CR>
-  autocmd FileType ruby map <silent> <leader>l :TestLast<CR>
+  autocmd FileType ruby map <silent> <leader>b :TestNearest<CR>
+  autocmd FileType ruby map <silent> <leader>bb :TestFile<CR>
+  autocmd FileType ruby map <silent> <leader>bl :TestLast<CR>
   autocmd FileType ruby map <silent> <leader>g :TestVisit<CR>
 
   let test#strategy = "tslime"
