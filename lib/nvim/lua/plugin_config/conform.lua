@@ -26,8 +26,4 @@ require('conform').setup({
   },
 })
 
-vim.api.nvim_create_user_command("Format", function()
-  require('conform').format { async = true, lsp_format = 'fallback' }
-end, {})
-
 vim.keymap.set('n', '<leader>l', ":Format<CR>", { desc = 'Format with Conform' })
