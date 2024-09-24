@@ -26,4 +26,4 @@ require('conform').setup({
   },
 })
 
-vim.keymap.set('n', '<leader>l', ":Format<CR>", { desc = 'Format with Conform' })
+vim.keymap.set('n', '<leader>m', ":Format<CR>", { desc = 'Format with Conform' })
