@@ -169,6 +169,7 @@ in
 
     extraPackages = with pkgs; [
       typescript-language-server
+      prettierd
       rubyPackages.sorbet-runtime
       nixd
       lua-language-server
