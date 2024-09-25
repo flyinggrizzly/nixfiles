@@ -14,6 +14,10 @@ vim.cmd [[
   let test#strategy = "tslime"
   let g:test#preserve_screen = 1
 
+  let g:test#javascript#executable = 'pnpm exect jest'
+  let g:test#typescript#executable = 'pnpm exect jest'
+  let g:test#typescriptreact#executable = 'pnpm exect jest'
+
   let test#ruby#rspec#options = {
     \ 'nearest': '--fail-fast',
     \ 'file':    '--fail-fast',
