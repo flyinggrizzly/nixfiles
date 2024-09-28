@@ -170,14 +170,18 @@ local servers = {
   sorbet = {
     cmd = { 'srb', 'tc', '--lsp' },
     filetypes = { 'ruby' },
-    root_dir = lsp.util.root_pattern('Gemfile', '.git'),
+    root_dir = lsp.util.root_pattern('Gemfile', '.git', 'sorbet'),
   },
 
   rubocop = {
     cmd = { 'rubocop', '--lsp' },
     filetypes = { 'ruby' },
-    root_dir = lsp.util.root_pattern('Gemfile', '.git'),
+    root_dir = lsp.util.root_pattern('Gemfile', '.git', 'rubocop.yml'),
   },
+
+  ruby_lsp = {
+    root_dir = lsp.util.root_pattern('Gemfile', '.git', '.ruby-lsp'),
+  }
 }
 
 local function lsp_binary_exists(defaults, config)
