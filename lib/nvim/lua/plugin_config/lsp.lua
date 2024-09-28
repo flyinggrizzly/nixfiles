@@ -213,10 +213,5 @@ for server_name, config in pairs(servers) do
   if lsp_binary_exists(server, config) then
     config.capabilities = vim.tbl_deep_extend('force', {}, capabilities, config.capabilities or {})
     server.setup(config)
-  else
-    vim.notify(
-      string.format("LSP: no executable available for server `%s`", server_name),
-      vim.log.levels.WARN
-    )
   end
 end
