@@ -5,12 +5,6 @@ vim.cmd [[
   " Ruby indentation style
   let ruby_indent_block_style = 'do'
 
-  " Automated testing
-  autocmd FileType ruby map <silent> <leader>b :TestNearest<CR>
-  autocmd FileType ruby map <silent> <leader>bb :TestFile<CR>
-  autocmd FileType ruby map <silent> <leader>bl :TestLast<CR>
-  autocmd FileType ruby map <silent> <leader>g :TestVisit<CR>
-
   let test#strategy = "tslime"
   let g:test#preserve_screen = 1
 
@@ -22,3 +16,8 @@ vim.cmd [[
     \ 'suite':   '--fail-fast',
   \}
 ]]
+
+vim.keymap.set('n', '<leader>t', ":TestNearest<CR>", { desc = 'Run [T]est under cursor' })
+vim.keymap.set('n', '<leader>tt', ":TestFile<CR>", { desc = 'Run [TT]est file' })
+vim.keymap.set('n', '<leader>tl', ":TestLast<CR>", { desc = 'Rerun [T]est [L]ast' })
+vim.keymap.set('n', '<leader>tv', ":TestVisit<CR>", { desc = 'Rerun [T]est [V]isit' })
