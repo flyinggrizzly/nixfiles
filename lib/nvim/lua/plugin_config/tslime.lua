@@ -8,7 +8,7 @@ vim.cmd [[
   let test#strategy = "tslime"
   let g:test#preserve_screen = 1
 
-  let g:test#javascript#runnr = 'jest'
+  let g:test#javascript#runner = 'jest'
 
   let test#ruby#rspec#options = {
     \ 'nearest': '--fail-fast',
