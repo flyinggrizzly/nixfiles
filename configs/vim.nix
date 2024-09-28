@@ -116,6 +116,8 @@ in
       which-key-nvim
       trouble-nvim
 
+      oil-nvim
+
       vim-fugitive
       gitsigns
 
@@ -125,8 +127,6 @@ in
       vim-eunuch # Adds :Rename, :SudoWrite
       incsearch-vim
       indent-blankline-nvim
-      nerdtree
-      nerdtree-git-plugin
       mkdir-nvim
       nerdcommenter
       vim-projectionist
