@@ -161,7 +161,7 @@ in
       vim-sleuth
 
       # Use `s${search_pattern}` to jump to the next instance of `search_pattern`
-      vim-sneak
+      leap-nvim
 
       # Nice navigation options
       vim-unimpaired
