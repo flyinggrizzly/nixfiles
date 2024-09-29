@@ -191,16 +191,12 @@ local function lsp_binary_exists(defaults, config)
     config or {}
   )
 
-  local valid_config = type(composed_config.cmd) == "table" and
-      #defaults.document_config.default_config.cmd >= 1
-
-  if not valid_config then
+  -- cmd must alwayus be an array table of at least one element
+  if not (type(composed_config.cmd) == "table" and #composed_config.cmd >= 1) then
     return false
   end
 
-  local binary = composed_config.cmd[1]
-
-  return vim.fn.executable(binary) == 1
+  return vim.fn.executable(composed_config.cmd[1]) == 1
 end
 
 for server_name, config in pairs(servers) do
