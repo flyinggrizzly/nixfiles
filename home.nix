@@ -29,5 +29,6 @@ in {
     ./configs/desktop.nix
     ./configs/if_mac.nix
     ./configs/secrets.nix
+    ./configs/ollama.nix
   ];
 }
