@@ -33,6 +33,9 @@
       # git add -p will also interact with untracked files
       ap = "!git add --intent-to-add && git add -p";
 
+      hide = "update-index --skip-worktree";
+      unhide = "update-index --no-skip-worktree";
+
       squash = "rebase -i --autosquash";
     };
 
