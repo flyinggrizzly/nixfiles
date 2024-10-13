@@ -47,9 +47,6 @@ in
 
   programs.zsh = {
     enable = true;
-    sessionVariables = {
-      ANTHROPIC_API_KEY = "add-your-key-dummy";
-    };
   };
 
   home.file.".zshrc".source = ../lib/zshrc;
