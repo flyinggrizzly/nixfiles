@@ -30,6 +30,9 @@
       po = "!git push -u origin \"$(git rev-parse --abbrev-ref HEAD)\"";
       cane = "commit --amend --no-edit";
 
+      # git add -p will also interact with untracked files
+      ap = "!git add --intent-to-add && git add -p";
+
       squash = "rebase -i --autosquash";
     };
 
