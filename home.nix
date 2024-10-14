@@ -28,5 +28,7 @@ in {
     ./configs/vim.nix
     ./configs/desktop.nix
     ./configs/if_mac.nix
+    ./configs/secrets.nix
+    ./configs/ollama.nix
   ];
 }

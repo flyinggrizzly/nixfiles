@@ -121,6 +121,11 @@ in
       vim-fugitive
       gitsigns
 
+      avante-nvim
+      dressing-nvim
+      nui-nvim
+      render-markdown-nvim
+
       nvim-autopairs
       vim-easy-align
       vim-endwise

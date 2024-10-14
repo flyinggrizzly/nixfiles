@@ -53,3 +53,9 @@ windows:
       panes:
         - nvim
         - zsh
+  - ollama:
+      root: ~/
+      layout: tiled
+      panes:
+        - ollama serve
+        - ollama run llama3.2

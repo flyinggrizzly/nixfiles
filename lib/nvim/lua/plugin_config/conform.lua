@@ -7,11 +7,7 @@ conform.setup({
     typescript = { "prettierd", "prettier" },
   },
 
-  format_on_save = function(bufnr)
-    return {
-      lsp_format = 'never',
-    }
-  end,
+  format_on_save = false,
 
   opts = {
     notify_on_error = false,
