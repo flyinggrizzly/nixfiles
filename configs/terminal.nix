@@ -35,6 +35,8 @@ in
     pkgs.nerd-fonts.symbols-only
     pkgs.nerd-fonts.jetbrains-mono
 
+    pkgs.jq
+
     pkgs.graphite-cli
 
     pkgs.claude-code
