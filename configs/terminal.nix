@@ -31,6 +31,8 @@ in
 
     jetbrains_mono_pkg
     (pkgs.nerdfonts.override { fonts = [ nerdfont_jetbrains_mono_pkg nerdfont_symbols_only_pkg ]; })
+
+    pkgs.graphite-cli
   ];
 
   home.file.".ripgreprc".source = ../lib/ripgreprc;
