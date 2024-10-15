@@ -1,6 +1,3 @@
-require('render-markdown').setup({
-  file_types = { "Avante" },
-})
 
 local function is_git_subprocess()
   -- Check Git-specific environment variables
@@ -24,24 +21,23 @@ local function is_git_subprocess()
   return false
 end
 
-require('avante_lib').load()
 if not is_git_subprocess() then
-  require('avante').setup({
-    provider = "claude",
-    auto_suggestions_provider = "claude",
-    suggestion = {
-      debounce = 1000
+  local openai = require("avante.providers.openai")
+  require('render-markdown').setup({ file_types = { "Avante" } })
+  require('avante_lib').load()
+
+  require("avante").setup({
+    -- @type AvanteProvider
+    provider = "shopify-ai",
+    auto_suggestions_provider = "shopify-ai",
+    vendors = {
+      ["shopify-ai"] = {
+        endpoint = "https://proxy.shopify.ai/v1",
+        model = "anthropic:claude-3-7-sonnet-20250219",
+        api_key_name = {"oai-proxy-key", "cat"},
+        parse_curl_args = openai.parse_curl_args,
+        parse_response_data = openai.parse_response,
+      },
     },
-    claude = {
-      api_key_name = "cmd:op read op://Personal/anthropic-api-key/password"
-    },
-    --vendors = {
-    --["local--llama3.1"] = {
-    --__inherited_from = "openai",
-    --api_key_name = "",
-    --endpoint = "http://127.0.0.1:11434/v1",
-    --model = "llama3.1:8b"
-    --},
-    --}
   })
 end
