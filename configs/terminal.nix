@@ -34,6 +34,8 @@ in
     jetbrains_mono_pkg
     (pkgs.nerdfonts.override { fonts = [ nerdfont_jetbrains_mono_pkg nerdfont_symbols_only_pkg ]; })
 
+    pkgs.jq
+
     pkgs.graphite-cli
   ];
 
@@ -53,6 +55,10 @@ in
     enable = true;
   };
 
+  home.file.".scripts" ={
+    source = ../lib/scripts;
+    recursive = true;
+  };
   home.file.".zshrc".source = ../lib/zshrc;
   home.file.".zshrc.extend".source = ../lib/zshrc.extend;
   home.file.".zsh" = {
