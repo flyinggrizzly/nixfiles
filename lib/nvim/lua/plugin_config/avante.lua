@@ -1,20 +1,21 @@
+local openai = require("avante.providers.openai")
+
 require('render-markdown').setup({
   file_types = { "Avante" },
 })
 
 require('avante_lib').load()
-require('avante').setup({
-  provider = "claude",
-  auto_suggestions_provider = "claude",
-  suggestion = {
-    debounce = 1000
+require("avante").setup({
+  -- @type AvanteProvider
+  provider = "shopify-ai",
+  auto_suggestions_provider = "shopify-ai",
+  vendors = {
+    ["shopify-ai"] = {
+      endpoint = "https://proxy.shopify.ai/v3/v1",
+      model = "anthropic:claude-3-5-sonnet",
+      api_key_name = {"oai-proxy-key", "cat"},
+      parse_curl_args = openai.parse_curl_args,
+      parse_response_data = openai.parse_response,
+    },
   },
-  --vendors = {
-    --["local--llama3.1"] = {
-      --__inherited_from = "openai",
-      --api_key_name = "",
-      --endpoint = "http://127.0.0.1:11434/v1",
-      --model = "llama3.1:8b"
-    --},
-  --}
 })

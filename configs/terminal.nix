@@ -34,6 +34,8 @@ in
     pkgs.nerd-fonts.symbols-only
     pkgs.nerd-fonts.jetbrains-mono
 
+    pkgs.jq
+
     pkgs.graphite-cli
 
     pkgs.aider-chat
