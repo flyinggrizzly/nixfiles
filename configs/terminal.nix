@@ -26,6 +26,8 @@ in
     pkgs.tree
     pkgs.yt-dlp
 
+    pkgs.libyaml
+
     pkgs.nix-prefetch
     pkgs.nix-search-cli
 
