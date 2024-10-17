@@ -51,6 +51,16 @@ let
     };
   };
 
+  render-markdown-nvim = pkgs.vimUtils.buildVimPlugin {
+    name = "render-markdown-nvim";
+    src = pkgs.fetchFromGitHub {
+      owner = "MeanderingProgrammer";
+      repo = "render-markdown.nvim";
+      rev = "7808306438e51d7222534759011cddedf36ce580";
+      sha256 = "sha256-K2YbO4vIjVgYrWF4MVxqiaTmONF1ZvMXxZVIW/UYwRo=";
+    };
+  };
+
   vim-haml = pkgs.vimUtils.buildVimPlugin {
     name = "vim-haml";
     src = pkgs.fetchFromGitHub {
