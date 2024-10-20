@@ -130,6 +130,10 @@ capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp'
 
 local lsp = require('lspconfig')
 
+local function sorbet_root_dir(fname)
+  return lsp.util.root_pattern('Gemfile', '.git', 'sorbet')(fname)
+end
+
 local servers = {
   nixd = {},
   graphql = {},
@@ -170,7 +174,18 @@ local servers = {
   sorbet = {
     cmd = { 'srb', 'tc', '--lsp' },
     filetypes = { 'ruby' },
-    root_dir = lsp.util.root_pattern('Gemfile', '.git', 'sorbet'),
+    root_dir = sorbet_root_dir,
+  },
+
+  ruby_lsp = {
+    root_dir = function(fname)
+      -- Don't enable the Ruby LSP if we're relying on Sorbet
+      local sorbet = sorbet_root_dir(fname)
+
+      if not sorbet then
+        lsp.util.root_pattern('Gemfile', '.git', '.ruby-lsp')(fname)
+      end
+    end
   },
 
   rubocop = {
@@ -178,10 +193,6 @@ local servers = {
     filetypes = { 'ruby' },
     root_dir = lsp.util.root_pattern('Gemfile', '.git', 'rubocop.yml'),
   },
-
-  ruby_lsp = {
-    root_dir = lsp.util.root_pattern('Gemfile', '.git', '.ruby-lsp'),
-  }
 }
 
 local function lsp_binary_exists(defaults, config)
