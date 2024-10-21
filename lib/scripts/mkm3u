@@ -1,0 +1,37 @@
+#!/usr/bin/env ruby
+
+require 'fileutils'
+require 'shellwords'
+
+# Check if a directory name is provided
+if ARGV.empty?
+  puts "Usage: mkm3u <directory_name>"
+  exit 1
+end
+
+directory = ARGV[0]
+
+# Check if the directory exists
+unless Dir.exist?(directory)
+  puts "Error: Directory '#{directory}' does not exist."
+  exit 1
+end
+
+# Get all .chd files in the directory
+chd_files = Dir.glob(File.join(directory.shellescape, "*.chd"))
+
+# Create the .m3u file name
+m3u_file = if directory.include?(".discs")
+             directory.gsub(".discs", ".m3u")
+           else
+             directory + ".m3u"
+           end
+
+# Write the .chd files to the .m3u playlist
+File.open(m3u_file, 'w') do |file|
+  chd_files.each do |chd_file|
+    file.puts "./#{chd_file}"
+  end
+end
+
+puts "Created #{m3u_file} with #{chd_files.count} entries."

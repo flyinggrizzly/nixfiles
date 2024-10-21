@@ -1,0 +1,42 @@
+#!/usr/bin/env ruby
+
+require 'fileutils'
+require 'shellwords'
+
+def convert_to_chd(directory, cleanup: false)
+  puts "Searching in directory: #{directory}"
+  files = Dir.glob(File.join(directory.shellescape, '**', '*.{cue,iso}'), File::FNM_CASEFOLD)
+  puts "Found #{files.length} files to process"
+
+  files.each do |file|
+    puts "Processing file: #{file}"
+    output_file = "#{File.dirname(file)}/#{File.basename(file, '.*')}.chd"
+
+    puts "Converting #{file} to CHD..."
+    puts(`chdman createcd -i #{file.shellescape} -o #{output_file.shellescape}`)
+
+    if $?.success?
+      puts "Conversion successful: #{output_file}"
+      if cleanup
+        if File.extname(file).downcase == '.cue'
+          associated_bin = file.sub(/\.cue$/i, '.bin')
+          File.delete(associated_bin) if File.exist?(associated_bin)
+        end
+        File.delete(file)
+        puts "Cleaned up source file(s)"
+      end
+    else
+      puts "Conversion failed for #{file}"
+    end
+  end
+end
+
+if ARGV.empty?
+  puts "Usage: #{$0} <directory> [--cleanup]"
+  exit 1
+end
+
+directory = ARGV[0]
+cleanup = ARGV.include?('--cleanup')
+
+convert_to_chd(directory, cleanup: cleanup)
