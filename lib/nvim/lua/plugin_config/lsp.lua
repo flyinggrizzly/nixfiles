@@ -131,7 +131,7 @@ capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp'
 local lsp = require('lspconfig')
 
 local function sorbet_root_dir(fname)
-  return lsp.util.root_pattern('Gemfile', '.git', 'sorbet')(fname)
+  return lsp.util.root_pattern('Gemfile', 'sorbet')(fname)
 end
 
 local servers = {
@@ -183,7 +183,7 @@ local servers = {
       local sorbet = sorbet_root_dir(fname)
 
       if not sorbet then
-        lsp.util.root_pattern('Gemfile', '.git', '.ruby-lsp')(fname)
+        lsp.util.root_pattern('Gemfile', '.ruby-lsp')(fname)
       end
     end
   },
