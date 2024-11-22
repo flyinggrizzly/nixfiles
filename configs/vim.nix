@@ -99,8 +99,8 @@ in
       nvim-web-devicons # required for lualine, telescope
 
       # Colorscheme
-      #dracula-nvim
-      tokyonight
+      dracula-nvim
+      #tokyonight
       twilight-nvim
 
       nvim-lspconfig

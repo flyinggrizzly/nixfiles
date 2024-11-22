@@ -1,8 +1,12 @@
-local colorscheme = 'tokyonight'
+local colorscheme = 'dracula'
 
 if colorscheme == 'tokyonight' then
   vim.cmd [[
     colorscheme tokyonight
+  ]]
+elseif colorscheme == 'dracula' then
+  vim.cmd [[
+    colorscheme dracula
   ]]
 else
   vim.cmd [[
