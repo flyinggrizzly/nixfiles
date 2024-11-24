@@ -37,6 +37,8 @@ in
     (pkgs.nerdfonts.override { fonts = [ nerdfont_jetbrains_mono_pkg nerdfont_symbols_only_pkg ]; })
 
     pkgs.graphite-cli
+
+    pkgs.aider-chat
   ];
 
   home.file.".ripgreprc".source = ../lib/ripgreprc;
