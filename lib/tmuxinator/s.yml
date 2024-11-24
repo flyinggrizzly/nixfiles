@@ -44,18 +44,18 @@ windows:
       root: ~/
       layout: 6791,344x78,0,0{76x78,0,0,17,267x78,77,0,7}
       panes:
-        - nvim
         - zsh
+        - nvim
   - zsh:
   - nixfiles:
       layout: 6791,344x78,0,0{76x78,0,0,17,267x78,77,0,7}
       root: ~/nixfiles/
       panes:
-        - nvim
         - zsh
+        - nvim
   - ollama:
       root: ~/
       layout: tiled
       panes:
         - ollama serve
-        - ollama run llama3.2
+        - ollama run opencoder
