@@ -32,6 +32,7 @@ in
     pkgs.nix-search-cli
 
     pkgs.pnpm
+    pkgs.rustc
 
     jetbrains_mono_pkg
     (pkgs.nerdfonts.override { fonts = [ nerdfont_jetbrains_mono_pkg nerdfont_symbols_only_pkg ]; })
