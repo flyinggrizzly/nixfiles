@@ -11,7 +11,7 @@ require("avante").setup({
   auto_suggestions_provider = "shopify-ai",
   vendors = {
     ["shopify-ai"] = {
-      endpoint = "https://proxy.shopify.ai/v3/v1",
+      endpoint = "https://proxy.shopify.ai/v1",
       model = "anthropic:claude-3-5-sonnet",
       api_key_name = {"oai-proxy-key", "cat"},
       parse_curl_args = openai.parse_curl_args,
