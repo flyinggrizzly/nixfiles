@@ -3,7 +3,7 @@ root: ~/
 windows:
   - core:
       layout: 6791,344x78,0,0{76x78,0,0,17,267x78,77,0,7}
-      root: ~/src/github.com/Shopify/shopify/areas/core/shopify
+      root: ~/world/trees/root/src/areas/core/shopify
       panes:
         - 
         - nvim
@@ -14,10 +14,10 @@ windows:
         - 
         - nvim
   - runners:
-      root: ~/src/github.com/Shopify/shopify/areas/core/shopify
+      root: ~/world/trees/root/src
       layout: tiled
       panes:
-        - dev up
+        -
         - 
         - 
         - 
