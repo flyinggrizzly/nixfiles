@@ -11,7 +11,7 @@
 
   outputs = { nixpkgs, home-manager, ... }: {
       # For `nix run .` later
-      defaultPackage.aarch64-darwin = home-manager.defaultPackage.aarch64-darwin;
+      packages.aarch64-darwin.default = home-manager.packages.aarch64-darwin.default;
 
       homeConfigurations = {
         "seandmr" = home-manager.lib.homeManagerConfiguration {
