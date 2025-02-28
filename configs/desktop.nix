@@ -11,27 +11,29 @@
     vscode = {
       enable = true;
       package = pkgs.vscode;
-      extensions = with pkgs.vscode-extensions; [
-        asvetliakov.vscode-neovim
-        bierner.markdown-mermaid
-      ];
-      userSettings = {
-        "vscode-neovim.compositeKeys" = {
-          "jk" = {
-            "command" = "vscode-neovim.escape";
+      profiles = {
+        default = {
+          extensions = with pkgs.vscode-extensions; [
+            asvetliakov.vscode-neovim
+            bierner.markdown-mermaid
+          ];
+          userSettings = {
+            "vscode-neovim.compositeKeys" = {
+              "jk" = {
+                "command" = "vscode-neovim.escape";
+              };
+            };
+            "vscode-neovim.compositeKeys" = {
+              "kj" = {
+                "command" = "vscode-neovim.escape";
+              };
+            };
+
+            "extensions.experimental.affinity" = {
+              "asvetliakov.vscode-neovim" = 1;
+            };
           };
         };
-        "vscode-neovim.compositeKeys" = {
-          "kj" = {
-            "command" = "vscode-neovim.escape";
-          };
-        };
-
-        "extensions.experimental.affinity" = {
-          "asvetliakov.vscode-neovim" = 1;
-        };
-
-
       };
     };
   };
