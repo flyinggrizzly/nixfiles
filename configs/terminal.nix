@@ -37,6 +37,8 @@ in
     pkgs.graphite-cli
 
     pkgs.aider-chat
+
+    pkgs.direnv
   ];
 
   home.file.".ripgreprc".source = ../lib/ripgreprc;
