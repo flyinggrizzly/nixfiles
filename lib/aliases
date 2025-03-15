@@ -35,3 +35,4 @@ alias grc="git rebase --continue"
 # see https://sw.kovidgoyal.net/kitty/faq/#i-get-errors-about-the-terminal-being-unknown-or-opening-the-terminal-failing-when-sshing-into-a-different-computer
 alias ssh="kitty +kitten ssh"
 
+(( $+commands[bundle] )) && alias be='bundle exec'
