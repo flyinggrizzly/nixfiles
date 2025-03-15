@@ -32,6 +32,9 @@ if not is_git_subprocess() then
     suggestion = {
       debounce = 1000
     },
+    claude = {
+      api_key_name = "cmd:op read op://Personal/anthropic-api-key/password"
+    },
     --vendors = {
     --["local--llama3.1"] = {
     --__inherited_from = "openai",
