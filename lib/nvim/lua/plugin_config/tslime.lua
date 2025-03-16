@@ -2,9 +2,6 @@ vim.cmd [[
   let g:tslime_always_current_session = 1
   let g:tslime_always_current_window = 1
 
-  " Ruby indentation style
-  let ruby_indent_block_style = 'do'
-
   let test#strategy = "tslime"
   let g:test#preserve_screen = 1
 
