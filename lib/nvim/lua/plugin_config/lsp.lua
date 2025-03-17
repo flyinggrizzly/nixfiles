@@ -171,12 +171,6 @@ local servers = {
     },
   },
 
-  sorbet = {
-    cmd = { 'srb', 'tc', '--lsp' },
-    filetypes = { 'ruby' },
-    root_dir = sorbet_root_dir,
-  },
-
   ruby_lsp = {
     root_dir = function(fname)
       -- Don't enable the Ruby LSP if we're relying on Sorbet
@@ -185,14 +179,27 @@ local servers = {
       if not sorbet then
         lsp.util.root_pattern('Gemfile', '.ruby-lsp')(fname)
       end
-    end
+    end,
+    priority = 100,
   },
 
   rubocop = {
-    cmd = { 'rubocop', '--lsp' },
+    cmd = { 'bundle', 'exec', 'rubocop', '--lsp' },
     filetypes = { 'ruby' },
     root_dir = lsp.util.root_pattern('Gemfile', '.git', 'rubocop.yml'),
+    priority = 1000,
+    on_attach = function(client, _)
+      client.server_capabilities.codeActionProvider = false
+    end,
   },
+
+  sorbet = {
+    cmd = { 'bundle', 'exec', 'srb', 'tc', '--lsp' },
+    filetypes = { 'ruby' },
+    root_dir = sorbet_root_dir,
+    priority = 1,
+  },
+
 }
 
 local function lsp_binary_exists(defaults, config)

@@ -147,7 +147,6 @@ in
       vim-projectionist
       vim-repeat
       vim-run-interactive
-      supertab
       vim-surround
       vim-test
       tmux-complete-vim
