@@ -67,4 +67,9 @@ in
     source = ../lib/zsh;
     recursive = true;
   };
+
+  programs.direnv = {
+    enable = true;
+    enableZshIntegration = true;
+  };
 }
