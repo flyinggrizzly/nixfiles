@@ -36,3 +36,5 @@ alias grc="git rebase --continue"
 alias ssh="kitty +kitten ssh"
 
 (( $+commands[bundle] )) && alias be='bundle exec'
+
+alias spt="dev conveyor is-it-shipped //areas/core/shopify"
