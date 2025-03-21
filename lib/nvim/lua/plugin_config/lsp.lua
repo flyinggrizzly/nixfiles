@@ -172,32 +172,32 @@ local servers = {
   },
 
   ruby_lsp = {
-    --root_dir = function(fname)
-      ---- Don't enable the Ruby LSP if we're relying on Sorbet
-      --local sorbet = sorbet_root_dir(fname)
+    root_dir = function(fname)
+      -- Don't enable the Ruby LSP if we're relying on Sorbet
+      local sorbet = sorbet_root_dir(fname)
 
-      --if not sorbet then
-        --lsp.util.root_pattern('Gemfile', '.ruby-lsp')(fname)
-      --end
-    --end,
-    --priority = 100,
+      if not sorbet then
+        lsp.util.root_pattern('Gemfile', '.ruby-lsp')(fname)
+      end
+    end,
+    priority = 100,
   },
 
-  --rubocop = {
-    --cmd = { 'bundle', 'exec', 'rubocop', '--lsp' },
-    --filetypes = { 'ruby' },
-    --root_dir = lsp.util.root_pattern('Gemfile', '.git', 'rubocop.yml'),
-    --priority = 1000,
-    --on_attach = function(client, _)
-      --client.server_capabilities.codeActionProvider = false
-    --end,
-  --},
+  rubocop = {
+    cmd = { 'bundle', 'exec', 'rubocop', '--lsp' },
+    filetypes = { 'ruby' },
+    root_dir = lsp.util.root_pattern('Gemfile', '.git', 'rubocop.yml'),
+    priority = 1000,
+    on_attach = function(client, _)
+      client.server_capabilities.codeActionProvider = false
+    end,
+  },
 
   sorbet = {
-    --cmd = { 'bundle', 'exec', 'srb', 'tc', '--lsp' },
-    --filetypes = { 'ruby' },
-    --root_dir = sorbet_root_dir,
-    --priority = 1,
+    cmd = { 'bundle', 'exec', 'srb', 'tc', '--lsp' },
+    filetypes = { 'ruby' },
+    root_dir = sorbet_root_dir,
+    priority = 1,
   },
 
 }
