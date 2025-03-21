@@ -2,7 +2,7 @@ local conform = require('conform')
 
 conform.setup({
   formatters_by_ft = {
-    ruby = { "rubocop" },
+    ruby = {},
     javascript = { "prettierd", "prettier" },
     typescript = { "prettierd", "prettier" },
   },
