@@ -134,6 +134,7 @@ in
       avante-nvim
       codecompanion-nvim
       copilot-lua
+      copilot-cmp
       dressing-nvim
       nui-nvim
       render-markdown-nvim

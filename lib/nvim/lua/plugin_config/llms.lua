@@ -21,7 +21,10 @@ local function is_git_subprocess()
 end
 
 if not is_git_subprocess() then
-  require('copilot').setup({})
+  require('copilot').setup({
+    suggestion = { enabled = false },
+    panel = { enabled = false },
+  })
 
   require("plugin_config/llms/codecompanion_fidget"):init()
 

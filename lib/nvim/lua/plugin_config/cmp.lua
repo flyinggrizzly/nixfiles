@@ -2,10 +2,12 @@ local cmp = require('cmp')
 
 cmp.setup({
   sources = {
-    { name = 'buffer', },
-    { name = 'tmux', },
+    { name = 'copilot' },
     { name = 'nvim_lsp' },
+    { name = 'buffer', },
+    { name = 'tmux' },
   },
+
   -- For an understanding of why these mappings were
   -- chosen, you will need to read `:help ins-completion`
   --
@@ -24,3 +26,5 @@ cmp.setup({
     ['<C-Space>'] = cmp.mapping.complete {},
   },
 })
+
+require("copilot_cmp").setup()
