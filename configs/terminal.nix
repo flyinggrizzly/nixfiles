@@ -39,6 +39,8 @@ in
     pkgs.aider-chat
 
     pkgs.direnv
+
+    pkgs.chruby
   ];
 
   home.file.".ripgreprc".source = ../lib/ripgreprc;
