@@ -172,6 +172,7 @@ local servers = {
   },
 
   ruby_lsp = {
+    cmd = { 'bundle', 'exec', 'ruby-lsp' },
     priority = 1,
   },
 
