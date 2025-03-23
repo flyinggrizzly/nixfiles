@@ -63,6 +63,17 @@ if not is_git_subprocess() then
           },
         })
       end,
+
+      deepseek_r1 = function()
+        return require("codecompanion.adapters").extend("ollama", {
+          name = "deepseek_r1",
+          schema = {
+            model = {
+              default = "deepseek-r1:1.5b",
+            },
+          },
+        })
+      end,
     },
   })
 
