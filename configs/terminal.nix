@@ -36,7 +36,7 @@ in
 
     pkgs.graphite-cli
 
-    pkgs.aider-chat
+    pkgs.claude-code
 
     pkgs.direnv
 
