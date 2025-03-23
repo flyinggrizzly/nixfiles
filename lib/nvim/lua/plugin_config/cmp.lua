@@ -8,6 +8,17 @@ cmp.setup({
     { name = 'tmux' },
   },
 
+  window = {
+    documentation = {
+      border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
+      winhighlight = 'Normal:NormalFloat,FloatBorder:CmpDocBorder,Search:None',
+    },
+    completion = {
+      border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
+      winhighlight = 'Normal:NormalFloat,FloatBorder:CmpPmenuBorder,CursorLine:PmenuSel,Search:None',
+    },
+  },
+
   -- For an understanding of why these mappings were
   -- chosen, you will need to read `:help ins-completion`
   --
@@ -28,3 +39,8 @@ cmp.setup({
 })
 
 require("copilot_cmp").setup()
+
+-- Add these highlight groups to your colorscheme setup or after/colors
+vim.api.nvim_set_hl(0, 'CmpPmenu', { bg = '#e8e8e8' })  -- Light gray background
+vim.api.nvim_set_hl(0, 'CmpPmenuBorder', { fg = '#999999' })  -- Border color
+vim.api.nvim_set_hl(0, 'CmpDoc', { bg = '#f0f0f0' })  -- Even lighter documentation bg
