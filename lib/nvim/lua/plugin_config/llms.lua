@@ -32,7 +32,7 @@ if not is_git_subprocess() then
   codecompanion.setup({
     strategies = {
       chat = {
-        adapter = "anthropic",
+        adapter = "sonnet_37",
         send = {
           modes = { n = "<C-s>", i = "<C-s>" },
         },
@@ -50,8 +50,14 @@ if not is_git_subprocess() then
     },
 
     adapters = {
-      anthropic = function()
+      sonnet_37 = function()
         return require("codecompanion.adapters").extend("anthropic", {
+          name = "sonnet_37",
+          schema = {
+            model = {
+              default = "claude-3-7-sonnet-20250219",
+            },
+          },
           env = {
             api_key = "cmd:op read op://Personal/anthropic-api-key/password"
           },
