@@ -20,6 +20,52 @@ local function is_git_subprocess()
   return false
 end
 
+local function is_shopify()
+  if os.getenv('SHOPIFY_ENV') then
+    return true
+  else
+    return false
+  end
+end
+
+local function chat_adapter()
+  if is_shopify() then
+    return "shopify_sonnet"
+  else
+    return "sonnet_37"
+  end
+end
+
+local function inline_adapter()
+  if is_shopify() then
+    return "shopify_sonnet"
+  else
+    return "copilot"
+  end
+end
+
+local openai = require("codecompanion.adapters.openai")
+local function shopify_adapter(base_name, url, model)
+  local base = require("codecompanion.adapters." .. base_name)
+
+  return require("codecompanion.adapters").extend(base, {
+    url = url,
+    env = {
+      api_key = "cmd:oai-proxy-key cat",
+    },
+    handlers = openai.handlers,
+    headers = openai.headers,
+    parameters = {
+      model = "${model}",
+    },
+    schema = {
+      model = {
+        default = model or base.schema.model.default,
+      },
+    },
+  })
+end
+
 if not is_git_subprocess() then
   require('copilot').setup({
     suggestion = { enabled = false },
@@ -32,14 +78,14 @@ if not is_git_subprocess() then
   codecompanion.setup({
     strategies = {
       chat = {
-        adapter = "sonnet_37",
+        adapter = chat_adapter(),
         send = {
           modes = { n = "<C-s>", i = "<C-s>" },
         },
       },
 
       inline = {
-        adapter = "copilot",
+        adapter = inline_adapter(),
       },
     },
 
@@ -63,6 +109,12 @@ if not is_git_subprocess() then
           },
         })
       end,
+
+      shopify_sonnet = shopify_adapter(
+        "anthropic",
+        "https://proxy.shopify.ai/v1/chat/completions",
+        "anthropic:claude-3-7-sonnet"
+      ),
 
       deepseek_r1 = function()
         return require("codecompanion.adapters").extend("ollama", {
