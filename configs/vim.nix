@@ -126,6 +126,8 @@ in
       which-key-nvim
       trouble-nvim
 
+      snacks-nvim
+
       oil-nvim
 
       vim-fugitive

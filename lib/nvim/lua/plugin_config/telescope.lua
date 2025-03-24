@@ -1,4 +1,6 @@
 local telescope = require('telescope')
+local snacks = require('snacks')
+local colors = require('dracula').colors()
 
 telescope.setup({
   extensions = {
@@ -8,6 +10,28 @@ telescope.setup({
   },
 })
 
+snacks.setup({
+  picker = {
+    enabled = true,
+  },
+
+  bigfile = { enabled = false },
+  dashboard = { enabled = false },
+  explorer = { enabled = false },
+  indent = { enabled = false },
+  input = { enabled = false },
+  notifier = { enabled = false },
+  quickfile = { enabled = false },
+  scope = { enabled = false },
+  scroll = { enabled = false },
+  statuscolumn = { enabled = false },
+  words = { enabled = false },
+})
+vim.api.nvim_set_hl(0, "SnacksPickerDir", { fg = colors.purple })
+vim.api.nvim_set_hl(0, "SnacksPickerPathHidden", { fg = colors.purple })
+
+vim.keymap.set('n', '<C-p>', snacks.picker.smart, { desc = 'Ctrl-P Search Files (Smart)' })
+
 -- Enable Telescope extensions if they are installed
 pcall(require('telescope').load_extension, 'fzf')
 pcall(require('telescope').load_extension, 'ui-select')
@@ -15,7 +39,6 @@ pcall(require('telescope').load_extension, 'ui-select')
 -- See `:help telescope.builtin`
 local builtin = require 'telescope.builtin'
 
-vim.keymap.set('n', '<C-p>', builtin.find_files, { desc = 'Ctrl-P Search Files' })
 vim.keymap.set('n', '<C-l>', function()
   builtin.find_files({
     hidden = true,
