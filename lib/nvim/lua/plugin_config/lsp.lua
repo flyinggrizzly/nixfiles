@@ -172,12 +172,12 @@ local servers = {
   },
 
   ruby_lsp = {
-    cmd = { 'bundle', 'exec', 'ruby-lsp' },
+    cmd = { 'ruby-lsp' },
     priority = 1,
   },
 
   sorbet = {
-    cmd = { 'bundle', 'exec', 'srb', 'tc', '--lsp' },
+    cmd = { 'srb', 'tc', '--lsp' },
     filetypes = { 'ruby' },
     root_dir = sorbet_root_dir,
     priority = 1000000,
