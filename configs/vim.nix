@@ -127,6 +127,7 @@ in
       trouble-nvim
 
       snacks-nvim
+      lazygit-nvim
 
       oil-nvim
 

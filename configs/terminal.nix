@@ -14,6 +14,7 @@ in
 
     pkgs.git
     pkgs.gh
+    pkgs.lazygit
 
     pkgs.wget
     pkgs.ripgrep
