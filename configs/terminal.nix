@@ -70,6 +70,7 @@ in
     source = ../lib/zsh;
     recursive = true;
   };
+  home.file."Library/Application Support/lazygit/config.yml".source = ../lib/lazy-git-config.yml;
 
   programs.direnv = {
     enable = true;
