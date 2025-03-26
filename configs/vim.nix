@@ -131,6 +131,15 @@ in
 
       oil-nvim
 
+      # neotest
+      neotest
+      nvim-nio
+      FixCursorHold-nvim
+      neotest-plenary
+      # also depends on plenary-nvim
+      # also depends on nvim-treesitter
+      neotest-minitest
+
       vim-fugitive
       gitsigns
 
