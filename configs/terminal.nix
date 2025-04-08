@@ -41,8 +41,11 @@
 
     chruby
 
-    python313
-    python313Packages.pip
+    (python313.withPackages (ps: with ps; [
+      jupyter
+      notebook
+      ipython
+    ]))
   ];
 
   home.file.".ripgreprc".source = ../lib/ripgreprc;
