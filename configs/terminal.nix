@@ -31,6 +31,8 @@
     nerd-fonts.symbols-only
     nerd-fonts.jetbrains-mono
 
+    jq
+
     graphite-cli
 
     claude-code
