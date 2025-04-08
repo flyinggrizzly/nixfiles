@@ -38,6 +38,9 @@
     direnv
 
     chruby
+
+    python313
+    python313Packages.pip
   ];
 
   home.file.".ripgreprc".source = ../lib/ripgreprc;
