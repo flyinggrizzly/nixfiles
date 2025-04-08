@@ -1,47 +1,43 @@
-{ lib, pkgs, ... }:
-let
-  jetbrains_mono_pkg = pkgs.jetbrains-mono;
-in
-{
-  home.packages = [
-    pkgs.powerline-fonts
-    pkgs.powerline-symbols
+{ lib, pkgs, ... }: {
+  home.packages = with pkgs; [
+    powerline-fonts
+    powerline-symbols
 
-    pkgs.mosh
+    mosh
 
-    pkgs.tmux
-    pkgs.tmuxinator
+    tmux
+    tmuxinator
 
-    pkgs.git
-    pkgs.gh
-    pkgs.lazygit
+    git
+    gh
+    lazygit
 
-    pkgs.wget
-    pkgs.ripgrep
-    pkgs.fd
-    pkgs.fzf
-    pkgs.tree
-    pkgs.yt-dlp
+    wget
+    ripgrep
+    fd
+    fzf
+    tree
+    yt-dlp
 
-    pkgs.libyaml
+    libyaml
 
-    pkgs.nix-prefetch
-    pkgs.nix-search-cli
+    nix-prefetch
+    nix-search-cli
 
-    pkgs.pnpm
-    pkgs.rustc
+    pnpm
+    rustc
 
-    jetbrains_mono_pkg
-    pkgs.nerd-fonts.symbols-only
-    pkgs.nerd-fonts.jetbrains-mono
+    jetbrains-mono
+    nerd-fonts.symbols-only
+    nerd-fonts.jetbrains-mono
 
-    pkgs.graphite-cli
+    graphite-cli
 
-    pkgs.claude-code
+    claude-code
 
-    pkgs.direnv
+    direnv
 
-    pkgs.chruby
+    chruby
   ];
 
   home.file.".ripgreprc".source = ../lib/ripgreprc;
