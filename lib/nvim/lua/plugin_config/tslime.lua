@@ -18,4 +18,4 @@ vim.keymap.set('n', '<leader>t', ":TestNearest<CR>", { desc = 'Run [T]est under 
 vim.keymap.set('n', '<leader>tt', ":TestFile<CR>", { desc = 'Run [TT]est file' })
 vim.keymap.set('n', '<leader>tl', ":TestLast<CR>", { desc = 'Rerun [T]est [L]ast' })
 vim.keymap.set('n', '<leader>tv', ":TestVisit<CR>", { desc = 'Rerun [T]est [V]isit' })
-vim.keymap.set('n', "<leader>ut", ":unlet g:tslime", { desc = '[U]nset [T]est pane'})
+vim.keymap.set('n', "<leader>ut", ":unlet g:tslime<CR>", { desc = '[U]nset [T]est pane'})
