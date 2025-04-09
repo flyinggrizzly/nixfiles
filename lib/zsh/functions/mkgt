@@ -1,0 +1,44 @@
+mkgt() {
+  local parent="main"
+  local track_with_graphite=false
+
+  # Parse arguments
+  while [[ $# -gt 0 ]]; do
+      case $1 in
+          -gt=*|--graphite-track=*)
+              track_with_graphite=true
+              parent="${1#*=}"
+              shift
+              ;;
+          -gt|--graphite-track)
+              track_with_graphite=true
+              shift
+              ;;
+          *)
+              local name=$1
+              shift
+              ;;
+      esac
+  done
+
+  # Check if name is provided
+  if [[ -z "$name" ]]; then
+      echo "Error: Branch name is required"
+      return 1
+  fi
+
+  # Create worktree
+  git worktree add -b "$name" "../$name"
+
+  # Change directory
+  cd "../$name"
+
+  # Run graphite track if requested
+  if $track_with_graphite; then
+      if command -v gt &> /dev/null; then
+          gt track --parent "$parent"
+      else
+          echo "Warning: gt command not found, skipping track"
+      fi
+  fi
+}

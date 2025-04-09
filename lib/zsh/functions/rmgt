@@ -1,0 +1,8 @@
+rmgt() {
+  if [[ $# -ne 1 ]]; then
+    echo "Usage: gtrm <worktree-name>"
+    exit 1
+  fi
+
+  git worktree remove "$1"
+}
