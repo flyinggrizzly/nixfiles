@@ -76,6 +76,11 @@
   };
   home.file."Library/Application Support/lazygit/config.yml".source = ../lib/lazy-git-config.yml;
 
+  home.file.".claude" = {
+    source = ../lib/claude;
+    recursive = true;
+  };
+
   programs.direnv = {
     enable = true;
     enableZshIntegration = true;
