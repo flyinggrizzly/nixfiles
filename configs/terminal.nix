@@ -35,8 +35,6 @@
 
     graphite-cli
 
-    claude-code
-
     direnv
 
     chruby
