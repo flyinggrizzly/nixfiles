@@ -7,6 +7,16 @@
     pkgs.code-cursor
   ];
 
+  programs.ghostty = {
+    enable = true;
+    installVimSyntax = true;
+    settings = {
+      theme = "calamity";
+      cursor-style = "underline";
+      font-family = "JetBrains Mono";
+    };
+  };
+
   programs = {
     vscode = {
       enable = true;
