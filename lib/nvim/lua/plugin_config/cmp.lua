@@ -1,12 +1,20 @@
 local cmp = require('cmp')
+local llms_enabled = require('plugin_config/llms_enabled')
 
 cmp.setup({
-  sources = {
-    { name = 'copilot' },
-    { name = 'nvim_lsp' },
-    { name = 'buffer', },
-    { name = 'tmux' },
-  },
+  sources = (function()
+    local sources = {
+      { name = 'nvim_lsp' },
+      { name = 'buffer', },
+      { name = 'tmux' },
+    }
+
+    if llms_enabled then
+      table.insert(sources, 1, { name = 'copilot' })
+    end
+
+    return sources
+  end)(),
 
   window = {
     documentation = {
@@ -38,7 +46,9 @@ cmp.setup({
   },
 })
 
-require("copilot_cmp").setup()
+if llms_enabled then
+  require("copilot_cmp").setup()
+end
 
 -- Add these highlight groups to your colorscheme setup or after/colors
 vim.api.nvim_set_hl(0, 'CmpPmenu', { bg = '#e8e8e8' })  -- Light gray background

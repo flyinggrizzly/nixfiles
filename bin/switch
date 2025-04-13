@@ -1,3 +1,64 @@
 #!/bin/bash
+set -e
 
-nix run . -- switch --flake . -b backup
+# Show usage information
+function show_usage {
+  echo "Usage: switch [OPTIONS] [PROFILE]"
+  echo
+  echo "Options:"
+  echo "  --brew     Run brew bundle after successful switch"
+  echo "  --no-gc    Skip running nix garbage collection"
+  echo "  --help     Show this help message"
+  echo
+  echo "If PROFILE is not specified, username@hostname will be used."
+  exit 0
+}
+
+# Parse command line arguments
+RUN_BREW=false
+RUN_GC=true
+PROFILE=""
+
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    --help)
+      show_usage
+      ;;
+    --brew)
+      RUN_BREW=true
+      shift
+      ;;
+    --no-gc)
+      RUN_GC=false
+      shift
+      ;;
+    *)
+      PROFILE="$1"
+      shift
+      ;;
+  esac
+done
+
+# Use default profile if none specified
+if [ -z "$PROFILE" ]; then
+  PROFILE="$(whoami)@$(hostname -s)"
+fi
+
+echo "Switching to profile: $PROFILE"
+
+# Run home-manager with the selected profile
+home-manager switch --flake ".#${PROFILE}" -b backup
+
+# Run brew bundle if requested
+if [ "$RUN_BREW" = true ] && [ "$(uname)" = "Darwin" ] && [ -f "$HOME/.Brewfile" ]; then
+  echo "Running brew bundle..."
+  brew bundle --global
+fi
+
+# Run garbage collection if enabled
+if [ "$RUN_GC" = true ]; then
+  echo "Running nix garbage collection (keeping last 14 days)..."
+  nix-collect-garbage --delete-older-than 14d
+fi
+
+echo "Switch completed!"

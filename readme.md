@@ -1,39 +1,223 @@
-## home-manager only instructions
+# nixfiles: Cross-Platform Nix Configuration
 
-1. install `nix`, enable `flakes`
-2. install homebrew
-3. clone to `~/nixfiles`
-4. run `bin/switch`
-5. run `brew-up` to install any Homebrew software defined in the created `~/.Brewfile` (we could use `nix-darwin`, but
-   it introduces a lot of complexity and you still need to install homebrew manually anyways... not totally worth the
-   lift. But if I ever change my mind there's a working spike (as of 2024-02-18) at https://github.com/flyinggrizzly/nixfiles/tree/nix-darwin-spike)
+A modular Home Manager configuration that works across multiple platforms:
 
-## resources
+- macOS laptops and desktops
+- Linux servers and workstations
+- Shared configurations with conditional overrides
 
-- home-manager + nix-darwin: https://xyno.space/post/nix-darwin-introduction
-- chris portela blowing my mind
-    - https://github.com/chrisportela/dotfiles
-    - https://www.chrisportela.com/posts/home-manager-flake/
-    - https://www.chrisportela.com/posts/published-nix-dotfiles/
-- [configuring LSP servers without Mason on nix](https://github.com/LazyVim/LazyVim/discussions/1972)
-   - using LazyVim as a reference, but the "add to `extraPackages` part is the important bit"
-   - used [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim/blob/master/init.lua) for a lot of the basic telescope/lsp/etc setup: 
+## Installation
+
+### Using the Template (Recommended)
+1. Create a new repository using the default template:
+   ```bash
+   nix flake new -t github:seandmr/nixfiles#default my-config
+   cd my-config
+   ```
+
+2. Customize the configuration in `flake.nix` with your settings:
+   - Set your `username` and `hostname`
+   - Configure modules according to your preferences
+   - Update system architecture as needed
+
+3. Apply your configuration:
+   ```bash
+   home-manager switch --flake .
+   ```
+
+### Direct Installation
+1. Install `nix` and enable `flakes` support
+2. On macOS, install Homebrew
+3. Clone this repository to `~/nixfiles`
+4. Run the switch script to activate:
+   ```
+   bin/switch
+   ```
+
+The script detects your current system and applies the correct configuration profile.
+
+## Structure
+
+The configuration is organized as follows:
+
+```
+nixfiles/
+├── bin/                    # Helper scripts
+│   └── switch              # Activation script
+├── flake.nix               # Main entry point
+├── hosts/                  # Host-specific configurations
+│   ├── m1-grizzly.nix      # Personal macOS laptop
+│   ├── work-mac.nix        # Work laptop configuration
+│   └── homelab.nix         # Server configuration
+├── lib/                    # Configuration files and resources
+│   ├── nvim/               # Neovim configuration
+│   ├── zsh/                # ZSH configuration
+│   └── ...                 # Other resources
+├── modules/                # Modular configurations
+│   ├── core.nix            # Core options and imports
+│   ├── darwin.nix          # macOS-specific configuration
+│   ├── desktop.nix         # GUI applications and settings
+│   ├── git.nix             # Git configuration
+│   ├── neovim.nix          # Neovim setup
+│   ├── secrets.nix         # Secret management
+│   └── shell.nix           # Terminal and shell setup
+└── secrets/                # Secret files (gitignored)
+```
+
+## Modules
+
+Each module includes:
+
+1. An `enable` option to toggle it on/off
+2. Configuration specific to its purpose
+3. Options for fine-grained control of module features
+
+### Module Activation
+
+Each module has an `enable` option that controls whether the module is active. This is set in the host configuration file.
+
+For example, to enable the desktop module:
+
+```nix
+modules.desktop.enable = true;
+```
+
+The configuration is completely modular, with each host choosing which modules to enable without relying on system type flags.
+
+## Configuration Reference
+
+The `prepareHome` function in `flake.nix` accepts the following configuration options:
+
+### Core Parameters
+
+```nix
+prepareHome {
+  username = "user";
+  platform = "x86_64-linux"; # Renamed from system
+  stateVersion = "24.05";
+  
+  # Module configurations...
+}
+```
+
+### Using within NixOS Configuration
+
+When using with NixOS, always wrap the function call in parentheses:
+
+```nix
+# In your NixOS configuration
+modules = [
+  (dotfiles.lib.nixosHome {
+    username = "user";
+    platform = "x86_64-linux";
+    stateVersion = "24.05";
+    # Module configurations...
+  })
+];
+```
+
+### Module Configuration
+
+#### Git
+
+```nix
+git = {
+  enable = true;           # Enable/disable Git configuration
+  username = "Your Name";  # Git user.name
+  email = "your@email.com"; # Git user.email
+  extraConfig = {          # Additional Git configuration
+    pull.rebase = true;
+    init.defaultBranch = "main";
+  };
+};
+```
+
+#### Neovim
+
+```nix
+neovim = {
+  enable = true;           # Enable/disable Neovim configuration
+  enableLlmTools = true;   # Enable/disable AI coding assistants
+  extraPlugins = [];       # Additional Vim plugins
+  extraPackages = [];      # Additional system packages for Neovim
+  extraConfig = '''         # Additional Lua configuration
+    vim.opt.colorcolumn = "80"
+  ''';
+  llmLuaOverride = null;   # Optional path to custom LLM config
+};
+```
+
+#### Desktop
+
+```nix
+desktop = {
+  enable = true;           # Enable/disable desktop applications
+};
+```
+
+#### Darwin (macOS specific)
+
+```nix
+darwin = {
+  enable = true;           # Enable macOS-specific configuration
+  brewfile = ./Brewfile;   # Path to Homebrew bundle file
+  alfred.enable = true;    # Enable Alfred configuration
+  karabiner.enable = true; # Enable Karabiner Elements configuration
+};
+```
+
+### Example Configuration
+
+```nix
+homeConfigurations."user@host" = lib.standaloneHome {
+  username = "user";
+  platform = "x86_64-linux";
+  stateVersion = "24.05";
+  
+  git = {
+    username = "User Name";
+    email = "user@example.com";
+  };
+  
+  neovim.enableLlmTools = false;
+  desktop.enable = true;
+};
+```
 
 ## Neovim + Nix
 
-We ain't using any vim package managers, as nice as lazy.vim is--most things are packaged by nix, and the update process
-for packages is harder when managing 2 different lockfiles.
+The Neovim configuration uses Nix for plugin management, not vim plugin managers:
 
-Process:
+1. Add plugins in `modules/neovim.nix` in the `plugins` list
+   - For packages not in `pkgs.vimPlugins`, use `pkgs.vimUtils.buildVimPlugin`
+   - For GitHub plugins, use `nix-git-sha` to generate the sha256 hash
 
-1. add the nix package from https://seach.nixos.org, into `programs.neovim.plugins`
-    - if the packages isn't in `pkgs.vimPlugins`, you can add it manually with `pkgs.vimUtils.buildVimPlugin`
-   - if it's from a github repo, you can also use the custom function `% nix-git-sha` helper to generate the sha256 value to lock it
-2. for language servers, we're not using `mason.nvim` to handle installation. Instead these also need to get installed
-   with nix (or with the software project like for Sorbet/Ruby/Rubocop--there's handling in `plugin_config/lsp.lua`
-for missing servers), into `programs.neovim.extraPackages`
-    - once that's done, you should be able to reference the language server normally from the LSP setup process
-3. similarly, for treesitter, rather than use `mason` to install the necessary grammars, we're just using
-   the `nvim-treesitter.withAllGrammars` plugin nix package. We could do it piecemeal, but it's not worth the hassle
-   to me
-4. set up any necessary neovim config, probably in `lib/nvim/lua/plugin_config/MY_PLUGIN.lua`
+2. Language servers go in `programs.neovim.extraPackages`
+
+3. Neovim configuration is in `lib/nvim/`
+
+### LLM Tools Integration
+
+The Neovim configuration includes optional LLM integration with tools like CodeCompanion and Copilot:
+
+- **Enable/Disable LLM Tools**: Set `neovim.enableLlmTools` to `true` or `false` in your configuration
+- **Custom LLM Configuration**: Provide your own LLM setup with `neovim.llmLuaOverride`
+
+Example configuration:
+
+```nix
+neovim = {
+  enable = true;
+  enableLlmTools = true;  # Set to false to disable LLM tools entirely
+  
+  # Optional: provide a custom LLM configuration
+  llmLuaOverride = ./path/to/custom-llms.lua;
+};
+```
+
+## Resources
+
+- [home-manager + nix-darwin](https://xyno.space/post/nix-darwin-introduction)
+- [Chris Portela's dotfiles](https://github.com/chrisportela/dotfiles)
+- [Configuring LSP servers without Mason on nix](https://github.com/LazyVim/LazyVim/discussions/1972)
+- [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim)

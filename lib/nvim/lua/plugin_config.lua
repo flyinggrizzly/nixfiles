@@ -17,4 +17,7 @@ require 'plugin_config/treesitter'
 require 'plugin_config/trouble'
 require 'plugin_config/twilight'
 require 'plugin_config/leap'
-require 'plugin_config/llms'
+
+if require('plugin_config/llms_enabled') then
+  require 'plugin_config/llms'
+end
