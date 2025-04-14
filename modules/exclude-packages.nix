@@ -13,7 +13,7 @@ in {
     description = ''
       List of packages to exclude from installation.
       IMPORTANT: These must be fully initialized package derivations, not functions.
-      
+
       Example:
         excludePackages = let 
           pkgs = import nixpkgs { 
@@ -28,30 +28,35 @@ in {
   };
 
   config = mkIf (cfg != []) {
-    # Apply an overlay that replaces excluded packages with empty derivations
+    # Apply a more efficient overlay that only affects the excluded packages
     nixpkgs.overlays = [ 
       (final: prev: 
         let 
-          # Extract the names of packages to exclude
-          exclusions = builtins.listToAttrs (
-            map (p: {
-              name = p.pname or p.name;
-              value = prev.runCommand "${p.pname or p.name}" {
-                # Inherit important attributes from the original package
-                meta = (p.meta or {}) // {
-                  description = "Package excluded by home-manager configuration (original: ${p.meta.description or "unknown"})";
-                  # Keep the platforms from the original package
-                  inherit (p.meta) platforms;
-                  # Mark it with the lowest priority so it's never chosen if alternatives exist
-                  priority = -1000;
-                };
-              } ''
-                mkdir -p $out
-                echo "This package (${p.pname or p.name}) was excluded by home-manager configuration" > $out/README
-              '';
+          # Create a set of package names to exclude
+          excludeSet = builtins.listToAttrs (
+            map (p: { 
+              name = p.pname or p.name; 
+              value = p; # Store the original package for metadata
             }) cfg
           );
-        in exclusions
+
+          # Create the overlay with empty packages only for excluded ones
+          excludeOverlay = builtins.mapAttrs (name: origPkg: 
+            prev.runCommand name {
+              # Keep the original package's metadata but modify as needed
+              meta = (origPkg.meta or {}) // {
+                description = "Package excluded by home-manager configuration (original: ${origPkg.meta.description or "unknown"})";
+                inherit (origPkg.meta) platforms;
+                priority = -1000;
+              };
+            } ''
+              mkdir -p $out
+              echo "This package (${name}) was excluded by home-manager configuration" > $out/README
+              ''
+          ) excludeSet;
+        in 
+          # Return only the overlay for excluded packages
+          excludeOverlay
       )
     ];
   };
