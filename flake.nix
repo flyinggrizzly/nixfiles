@@ -31,35 +31,37 @@
           git ? {},
           desktop ? {},
           darwin ? {},
+          excludePackages ? [],
           }:
           let
             pkgs = getPkgs platform;
 
             # The home-manager configuration module that both functions use
             homeConfig = { config, lib, pkgs, ... }: {
-                imports = [
-                  ./modules/neovim.nix
-                  ./modules/git.nix
-                  ./modules/shell.nix
-                  ./modules/desktop.nix
-                  ./modules/darwin.nix
-                ];
-                
-                # Basic home configuration
-                home = {
-                  inherit username stateVersion;
-                  homeDirectory = if pkgs.stdenv.isDarwin 
-                    then "/Users/${username}"
-                    else "/home/${username}";
-                };
-                programs.home-manager.enable = true;
-                
-                # Pass only module configuration options, not global params
-                modules = {
-                  # Module config options only
-                  inherit neovim git desktop darwin;
-                };
+              imports = [
+                ./modules/neovim.nix
+                ./modules/git.nix
+                ./modules/shell.nix
+                ./modules/desktop.nix
+                ./modules/darwin.nix
+                ./modules/exclude-packages.nix
+              ];
+
+              # Basic home configuration
+              home = {
+                inherit username stateVersion;
+                homeDirectory = if pkgs.stdenv.isDarwin 
+                  then "/Users/${username}"
+                else "/home/${username}";
               };
+              programs.home-manager.enable = true;
+
+              # Pass only module configuration options, not global params
+              modules = {
+                # Module config options only
+                inherit neovim git desktop darwin excludePackages;
+              };
+            };
           in {
             inherit homeConfig pkgs;
           };
