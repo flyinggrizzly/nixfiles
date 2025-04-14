@@ -59,6 +59,14 @@
           alfred.enable = false;
           karabiner.enable = false;
         };
+        
+        # Home extensions - allows extending home-manager configuration directly
+        homeExtensions = {
+          # Example configurations:
+          # file.".config/custom/settings.json".text = ''{ "setting": "value" }'';
+          # packages = [ pkgs.ripgrep ];
+          # sessionVariables = { EDITOR = "nvim"; };
+        };
       };
     };
 }

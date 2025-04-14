@@ -97,6 +97,11 @@ prepareHome {
   stateVersion = "24.05";
   
   # Module configurations...
+  
+  # Home extensions...
+  homeExtensions = {
+    # Additional home-manager configurations
+  };
 }
 ```
 
@@ -117,6 +122,18 @@ modules = [
 ```
 
 ### Module Configuration
+
+#### Home Extensions
+
+```nix
+homeExtensions = {
+  # Direct extension of home-manager's home.* attributes
+  file.".config/custom/config.txt".text = "Example configuration";
+  packages = [ pkgs.ripgrep pkgs.fd ];
+  sessionVariables = { EDITOR = "nvim"; };
+  # Any other valid home-manager home.* attributes
+};
+```
 
 #### Git
 
@@ -181,6 +198,13 @@ homeConfigurations."user@host" = lib.standaloneHome {
   
   neovim.enableLlmTools = false;
   desktop.enable = true;
+  
+  # Custom home-manager extensions
+  homeExtensions = {
+    file.".config/custom/settings.json".text = ''{ "setting": "value" }'';
+    packages = [ pkgs.ripgrep ];
+    sessionVariables = { EDITOR = "nvim"; };
+  };
 };
 ```
 

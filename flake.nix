@@ -33,6 +33,7 @@
           desktop ? {},
           darwin ? {},
           excludePackages ? [],
+          homeExtensions ? {},
           }:
           let
             pkgs = getPkgs platform;
@@ -46,6 +47,7 @@
                 ./modules/desktop.nix
                 ./modules/darwin.nix
                 ./modules/exclude-packages.nix
+                ./modules/home-extensions.nix
               ];
 
               # Basic home configuration
@@ -57,10 +59,8 @@
               };
               programs.home-manager.enable = true;
 
-              # Pass only module configuration options, not global params
               modules = {
-                # Module config options only
-                inherit shell neovim git desktop darwin excludePackages;
+                inherit shell neovim git desktop darwin excludePackages homeExtensions;
               };
             };
           in {
@@ -73,11 +73,9 @@
             prepared = lib.prepareHome args;
             inherit (prepared) homeConfig pkgs;
           in
-            # Return home-manager configuration
             home-manager.lib.homeManagerConfiguration {
               inherit pkgs;
               modules = [ homeConfig ];
-              # No special args needed
             };
 
         # Function for NixOS module integration
@@ -94,16 +92,10 @@
           };
       };
     in {
-      # Keep the original lib for backward compatibility
       inherit lib;
 
       # Templates for user configurations
       templates = {
-        # The standalone template is now the default
-        default = {
-          path = ./templates/standalone;
-          description = "Standalone home-manager configuration template";
-        };
         standalone = {
           path = ./templates/standalone;
           description = "Standalone home-manager configuration template";
@@ -114,8 +106,7 @@
         };
       };
 
-      # Example configurations for specific systems
-      # These could be expanded or removed as needed
+      # My main laptop config
       homeConfigurations = {
         "seandmr@m1-grizzly" = lib.standaloneHome {
           username = "seandmr";
