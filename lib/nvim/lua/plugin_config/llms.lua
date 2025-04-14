@@ -1,25 +1,3 @@
-local function is_git_subprocess()
-  -- Check Git-specific environment variables
-  if vim.env.GIT_EXEC_PATH ~= nil or
-      vim.env.GIT_EDITOR ~= nil or
-      vim.env.GIT_SEQUENCE_EDITOR ~= nil then
-    return true
-  end
-
-  -- Check if Neovim was invoked via git commit, rebase, etc.
-  -- by examining process arguments
-  local args = vim.v.argv
-  for _, arg in ipairs(args) do
-    if arg:match("COMMIT_EDITMSG$") or
-        arg:match("git%-rebase%-todo$") or
-        arg:match("MERGE_MSG$") then
-      return true
-    end
-  end
-
-  return false
-end
-
 local function is_shopify()
   if os.getenv('SHOPIFY_ENV') then
     return true
@@ -66,7 +44,7 @@ local function shopify_adapter(base_name, url, model)
   })
 end
 
-if not is_git_subprocess() then
+if not require('helpers').is_git_subprocess() then
   require('copilot').setup({
     suggestion = { enabled = false },
     panel = { enabled = false },
