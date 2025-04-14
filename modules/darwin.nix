@@ -19,8 +19,17 @@ in {
       description = "Path to the Brewfile for homebrew packages";
     };
 
-    alfred.enable = mkEnableOption "Enable Alfred configuration";
-    karabiner.enable = mkEnableOption "Enable Karabiner configuration";
+    alfred.enable = mkOption {
+      description =  "Enable Alfred configuration";
+      type = types.bool;
+      default = true;
+    };
+
+    karabiner.enable = mkOption {
+      description = "Enable Karabiner configuration";
+      type = types.bool;
+      default = true;
+    };
   };
 
   config = mkIf config.modules.darwin.enable {
