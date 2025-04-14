@@ -27,6 +27,7 @@
           username,
           stateVersion,
           platform,
+          shell ? {},
           neovim ? {},
           git ? {},
           desktop ? {},
@@ -59,7 +60,7 @@
               # Pass only module configuration options, not global params
               modules = {
                 # Module config options only
-                inherit neovim git desktop darwin excludePackages;
+                inherit shell neovim git desktop darwin excludePackages;
               };
             };
           in {

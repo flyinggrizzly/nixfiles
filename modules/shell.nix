@@ -1,5 +1,16 @@
 { config, lib, pkgs, ... }:
-{
+let
+  inherit (lib) mkIf mkOption types;
+  cfg = config.modules.shell;
+in {
+  options.modules.shell = {
+    extendZshConfig = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      description = "Additional ZSH config file--included at end of main zshrc";
+    };
+  };
+
   config = {
     home.packages = with pkgs; [
       # Core terminal utilities
@@ -71,7 +82,9 @@
 
       # Shell configuration
       ".zshrc".source = ../lib/zshrc;
-      ".zshrc.extend".source = ../lib/zshrc.extend;
+      ".zshrc.extend" = mkIf (cfg.extendZshConfig != null) {
+        source = cfg.extendZshConfig;
+      };
       ".zsh" = {
         source = ../lib/zsh;
         recursive = true;
