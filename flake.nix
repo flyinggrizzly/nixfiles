@@ -19,6 +19,17 @@
           config = { allowUnfree = true; };
         };
 
+      # Supported systems for testing
+      systems = [
+        "x86_64-linux"
+        "aarch64-linux"
+        "x86_64-darwin"
+        "aarch64-darwin"
+      ];
+      
+      # Helper to create flake outputs for each system
+      forAllSystems = f: nixpkgs.lib.genAttrs systems (system: f system);
+
       # Library functions
       lib = {
         # Core function that creates the basic home configuration
@@ -116,5 +127,16 @@
           darwin.enable = true;
         };
       };
+
+      # Add test packages for each system
+      packages = forAllSystems (system: 
+        let 
+          testPkgs = getPkgs system;
+          tests = import ./tests { 
+            pkgs = testPkgs;
+            inherit (self) lib;
+          };
+        in tests
+      );
     };
 }

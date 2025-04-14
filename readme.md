@@ -239,6 +239,60 @@ neovim = {
 };
 ```
 
+## Testing
+
+This flake includes a comprehensive test suite that verifies all configuration options work correctly. The tests can be run on any system without actually switching configurations.
+
+### Running Tests
+
+The simplest way to run tests is using the provided script:
+
+```bash
+# Run all tests
+bin/test
+
+# Run specific test groups
+bin/test minimal     # Minimal configuration tests
+bin/test complete    # Complete configuration tests with all options
+bin/test standalone  # Standalone home-manager tests
+bin/test nixos       # NixOS integration tests
+bin/test exclude     # Package exclusion test
+```
+
+You can also run tests directly with Nix:
+
+```bash
+# Run all tests
+nix build .#packages.$(nix eval --impure --expr "builtins.currentSystem").tests
+
+# Run specific tests
+nix build .#packages.$(nix eval --impure --expr "builtins.currentSystem").tests.testStandaloneComplete
+nix build .#packages.$(nix eval --impure --expr "builtins.currentSystem").tests.testNixosComplete
+nix build .#packages.$(nix eval --impure --expr "builtins.currentSystem").tests.testExcludePackages
+```
+
+### What the Tests Verify
+
+The tests simulate consuming this flake from another flake and verify that these configurations can be properly evaluated:
+
+1. `testStandaloneComplete` - A comprehensive standalone home-manager configuration with all options enabled
+2. `testStandaloneMinimal` - A minimal standalone home-manager configuration with only required options
+3. `testNixosComplete` - A comprehensive NixOS configuration with home-manager integration and all options enabled
+4. `testNixosMinimal` - A minimal NixOS configuration with home-manager integration
+5. `testExcludePackages` - A configuration testing the package exclusion functionality
+
+### Testing Your Own Flakes
+
+When developing a flake that uses this configuration as a dependency, you can verify that your configuration builds correctly without switching to it:
+
+```bash
+# For standalone home-manager configuration
+nix build .#homeConfigurations.<username>@<hostname>.activationPackage --no-link
+
+# For NixOS configuration
+nix build .#nixosConfigurations.<hostname>.config.system.build.toplevel --no-link
+```
+
 ## Resources
 
 - [home-manager + nix-darwin](https://xyno.space/post/nix-darwin-introduction)

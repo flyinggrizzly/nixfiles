@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+#
+# bin/test - Run tests for nixfiles
+#
+# This script runs the test suite for the nixfiles flake to verify that
+# all configurations can be built without actually switching to them.
+#
+# Usage:
+#   bin/test              Run all tests
+#   bin/test minimal      Run minimal configuration tests only
+#   bin/test complete     Run complete configuration tests only
+#   bin/test standalone   Run standalone tests only
+#   bin/test nixos        Run NixOS tests only
+#   bin/test exclude      Run package exclusion test only
+
+set -e
+
+# Determine current system
+SYSTEM=$(nix eval --impure --expr "builtins.currentSystem" --raw)
+
+# Default to running all tests
+test_target="packages.$SYSTEM.runAllTests"
+
+# Process command line arguments
+if [ $# -gt 0 ]; then
+  case "$1" in
+    minimal)
+      test_target="packages.$SYSTEM.testStandaloneMinimal packages.$SYSTEM.testNixosMinimal"
+      echo "Running minimal configuration tests..."
+      ;;
+    complete)
+      test_target="packages.$SYSTEM.testStandaloneComplete packages.$SYSTEM.testNixosComplete"
+      echo "Running complete configuration tests..."
+      ;;
+    standalone)
+      test_target="packages.$SYSTEM.testStandaloneComplete packages.$SYSTEM.testStandaloneMinimal"
+      echo "Running standalone home-manager tests..."
+      ;;
+    nixos)
+      test_target="packages.$SYSTEM.testNixosComplete packages.$SYSTEM.testNixosMinimal"
+      echo "Running NixOS integration tests..."
+      ;;
+    exclude)
+      test_target="packages.$SYSTEM.testExcludePackages"
+      echo "Running package exclusion test..."
+      ;;
+    -h|--help)
+      echo "Usage: bin/test [OPTION]"
+      echo ""
+      echo "Run tests for the nixfiles flake"
+      echo ""
+      echo "Options:"
+      echo "  minimal      Run minimal configuration tests only"
+      echo "  complete     Run complete configuration tests only"
+      echo "  standalone   Run standalone tests only"
+      echo "  nixos        Run NixOS tests only"
+      echo "  exclude      Run package exclusion test only"
+      echo "  help, -h     Display this help message"
+      echo ""
+      echo "With no options, all tests will be run."
+      exit 0
+      ;;
+    *)
+      echo "Error: Unknown option '$1'"
+      echo "Run 'bin/test help' for usage information"
+      exit 1
+      ;;
+  esac
+else
+  echo "Running all tests..."
+fi
+
+# Run the specified tests
+for target in $test_target; do
+  nix build .#$target --no-link
+done
+
+echo "✓ All specified tests passed!"
