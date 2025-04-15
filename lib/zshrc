@@ -38,7 +38,6 @@ _load_settings "$HOME/.zsh/configs"
 [[ -f ~/.aliases ]] && source ~/.aliases
 
 # BEGIN PERSONAL
-
 export EDITOR="$(which nvim)"
 export SHELL="$(which zsh)"
 
