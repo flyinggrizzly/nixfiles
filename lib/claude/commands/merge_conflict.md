@@ -15,3 +15,5 @@ Resolve rebase and merge conflicts. Respect the intent of the local branch and u
 
 ## Execution constraint
 - Use a bash login shell to run tests (like `bash -l <test_command>`)
+- DO NOT STAGE ANY CHANGES IN GIT
+- DO NOT MAKE ANY GIT COMMITS
