@@ -26,7 +26,7 @@
         "x86_64-darwin"
         "aarch64-darwin"
       ];
-      
+
       # Helper to create flake outputs for each system
       forAllSystems = f: nixpkgs.lib.genAttrs systems (system: f system);
 
@@ -105,7 +105,6 @@
     in {
       inherit lib;
 
-      # Templates for user configurations
       templates = {
         standalone = {
           path = ./templates/standalone;
@@ -117,7 +116,6 @@
         };
       };
 
-      # My main laptop config
       homeConfigurations = {
         "seandmr@m1-grizzly" = lib.standaloneHome {
           username = "seandmr";
@@ -128,7 +126,6 @@
         };
       };
 
-      # Add test packages for each system
       packages = forAllSystems (system: 
         let 
           testPkgs = getPkgs system;
