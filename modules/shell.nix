@@ -13,6 +13,8 @@ in {
 
   config = {
     home.packages = with pkgs; [
+      _1password-cli
+
       # Core terminal utilities
       mosh
       tmux
@@ -29,7 +31,6 @@ in {
       fd
       fzf
       tree
-      yt-dlp
 
       # Development tools
       libyaml
