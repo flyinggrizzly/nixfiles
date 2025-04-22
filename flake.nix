@@ -58,8 +58,7 @@
                 ./modules/desktop.nix
                 ./modules/darwin.nix
                 ./modules/exclude-packages.nix
-                ./modules/extra-modules.nix
-              ];
+              ] ++ extraModules; # Direct import of extra modules
 
               # Basic home configuration
               home = {
@@ -71,7 +70,7 @@
               programs.home-manager.enable = true;
 
               modules = {
-                inherit shell neovim git desktop darwin excludePackages extraModules;
+                inherit shell neovim git desktop darwin excludePackages;
               };
             };
           in {

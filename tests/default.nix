@@ -31,6 +31,7 @@ let
   
   # Import flake input tests
   flakeInputTests = import ./flake-input-tests.nix { inherit pkgs lib; };
+  flakeInputRunAllTests = flakeInputTests.runAllTests;
 
   # Run all tests
   runAllTests = pkgs.runCommand "run-all-tests" {
@@ -40,7 +41,7 @@ let
       testNixosComplete
       testNixosMinimal
       testExcludePackages
-      flakeInputTests.default
+      flakeInputRunAllTests
     ];
   } ''
     echo "All tests passed!"
@@ -53,7 +54,7 @@ in {
   testNixosComplete = testNixosComplete;
   testNixosMinimal = testNixosMinimal;
   testExcludePackages = testExcludePackages;
-  flakeInputTests = flakeInputTests;
+  flakeInputTests = flakeInputRunAllTests;
   runAllTests = runAllTests;
 
   # Default target to build
