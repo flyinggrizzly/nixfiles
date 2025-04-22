@@ -43,10 +43,10 @@ createDerivation {
     # Darwin configuration (disabled for Linux)
     darwin.enable = false;
 
-    # Home extensions
-    homeExtensions = {
-      packages = [];
-      sessionVariables = {
+    # Extensions
+    extensions = {
+      home.packages = [];
+      home.sessionVariables = {
         EDITOR = "nvim";
       };
     };

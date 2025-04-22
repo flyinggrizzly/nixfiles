@@ -50,10 +50,10 @@ createDerivation {
       pkgs.ripgrep
     ];
 
-    # Home extensions
-    homeExtensions = {
-      packages = [];
-      sessionVariables = {
+    # Extensions
+    extensions = {
+      home.packages = [];
+      home.sessionVariables = {
         EDITOR = "nvim";
       };
     };

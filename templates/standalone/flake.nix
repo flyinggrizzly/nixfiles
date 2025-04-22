@@ -60,12 +60,13 @@
           karabiner.enable = false;
         };
         
-        # Home extensions - allows extending home-manager configuration directly
-        homeExtensions = {
+        # Extensions - allows extending any configuration attributes
+        extensions = {
           # Example configurations:
-          # file.".config/custom/settings.json".text = ''{ "setting": "value" }'';
-          # packages = [ pkgs.ripgrep ];
-          # sessionVariables = { EDITOR = "nvim"; };
+          # home.file.".config/custom/settings.json".text = ''{ "setting": "value" }'';
+          # home.packages = [ pkgs.ripgrep ];
+          # home.sessionVariables = { EDITOR = "nvim"; };
+          # programs.starship.enable = true;
         };
       };
     };

@@ -98,9 +98,9 @@ prepareHome {
   
   # Module configurations...
   
-  # Home extensions...
-  homeExtensions = {
-    # Additional home-manager configurations
+  # General extensions...
+  extensions = {
+    # Additional configuration
   };
 }
 ```
@@ -122,16 +122,18 @@ modules = [
 ```
 
 ### Module Configuration
-
-#### Home Extensions
+#### Extensions
 
 ```nix
-homeExtensions = {
-  # Direct extension of home-manager's home.* attributes
-  file.".config/custom/config.txt".text = "Example configuration";
-  packages = [ pkgs.ripgrep pkgs.fd ];
-  sessionVariables = { EDITOR = "nvim"; };
-  # Any other valid home-manager home.* attributes
+extensions = {
+  programs.starship = {
+    enable = true;
+    enableZshIntegration = true;
+    settings = {
+      add_newline = false;
+    };
+  };
+  xdg.configFile."myapp/settings.json".text = ''{ "theme": "dark" }'';
 };
 ```
 
@@ -208,11 +210,12 @@ homeConfigurations."user@host" = lib.standaloneHome {
     vscode.enable = true;
   };
   
-  # Custom home-manager extensions
-  homeExtensions = {
-    file.".config/custom/settings.json".text = ''{ "setting": "value" }'';
-    packages = [ pkgs.ripgrep ];
-    sessionVariables = { EDITOR = "nvim"; };
+  # Extensions (arbitrary config overrides)
+  extensions = {
+    home.file.".config/custom/settings.json".text = ''{ "setting": "value" }'';
+    home.packages = [ pkgs.ripgrep ];
+    home.sessionVariables = { EDITOR = "nvim"; };
+    programs.starship.enable = true;
   };
 };
 ```

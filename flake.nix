@@ -44,7 +44,7 @@
           desktop ? {},
           darwin ? {},
           excludePackages ? [],
-          homeExtensions ? {},
+          extensions ? {},
           }:
           let
             pkgs = getPkgs platform;
@@ -58,7 +58,7 @@
                 ./modules/desktop.nix
                 ./modules/darwin.nix
                 ./modules/exclude-packages.nix
-                ./modules/home-extensions.nix
+                ./modules/extensions.nix
               ];
 
               # Basic home configuration
@@ -71,7 +71,7 @@
               programs.home-manager.enable = true;
 
               modules = {
-                inherit shell neovim git desktop darwin excludePackages homeExtensions;
+                inherit shell neovim git desktop darwin excludePackages extensions;
               };
             };
           in {
