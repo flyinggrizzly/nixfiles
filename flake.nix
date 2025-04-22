@@ -13,7 +13,7 @@
   outputs = { self, nixpkgs, home-manager, ... }@inputs:
     let
       # Helper function to get the appropriate pkgs for a platform
-      getPkgs = platform: 
+      getPkgs = platform:
         import nixpkgs {
           system = platform;
           config = { allowUnfree = true; };
@@ -34,7 +34,7 @@
       lib = {
         # Core function that creates the basic home configuration
         # This is reused by both standaloneHome and nixosHome
-        prepareHome = { 
+        prepareHome = {
           username,
           stateVersion,
           platform,
@@ -64,7 +64,7 @@
               # Basic home configuration
               home = {
                 inherit username stateVersion;
-                homeDirectory = if pkgs.stdenv.isDarwin 
+                homeDirectory = if pkgs.stdenv.isDarwin
                   then "/Users/${username}"
                 else "/home/${username}";
               };
@@ -105,7 +105,7 @@
           };
       };
     in {
-      inherit lib;
+      inherit lib home-manager;
 
       templates = {
         standalone = {
@@ -128,10 +128,10 @@
         };
       };
 
-      packages = forAllSystems (system: 
-        let 
+      packages = forAllSystems (system:
+        let
           testPkgs = getPkgs system;
-          tests = import ./tests { 
+          tests = import ./tests {
             pkgs = testPkgs;
             inherit (self) lib;
           };

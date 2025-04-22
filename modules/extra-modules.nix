@@ -2,12 +2,12 @@
 
 let
   inherit (lib) mkOption types;
-  
-  # Access the toplevel extraModules parameter from modules
-  cfg = config.extraModules or [];
+
+  # Access the extraModules parameter from the modules namespace
+  cfg = config.modules.extraModules;
 in {
-  # Define the option at the top level
-  options.extraModules = mkOption {
+  # Define the option in the modules namespace
+  options.modules.extraModules = mkOption {
     type = types.listOf types.anything;
     default = [];
     description = "Additional modules to include in the home-manager configuration";

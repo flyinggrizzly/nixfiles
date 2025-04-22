@@ -3,15 +3,16 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    
-    # Import dotfiles flake - update this URL to your fork
-    dotfiles.url = "github:seandmr/nixfiles";
-    
-    # Home-manager is already imported through the dotfiles flake
-    home-manager.follows = "dotfiles/home-manager";
+
+    # Import nixfiles flake - update this URL to your fork
+    nixfiles.url = "github:flyinggrizzly/nixfiles";
+    nixfiles.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Home-manager is already imported through the nixfiles flake
+    home-manager.follows = "nixfiles/home-manager";
   };
 
-  outputs = { self, nixpkgs, home-manager, dotfiles, ... }:
+  outputs = { self, nixpkgs, nixfiles, ... }:
     let
       system = "x86_64-linux"; # Change to your system architecture
       username = "user";       # Change to your username
@@ -30,29 +31,29 @@
               extraGroups = [ "wheel" "networkmanager" ];
               # No need to specify packages here as they'll come from home-manager
             };
-            
+
             # System-level packages
             environment.systemPackages = with pkgs: [
               git
               vim
               wget
             ];
-            
+
             # Allow unfree packages (if needed)
             nixpkgs.config.allowUnfree = true;
-            
+
             # Boot configuration, hardware, etc. would go here
             # This is just a minimal example
-            
+
             system.stateVersion = "24.05";
           })
-          
+
           # Import home-manager NixOS module
-          dotfiles.nixosHome {
-            inherit username hostname;
-            systemIdentifier = system;
+          nixfiles.lib.nixosHome {
+            inherit username;
+            platform = system;
             stateVersion = "24.05";
-            
+
             # Git configuration
             git = {
               enable = true;
@@ -64,7 +65,7 @@
                 core.editor = "vim";
               };
             };
-            
+
             # Neovim configuration
             neovim = {
               enable = true;
@@ -72,15 +73,15 @@
               extraPlugins = [];
               extraPackages = [];
             };
-            
+
             # Desktop configuration
             desktop = {
               enable = true; # Set to false for headless systems
             };
-            
+
             # Darwin settings (disabled for NixOS)
             darwin.enable = false;
-            
+
             # Direct configuration through extraModules
             extraModules = [
               # Custom module with direct home-manager settings

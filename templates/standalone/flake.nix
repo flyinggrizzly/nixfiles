@@ -3,22 +3,23 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    home-manager.url = "github:nix-community/home-manager";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     # Import dotfiles flake - update this URL to your fork
-    dotfiles.url = "github:seandmr/nixfiles";
+    nixfiles.url = "github:flyinggrizzly/nixfiles";
+    nixfiles.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Get home-manager from nixfiles
+    home-manager.follows = "nixfiles/home-manager";
   };
 
-  outputs = { nixpkgs, home-manager, dotfiles, ... }:
+  outputs = { nixpkgs, nixfiles, ... }:
     let
-      system = "x86_64-linux"; # Change to your system (aarch64-darwin, x86_64-darwin, etc.)
+      platform = "x86_64-linux"; # Change to your system (aarch64-darwin, x86_64-darwin, etc.)
       username = "user";       # Change to your username
       hostname = "hostname";   # Change to your hostname
     in {
-      homeConfigurations."${username}@${hostname}" = dotfiles.standaloneHome {
-        inherit username hostname;
-        systemIdentifier = system;
+      homeConfigurations."${username}@${hostname}" = nixfiles.lib.standaloneHome {
+        inherit username platform;
         stateVersion = "24.05";
 
         # Git configuration
@@ -59,7 +60,7 @@
           alfred.enable = false;
           karabiner.enable = false;
         };
-        
+
         # Direct configuration through extraModules
         extraModules = [
           # Custom module with direct home-manager settings

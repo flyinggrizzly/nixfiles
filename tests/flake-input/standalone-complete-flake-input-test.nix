@@ -1,21 +1,21 @@
 # Complete standalone home configuration as flake input
 {
   description = "Test consumer for nixfiles - complete standalone";
-  
+
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixfiles.url = "path:../..";
-    home-manager.url = "github:nix-community/home-manager";
+    home-manager.follows = "nixfiles/home-manager";
   };
-  
-  outputs = { self, nixpkgs, nixfiles, home-manager }: {
+
+  outputs = { self, nixpkgs, nixfiles }: {
     homeConfigurations."tester@host" = nixfiles.lib.standaloneHome {
       username = "tester";
       stateVersion = "24.11";
       platform = "x86_64-linux";
-      
+
       shell.extendZshConfig = null;
-      
+
       neovim = {
         enable = true;
         enableLlmTools = true;
@@ -40,11 +40,11 @@
 
       desktop.enable = true;
       darwin.enable = false;
-      
+
       excludePackages = [
         nixpkgs.legacyPackages.x86_64-linux.ripgrep
       ];
-      
+
       extraModules = [
         ({ config, lib, pkgs, ... }: {
           home.packages = [ pkgs.ripgrep ];
