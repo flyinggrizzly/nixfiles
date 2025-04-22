@@ -43,12 +43,15 @@ createDerivation {
     # Darwin configuration (disabled for Linux)
     darwin.enable = false;
 
-    # Extensions
-    extensions = {
-      home.packages = [];
-      home.sessionVariables = {
-        EDITOR = "nvim";
-      };
-    };
+    # Direct configuration through extraModules
+    extraModules = [
+      ({ config, lib, pkgs, ... }: {
+        home.packages = [ pkgs.ripgrep ];
+        home.sessionVariables = {
+          EDITOR = "nvim";
+        };
+        programs.starship.enable = true;
+      })
+    ];
   };
 }

@@ -12,6 +12,7 @@
 #   bin/test standalone   Run standalone tests only
 #   bin/test nixos        Run NixOS tests only
 #   bin/test exclude      Run package exclusion test only
+#   bin/test flake-input  Run flake input tests only
 
 set -e
 
@@ -20,9 +21,11 @@ SYSTEM=$(nix eval --impure --expr "builtins.currentSystem" --raw)
 
 # Default to running all tests
 test_target="packages.$SYSTEM.runAllTests"
+run_all=true
 
 # Process command line arguments
 if [ $# -gt 0 ]; then
+  run_all=false
   case "$1" in
     minimal)
       test_target="packages.$SYSTEM.testStandaloneMinimal packages.$SYSTEM.testNixosMinimal"
@@ -44,6 +47,10 @@ if [ $# -gt 0 ]; then
       test_target="packages.$SYSTEM.testExcludePackages"
       echo "Running package exclusion test..."
       ;;
+    flake-input)
+      test_target="packages.$SYSTEM.flakeInputTests.default"
+      echo "Running flake input tests..."
+      ;;
     -h|--help)
       echo "Usage: bin/test [OPTION]"
       echo ""
@@ -55,6 +62,7 @@ if [ $# -gt 0 ]; then
       echo "  standalone   Run standalone tests only"
       echo "  nixos        Run NixOS tests only"
       echo "  exclude      Run package exclusion test only"
+      echo "  flake-input  Run flake input tests only"
       echo "  help, -h     Display this help message"
       echo ""
       echo "With no options, all tests will be run."

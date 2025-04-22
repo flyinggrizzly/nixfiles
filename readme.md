@@ -98,10 +98,13 @@ prepareHome {
   
   # Module configurations...
   
-  # General extensions...
-  extensions = {
-    # Additional configuration
-  };
+  # Additional configuration through extraModules
+  extraModules = [
+    # Custom configuration modules
+    ({ config, lib, pkgs, ... }: {
+      # Your direct configurations here
+    })
+  ];
 }
 ```
 
@@ -122,20 +125,34 @@ modules = [
 ```
 
 ### Module Configuration
-#### Extensions
+#### Adding Custom Configuration
+
+You can add custom configurations using the `extraModules` parameter:
 
 ```nix
-extensions = {
-  programs.starship = {
-    enable = true;
-    enableZshIntegration = true;
-    settings = {
-      add_newline = false;
+extraModules = [
+  ({ config, lib, pkgs, ... }: {
+    # Direct configuration for any home-manager settings
+    programs.starship = {
+      enable = true;
+      enableZshIntegration = true;
+      settings = {
+        add_newline = false;
+      };
     };
-  };
-  xdg.configFile."myapp/settings.json".text = ''{ "theme": "dark" }'';
-};
+    
+    xdg.configFile."myapp/settings.json".text = ''{ "theme": "dark" }'';
+    
+    home.packages = with pkgs; [ 
+      ripgrep 
+      fd
+    ];
+  })
+];
 ```
+
+The `extraModules` parameter is handled through the module system. Each module in the list
+is imported automatically and its configuration is applied to your home-manager setup.
 
 #### Git
 
@@ -210,13 +227,15 @@ homeConfigurations."user@host" = lib.standaloneHome {
     vscode.enable = true;
   };
   
-  # Extensions (arbitrary config overrides)
-  extensions = {
-    home.file.".config/custom/settings.json".text = ''{ "setting": "value" }'';
-    home.packages = [ pkgs.ripgrep ];
-    home.sessionVariables = { EDITOR = "nvim"; };
-    programs.starship.enable = true;
-  };
+  # Custom configuration through extraModules
+  extraModules = [
+    ({ config, lib, pkgs, ... }: {
+      home.file.".config/custom/settings.json".text = ''{ "setting": "value" }'';
+      home.packages = [ pkgs.ripgrep ];
+      home.sessionVariables = { EDITOR = "nvim"; };
+      programs.starship.enable = true;
+    })
+  ];
 };
 ```
 

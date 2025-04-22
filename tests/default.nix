@@ -18,9 +18,6 @@ let
       touch $out # Create empty output file to mark success
     '';
 
-  # Define test configurations by importing individual test files
-  linuxPkgs = getPlatformPkgs "x86_64-linux";
-  
   testHelpers = {
     inherit pkgs lib getPlatformPkgs createDerivation;
   };
@@ -31,6 +28,9 @@ let
   testExcludePackages = import ./exclude_packages_test.nix testHelpers;
   testNixosComplete = import ./nixos_complete_test.nix testHelpers;
   testNixosMinimal = import ./nixos_minimal_test.nix testHelpers;
+  
+  # Import flake input tests
+  flakeInputTests = import ./flake-input-tests.nix { inherit pkgs lib; };
 
   # Run all tests
   runAllTests = pkgs.runCommand "run-all-tests" {
@@ -40,6 +40,7 @@ let
       testNixosComplete
       testNixosMinimal
       testExcludePackages
+      flakeInputTests.default
     ];
   } ''
     echo "All tests passed!"
@@ -52,6 +53,7 @@ in {
   testNixosComplete = testNixosComplete;
   testNixosMinimal = testNixosMinimal;
   testExcludePackages = testExcludePackages;
+  flakeInputTests = flakeInputTests;
   runAllTests = runAllTests;
 
   # Default target to build

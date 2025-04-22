@@ -81,14 +81,17 @@
             # Darwin settings (disabled for NixOS)
             darwin.enable = false;
             
-            # Extensions - allows extending any configuration attributes
-            extensions = {
-              # Example configurations:
-              # home.file.".config/custom/settings.json".text = ''{ "setting": "value" }'';
-              # home.packages = [ pkgs.ripgrep ];
-              # home.sessionVariables = { EDITOR = "nvim"; };
-              # programs.starship.enable = true;
-            };
+            # Direct configuration through extraModules
+            extraModules = [
+              # Custom module with direct home-manager settings
+              ({ config, pkgs, ... }: {
+                # Example configurations:
+                # home.file.".config/custom/settings.json".text = ''{ "setting": "value" }'';
+                # home.packages = [ pkgs.ripgrep ];
+                # home.sessionVariables = { EDITOR = "nvim"; };
+                # programs.starship.enable = true;
+              })
+            ];
           }
         ];
       };

@@ -44,7 +44,7 @@
           desktop ? {},
           darwin ? {},
           excludePackages ? [],
-          extensions ? {},
+          extraModules ? [],
           }:
           let
             pkgs = getPkgs platform;
@@ -58,7 +58,7 @@
                 ./modules/desktop.nix
                 ./modules/darwin.nix
                 ./modules/exclude-packages.nix
-                ./modules/extensions.nix
+                ./modules/extra-modules.nix
               ];
 
               # Basic home configuration
@@ -71,7 +71,7 @@
               programs.home-manager.enable = true;
 
               modules = {
-                inherit shell neovim git desktop darwin excludePackages extensions;
+                inherit shell neovim git desktop darwin excludePackages extraModules;
               };
             };
           in {
@@ -97,7 +97,9 @@
             inherit (args) username;
           in {
             imports = [ home-manager.nixosModules.home-manager ];
-            home-manager.users.${username} = homeConfig;
+            home-manager.users.${username} = { config, ... }: {
+              imports = [ homeConfig ];
+            };
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
           };
