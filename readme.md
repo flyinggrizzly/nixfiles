@@ -169,6 +169,9 @@ neovim = {
 ```nix
 desktop = {
   enable = true;           # Enable/disable desktop applications
+  ghostty.enable = true;   # Enable/disable Ghostty terminal configuration
+  kitty.enable = true;     # Enable/disable Kitty terminal configuration
+  vscode.enable = true;    # Enable/disable VSCode configuration
 };
 ```
 
@@ -197,7 +200,13 @@ homeConfigurations."user@host" = lib.standaloneHome {
   };
   
   neovim.enableLlmTools = false;
-  desktop.enable = true;
+  
+  desktop = {
+    enable = true;
+    ghostty.enable = true;
+    kitty.enable = true;
+    vscode.enable = true;
+  };
   
   # Custom home-manager extensions
   homeExtensions = {

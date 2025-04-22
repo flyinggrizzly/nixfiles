@@ -3,12 +3,34 @@
 let
   inherit (lib) mkEnableOption mkIf;
   jetbrains_mono_name = "JetBrains Mono";
+  cfg = config.modules.desktop;
 in {
   options.modules.desktop = {
     enable = mkEnableOption "Enable desktop applications and configuration";
+    ghostty = {
+      enable = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = "Enable Ghostty terminal configuration";
+      };
+    };
+    kitty = {
+      enable = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = "Enable Kitty terminal configuration";
+      };
+    };
+    vscode = {
+      enable = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = "Enable VSCode configuration";
+      };
+    };
   };
 
-  config = mkIf config.modules.desktop.enable {
+  config = mkIf cfg.enable {
     # Common desktop packages for all platforms
     home.packages = with pkgs; [
       alacritty
@@ -20,7 +42,7 @@ in {
     ];
 
     # Kitty terminal
-    programs.kitty = {
+    programs.kitty = mkIf cfg.kitty.enable {
       enable = true;
       font = {
         name = jetbrains_mono_name;
@@ -73,7 +95,7 @@ in {
     };
 
     # Ghostty terminal
-    programs.ghostty = {
+    programs.ghostty = mkIf cfg.ghostty.enable {
       enable = true;
       installVimSyntax = true;
       settings = {
@@ -84,7 +106,7 @@ in {
     };
 
     # VSCode
-    programs.vscode = {
+    programs.vscode = mkIf cfg.vscode.enable {
       enable = true;
       package = pkgs.vscode;
       profiles.default = {

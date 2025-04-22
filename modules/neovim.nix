@@ -85,6 +85,16 @@ let
       rev = "6ae33c719bdf185325c3c1836978bb4352157c82";
     };
   };
+
+  claude-fu-nvim = pkgs.vimUtils.buildVimPlugin {
+    name = "claude-fu-nvim";
+    src = pkgs.fetchFromGitHub{
+      owner = "mattkubej";
+      repo = "claude-fu.nvim";
+      rev = "2cfd685898579be43b29ecbfd3dd9e1e4f255a0d";
+      sha256 = "sha256-BdWzrAnWsR6QVqWxI1olRA01hHieLVvT5Vzr9ILh754=";
+    };
+  };
 in {
   options.modules.neovim = {
     enable = mkOption {
@@ -219,6 +229,7 @@ in {
         copilot-cmp
         dressing-nvim
         nui-nvim
+        claude-fu-nvim
         render-markdown-nvim
       ] else []) ++ config.modules.neovim.extraPlugins;
 
