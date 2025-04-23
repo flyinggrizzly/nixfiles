@@ -5,7 +5,17 @@ local dracula_colors = require('dracula').colors()
 
 -- Configure diagnostic display
 vim.diagnostic.config({
-  virtual_text = true,      -- Show diagnostics inline with code
+  virtual_text = {
+    spacing = 4, -- Add more space before the virtual text
+    prefix = "●", -- Use a small dot as prefix
+    format = function(diagnostic)
+      -- Include the diagnostic source in the message if available
+      if diagnostic.source then
+        return string.format("%s (%s)", diagnostic.message, diagnostic.source)
+      end
+      return diagnostic.message
+    end,
+  },
   signs = true,             -- Show diagnostic signs in the sign column
   underline = true,         -- Underline the text with issues
   update_in_insert = false, -- Don't update diagnostics in insert mode
@@ -15,10 +25,10 @@ vim.diagnostic.config({
     source = "always",
     header = "",
     prefix = "",
-    pad_top = 1,           -- Add padding at the top
-    pad_bottom = 1,        -- Add padding at the bottom
-    max_width = 80,        -- Maximum width of the float window
-    max_height = 20,       -- Maximum height of the float window
+    pad_top = 1,     -- Add padding at the top
+    pad_bottom = 1,  -- Add padding at the bottom
+    max_width = 80,  -- Maximum width of the float window
+    max_height = 20, -- Maximum height of the float window
   },
 })
 
@@ -28,6 +38,18 @@ vim.api.nvim_set_hl(0, "DiagnosticFloatingWarn", { fg = dracula_colors.orange, b
 vim.api.nvim_set_hl(0, "DiagnosticFloatingInfo", { fg = dracula_colors.cyan, bg = dracula_colors.black })
 vim.api.nvim_set_hl(0, "DiagnosticFloatingHint", { fg = dracula_colors.green, bg = dracula_colors.black })
 vim.api.nvim_set_hl(0, "DiagnosticFloatingOk", { fg = dracula_colors.green, bg = dracula_colors.black })
+
+-- Set up inline diagnostics with a subtle background
+vim.api.nvim_set_hl(0, "DiagnosticVirtualTextError", { fg = dracula_colors.red, bg = "#382838" })
+vim.api.nvim_set_hl(0, "DiagnosticVirtualTextWarn", { fg = dracula_colors.orange, bg = "#38352f" })
+vim.api.nvim_set_hl(0, "DiagnosticVirtualTextInfo", { fg = dracula_colors.cyan, bg = "#2e3a40" })
+vim.api.nvim_set_hl(0, "DiagnosticVirtualTextHint", { fg = dracula_colors.green, bg = "#2d3b2d" })
+
+-- Add faint border to underline diagnostics
+vim.api.nvim_set_hl(0, "DiagnosticUnderlineError", { sp = dracula_colors.red, underline = true })
+vim.api.nvim_set_hl(0, "DiagnosticUnderlineWarn", { sp = dracula_colors.orange, underline = true })
+vim.api.nvim_set_hl(0, "DiagnosticUnderlineInfo", { sp = dracula_colors.cyan, underline = true })
+vim.api.nvim_set_hl(0, "DiagnosticUnderlineHint", { sp = dracula_colors.green, underline = true })
 
 -- Make floating window borders match the Dracula theme
 vim.api.nvim_set_hl(0, "FloatBorder", { fg = dracula_colors.comment, bg = dracula_colors.black })
@@ -46,16 +68,49 @@ vim.api.nvim_set_hl(0, "markdownCode", { fg = dracula_colors.green, bg = dracula
 vim.api.nvim_set_hl(0, "markdownCodeBlock", { fg = dracula_colors.green, bg = dracula_colors.selection })
 vim.api.nvim_set_hl(0, "markdownBlockquote", { fg = dracula_colors.comment, italic = true })
 
--- Create consistent float config for reuse
+-- Create base float config for reuse
 local float_config = {
   border = "rounded",
-  max_width = 80,
   max_height = 20,
   pad_top = 1,
   pad_bottom = 1,
   padding = { left = 2, right = 2 },
   source = "always",
 }
+
+-- Function to get a configured float config with proper width
+local function get_float_config(opts)
+  -- Default options
+  opts = opts or {}
+  local width_percent = opts.width_percent or 0.75
+  local min_width_percent = opts.min_width_percent
+  local title = opts.title
+  local focus = opts.focusable
+
+  -- Create config based on float_config
+  local config = vim.deepcopy(float_config)
+
+  -- Calculate widths
+  local win_width = vim.api.nvim_win_get_width(0)
+  config.max_width = math.floor(win_width * width_percent)
+
+  if min_width_percent then
+    config.min_width = math.floor(win_width * min_width_percent)
+  end
+
+  -- Add optional properties
+  if title then
+    config.title = title
+    config.title_pos = "center"
+  end
+
+  if focus then
+    config.focusable = true
+    config.style = "minimal"
+  end
+
+  return config
+end
 
 -- Brief aside: **What is LSP?**
 --
@@ -178,53 +233,61 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
     -- Add hover information keymap with custom styling
     map('K', function()
-      -- Enhanced hover with some extra config
-      local hover = vim.deepcopy(float_config)
-      hover.focusable = true
-      hover.style = "minimal"
-      hover.title = "Documentation"
-      hover.title_pos = "center"
-      vim.lsp.buf.hover(hover)
+      local hover_config = get_float_config({
+        width_percent = 0.75,
+        min_width_percent = 0.5,
+        title = "Documentation",
+        focusable = true
+      })
+      vim.lsp.buf.hover(hover_config)
     end, 'Hover Documentation')
 
     -- Add keymap for diagnostics with custom styling
     map('<leader>e', function()
-      vim.diagnostic.open_float(float_config)
+      local diag_config = get_float_config({ title = "Diagnostics" })
+      vim.diagnostic.open_float(diag_config)
     end, 'Show [E]rror Diagnostics')
 
     -- Navigate between all diagnostics (any severity)
-    map('[i', function() 
-      vim.diagnostic.goto_prev({ float = float_config }) 
+    map('[i', function()
+      local diag_config = get_float_config({ title = "Diagnostic" })
+      vim.diagnostic.goto_prev({ float = diag_config })
     end, 'Go to previous diagnostic (any)')
-    map(']i', function() 
-      vim.diagnostic.goto_next({ float = float_config }) 
+    map(']i', function()
+      local diag_config = get_float_config({ title = "Diagnostic" })
+      vim.diagnostic.goto_next({ float = diag_config })
     end, 'Go to next diagnostic (any)')
 
     -- Navigate between errors only
     map('[d', function()
-      vim.diagnostic.goto_prev({ 
+      local diag_config = get_float_config({ title = "Error" })
+      vim.diagnostic.goto_prev({
         severity = vim.diagnostic.severity.ERROR,
-        float = float_config
+        float = diag_config
       })
     end, 'Go to previous error')
+
     map(']d', function()
-      vim.diagnostic.goto_next({ 
+      local diag_config = get_float_config({ title = "Error" })
+      vim.diagnostic.goto_next({
         severity = vim.diagnostic.severity.ERROR,
-        float = float_config
+        float = diag_config
       })
     end, 'Go to next error')
 
     -- Navigate between warnings only
     map('[w', function()
-      vim.diagnostic.goto_prev({ 
+      local diag_config = get_float_config({ title = "Warning" })
+      vim.diagnostic.goto_prev({
         severity = vim.diagnostic.severity.WARN,
-        float = float_config
+        float = diag_config
       })
     end, 'Go to previous warning')
     map(']w', function()
-      vim.diagnostic.goto_next({ 
+      local diag_config = get_float_config({ title = "Warning" })
+      vim.diagnostic.goto_next({
         severity = vim.diagnostic.severity.WARN,
-        float = float_config
+        float = diag_config
       })
     end, 'Go to next warning')
   end,
