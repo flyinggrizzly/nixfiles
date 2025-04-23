@@ -50,5 +50,6 @@ mapn('<leader>gd', snacks.picker.git_diff, '[G]it [D]iff')
 mapn('<leader>gg', snacks.lazygit.open, 'Lazy [G]it')
 mapn('<leader>gH', snacks.gitbrowse.open, 'Open in [G]it[H]ub')
 
--- Are we keeping these?
-mapn('<leader>sd', snacks.picker.diagnostics, '[S]earch [D]iagnostics')
+-- Diagnostic mappings
+mapn('<leader>sd', snacks.picker.diagnostics_buffer, '[S]earch [D]ocument diagnostics')
+mapn('<leader>sD', snacks.picker.diagnostics, '[S]earch workspace [D]iagnostics')

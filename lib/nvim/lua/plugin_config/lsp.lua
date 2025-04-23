@@ -1,12 +1,19 @@
-local telescope_builtin = require('telescope.builtin')
-require('telescope').setup({
-  extensions = {
-    ['ui-select'] = {
-      require('telescope.themes').get_dropdown(),
-    },
+local snacks = require('snacks')
+
+-- Configure diagnostic display
+vim.diagnostic.config({
+  virtual_text = true,      -- Show diagnostics inline with code
+  signs = true,             -- Show diagnostic signs in the sign column
+  underline = true,         -- Underline the text with issues
+  update_in_insert = false, -- Don't update diagnostics in insert mode
+  severity_sort = true,     -- Sort diagnostics by severity
+  float = {
+    border = "rounded",
+    source = "always",
+    header = "",
+    prefix = "",
   },
 })
-
 
 -- Brief aside: **What is LSP?**
 --
@@ -53,27 +60,27 @@ vim.api.nvim_create_autocmd('LspAttach', {
     -- Jump to the definition of the word under your cursor.
     --  This is where a variable was first declared, or where a function is defined, etc.
     --  To jump back, press <C-t>.
-    map('gd', telescope_builtin.lsp_definitions, '[G]oto [D]efinition')
+    map('gd', snacks.picker.lsp_definitions, '[G]oto [D]efinition')
 
     -- Find references for the word under your cursor.
-    map('gr', telescope_builtin.lsp_references, '[G]oto [R]eferences')
+    map('gr', snacks.picker.lsp_references, '[G]oto [R]eferences')
 
     -- Jump to the implementation of the word under your cursor.
     --  Useful when your language has ways of declaring types without an actual implementation.
-    map('gI', telescope_builtin.lsp_implementations, '[G]oto [I]mplementation')
+    map('gI', snacks.picker.lsp_implementations, '[G]oto [I]mplementation')
 
     -- Jump to the type of the word under your cursor.
     --  Useful when you're not sure what type a variable is and you want to see
     --  the definition of its *type*, not where it was *defined*.
-    map('<leader>D', telescope_builtin.lsp_type_definitions, 'Type [D]efinition')
+    map('<leader>D', snacks.picker.lsp_type_definitions, 'Type [D]efinition')
 
     -- Fuzzy find all the symbols in your current document.
     --  Symbols are things like variables, functions, types, etc.
-    map('<leader>ds', telescope_builtin.lsp_document_symbols, '[D]ocument [S]ymbols')
+    map('<leader>ds', snacks.picker.lsp_symbols, '[D]ocument [S]ymbols')
 
     -- Fuzzy find all the symbols in your current workspace.
     --  Similar to document symbols, except searches over your entire project.
-    map('<leader>ws', telescope_builtin.lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
+    map('<leader>ws', snacks.picker.lsp_workspace_symbols, '[W]orkspace [S]ymbols')
 
     -- Rename the variable under your cursor.
     --  Most Language Servers support renaming across files, etc.
@@ -126,6 +133,14 @@ vim.api.nvim_create_autocmd('LspAttach', {
         vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
       end, '[L]SP toggle Inlay [H]ints')
     end
+
+    -- Add hover information keymap
+    map('K', vim.lsp.buf.hover, 'Hover Documentation')
+
+    -- Add keymap for diagnostics
+    map('<leader>e', vim.diagnostic.open_float, 'Show [E]rror Diagnostics')
+    map('[d', function() vim.diagnostic.goto_prev({ float = true }) end, 'Go to previous diagnostic')
+    map(']d', function() vim.diagnostic.goto_next({ float = true }) end, 'Go to next diagnostic')
   end,
 })
 
