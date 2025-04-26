@@ -3,7 +3,6 @@ tap "homebrew/cask-drivers"
 
 cask "1password"
 cask "alfred"
-brew "chruby"
 cask "discord"
 cask "firefox"
 cask "karabiner-elements"
