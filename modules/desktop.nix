@@ -102,6 +102,10 @@ in {
         theme = "calamity";
         cursor-style = "underline";
         font-family = "JetBrains Mono";
+        keybind = [
+          "alt+right=unbind"
+          "alt+left=unbind"
+        ];
       };
     };
 
