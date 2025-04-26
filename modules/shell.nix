@@ -24,6 +24,7 @@ in {
       git
       gh
       lazygit
+      graphite-cli
 
       # File and text utilities
       wget
@@ -33,7 +34,7 @@ in {
       tree
 
       # Development tools
-      libyaml
+      libyaml.dev
       jq
       direnv
 
@@ -44,8 +45,8 @@ in {
       # Programming languages and tools
       pnpm
       rustc
-      chruby
-      graphite-cli
+      ruby_3_4
+
       claude-code
 
       # Fonts
