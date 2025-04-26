@@ -28,18 +28,22 @@ in {
         description = "Enable VSCode configuration";
       };
     };
+    firefox = {
+      enable = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = "Enable Firefox configuration";
+      };
+    };
   };
 
   config = mkIf cfg.enable {
     # Common desktop packages for all platforms
     home.packages = with pkgs; [
-      alacritty
-      kitty-themes
       logseq
       google-chrome
       code-cursor
-      # todo: firefox
-    ];
+    ] ++ (mkIf cfg.kitty.enable [ kitty-themes ]);
 
     # Kitty terminal
     programs.kitty = mkIf cfg.kitty.enable {
@@ -106,6 +110,18 @@ in {
           "alt+right=unbind"
           "alt+left=unbind"
         ];
+      };
+    };
+
+    programs.firefox.enable = mkIf cfg.firefox.enable {
+      enable = true;
+      languagePacks = [ "en-US" ];
+      policies = {
+        "DefaultDownloadDirectory" = "\${home}/Downloads";
+        "AppAutoUpdate" = false;
+        "DisableTelemetry" = true;
+        "OfferToSaveLogins" = false;
+        "PromptForDownloadLocation" = true;
       };
     };
 
