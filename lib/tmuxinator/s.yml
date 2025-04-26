@@ -46,6 +46,18 @@ windows:
       panes:
         - zsh
         - nvim
+  - blog:
+      root: ~/flying-grizzly
+      layout: 6791,344x78,0,0{76x78,0,0,17,267x78,77,0,7}
+      panes:
+        - zsh
+        - nvim
+  - plamotrack:
+      root: ~/src/plamotrack
+      layout: 6791,344x78,0,0{76x78,0,0,17,267x78,77,0,7}
+      panes:
+        - zsh
+        - nvim
   - zsh:
   - nixfiles:
       layout: 6791,344x78,0,0{76x78,0,0,17,267x78,77,0,7}
@@ -53,9 +65,3 @@ windows:
       panes:
         - zsh
         - nvim
-  - ollama:
-      root: ~/
-      layout: tiled
-      panes:
-        - ollama serve
-        - ollama run opencoder
