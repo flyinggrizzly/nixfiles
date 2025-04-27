@@ -122,8 +122,13 @@
           username = "seandmr";
           stateVersion = "24.11";
           platform = "aarch64-darwin";
-          desktop.enable = true;
           darwin.enable = true;
+          desktop = {
+            enable = true;
+            ghostty.enable = true;
+            kitty.enable = false;
+            transmission.enable = true;
+          };
         };
       };
 

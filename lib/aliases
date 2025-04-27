@@ -31,8 +31,4 @@ alias ggone="git branch -vv | grep ': gone' | cut -c 3- | awk '{ print \$1 }'"
 
 alias grc="git rebase --continue"
 
-# SSH for Kitty
-# see https://sw.kovidgoyal.net/kitty/faq/#i-get-errors-about-the-terminal-being-unknown-or-opening-the-terminal-failing-when-sshing-into-a-different-computer
-alias ssh="kitty +kitten ssh"
-
 (( $+commands[bundle] )) && alias be='bundle exec'

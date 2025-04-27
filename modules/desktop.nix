@@ -4,37 +4,30 @@ let
   inherit (lib) mkEnableOption mkIf;
   jetbrains_mono_name = "JetBrains Mono";
   cfg = config.modules.desktop;
+
+  addIf = condition: package: if condition then (lib.toList package) else []; 
 in {
   options.modules.desktop = {
     enable = mkEnableOption "Enable desktop applications and configuration";
-    ghostty = {
-      enable = lib.mkOption {
-        type = lib.types.bool;
-        default = true;
-        description = "Enable Ghostty terminal configuration";
-      };
+    ghostty.enable = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Enable Ghostty terminal configuration";
     };
-    kitty = {
-      enable = lib.mkOption {
-        type = lib.types.bool;
-        default = true;
-        description = "Enable Kitty terminal configuration";
-      };
+    vscode.enable = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Enable VSCode configuration";
     };
-    vscode = {
-      enable = lib.mkOption {
-        type = lib.types.bool;
-        default = true;
-        description = "Enable VSCode configuration";
-      };
+    firefox.enable = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Enable Firefox configuration";
     };
-    firefox = {
-      enable = lib.mkOption {
-        type = lib.types.bool;
-        default = true;
-        description = "Enable Firefox configuration";
-      };
-    };
+    kitty.enable = lib.mkEnableOption "Enable Kitty terminal configuration";
+    slack.enable = lib.mkEnableOption "Enable Slack configuration";
+    discord.enable = lib.mkEnableOption "Enable Discord configuration";
+    transmission.enable = lib.mkEnableOption "Enable Transmission configuration";
   };
 
   config = mkIf cfg.enable {
@@ -43,7 +36,10 @@ in {
       logseq
       google-chrome
       code-cursor
-    ] ++ (mkIf cfg.kitty.enable [ kitty-themes ]);
+    ] ++ (addIf cfg.kitty.enable kitty-themes)
+      ++ (addIf cfg.slack.enable slack)
+      ++ (addIf cfg.transmission.enable transmission)
+      ++ (addIf cfg.discord.enable discord);
 
     # Kitty terminal
     programs.kitty = mkIf cfg.kitty.enable {
@@ -113,11 +109,10 @@ in {
       };
     };
 
-    programs.firefox.enable = mkIf cfg.firefox.enable {
+    programs.firefox = mkIf cfg.firefox.enable {
       enable = true;
       languagePacks = [ "en-US" ];
       policies = {
-        "DefaultDownloadDirectory" = "\${home}/Downloads";
         "AppAutoUpdate" = false;
         "DisableTelemetry" = true;
         "OfferToSaveLogins" = false;

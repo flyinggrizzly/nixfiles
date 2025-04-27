@@ -18,6 +18,7 @@ function show_usage {
 RUN_BREW=false
 RUN_GC=true
 PROFILE=""
+TRACE=""
 
 while [[ $# -gt 0 ]]; do
   case $1 in
@@ -30,6 +31,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     --no-gc)
       RUN_GC=false
+      shift
+      ;;
+    -t|--show-trace)
+      TRACE="--show-trace"
       shift
       ;;
     *)
@@ -47,7 +52,7 @@ fi
 echo "Switching to profile: $PROFILE"
 
 # Run home-manager with the selected profile
-home-manager switch --flake ".#${PROFILE}" -b backup
+home-manager switch --flake ".#${PROFILE}" -b backup ${TRACE}
 
 # Run brew bundle if requested
 if [ "$RUN_BREW" = true ] && [ "$(uname)" = "Darwin" ] && [ -f "$HOME/.Brewfile" ]; then

@@ -9,6 +9,10 @@ let
   ghostty-mock = pkgs.writeShellScriptBin "ghostty-mock" ''
     true
   '';
+
+  cfg = config.modules.darwin;
+
+  addIf = condition: package: if condition then [ package ] else []; 
 in {
   options.modules.darwin = {
     enable = mkEnableOption "Enable macOS-specific configuration";
@@ -32,45 +36,38 @@ in {
     };
   };
 
-  config = mkIf config.modules.darwin.enable {
+  config = mkIf cfg.enable {
     assertions = [
       {
-        # Raise **unless** the module is disabled or we're on Darwin
-        assertion = !config.modules.darwin.enable || isDarwin;
+        assertion = !cfg.enable || isDarwin;
         message = "Darwin module cannot be enabled on non-macOS systems";
       }
     ];
 
-    # Darwin-specific packages
     home.packages = with pkgs; [
       iterm2
       rectangle
-    ];
+      the-unarchiver
+    ] ++ (addIf cfg.karabiner.enable karabiner-elements);
 
-    # Mac package for ghostty is busted, use homebrew version
     programs.ghostty.package = ghostty-mock;
 
-    # Homebrew integration
     home.sessionVariables = {
       HOMEBREW_BUNDLE_FILE = "$HOME/.Brewfile";
     };
 
-    # File configurations
     home.file = {
-      # Homebrew
-      ".Brewfile".source = config.modules.darwin.brewfile;
+      ".Brewfile".source = cfg.brewfile;
 
-      # Alfred configuration (conditional)
-      "Library/Application Support/Alfred/Alfred.alfredpreferences" = mkIf config.modules.darwin.alfred.enable {
+      "Library/Application Support/Alfred/Alfred.alfredpreferences" = mkIf cfg.alfred.enable {
         source = ../lib/Alfred.alfredpreferences;
         recursive = true;
       };
-      "Library/Application Support/Alfred/prefs.json" = mkIf config.modules.darwin.alfred.enable {
+      "Library/Application Support/Alfred/prefs.json" = mkIf cfg.alfred.enable {
         source = ../lib/alfred-prefs.json;
       };
-      
-      # Karabiner configuration (conditional)
-      ".config/karabiner" = mkIf config.modules.darwin.karabiner.enable {
+
+      ".config/karabiner" = mkIf cfg.karabiner.enable {
         source = ../lib/karabiner;
         recursive = true;
       };
