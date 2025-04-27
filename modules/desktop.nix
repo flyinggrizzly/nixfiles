@@ -102,6 +102,9 @@ in {
         theme = "calamity";
         cursor-style = "underline";
         font-family = "JetBrains Mono";
+        window-padding-x = "1";
+        window-padding-y = "0";
+        window-padding-balance = true;
         keybind = [
           "alt+right=unbind"
           "alt+left=unbind"
