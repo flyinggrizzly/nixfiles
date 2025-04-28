@@ -2,12 +2,26 @@
 let
   inherit (lib) mkIf mkOption types;
   cfg = config.modules.shell;
+  
+  baseZshrc = builtins.readFile ../lib/zshrc;
+  finalZshrc = baseZshrc + "\n# Appended ZSH configuration\n" + cfg.zshrc.append;
 in {
   options.modules.shell = {
-    extendZshConfig = mkOption {
-      type = types.nullOr types.path;
-      default = null;
-      description = "Additional ZSH config file--included at end of main zshrc";
+    zshrc = {
+      sourceExtension = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        description = "Additional ZSH config file--included at end of main zshrc";
+      };
+
+      append = mkOption {
+        type = types.str;
+        default = "";
+        description = ''
+          Additional ZSH configuration to append to zshrc. Will be appended after `sourceExtension` is
+          sourced if present.
+        '';
+      };
     };
   };
 
@@ -83,9 +97,9 @@ in {
       };
 
       # Shell configuration
-      ".zshrc".source = ../lib/zshrc;
-      ".zshrc.extend" = mkIf (cfg.extendZshConfig != null) {
-        source = cfg.extendZshConfig;
+      ".zshrc".text = finalZshrc;
+      ".zshrc.extend" = mkIf (cfg.zshrc.sourceExtension != null) {
+        source = cfg.zshrc.sourceExtension;
       };
       ".zsh" = {
         source = ../lib/zsh;

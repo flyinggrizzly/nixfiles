@@ -14,7 +14,14 @@
       stateVersion = "24.11";
       platform = "x86_64-linux";
 
-      shell.extendZshConfig = null;
+      shell.zshrc = {
+        sourceExtension = null;
+        append = ''
+          # Test appended zsh configuration
+          export TEST_VAR="test_value"
+          alias test-alias='echo "This is a test"'
+        '';
+      };
 
       neovim = {
         enable = true;

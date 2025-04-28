@@ -168,6 +168,21 @@ git = {
 };
 ```
 
+#### Shell
+
+```nix
+shell = {
+  zshrc = {
+    sourceExtension = ./path/to/additional.zsh; # Optional path to an additional zsh config file
+    append = ''
+      # Additional zsh configuration to append to zshrc
+      alias ll='ls -la'
+      export MY_ENV_VAR="value"
+    '';
+  };
+};
+```
+
 #### Neovim
 
 ```nix

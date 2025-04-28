@@ -45,7 +45,7 @@
           darwin ? {},
           excludePackages ? [],
           extraModules ? [],
-          }:
+        }:
           let
             pkgs = getPkgs platform;
 

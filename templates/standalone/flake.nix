@@ -61,6 +61,16 @@
           karabiner.enable = false;
         };
 
+        # Shell configuration
+        shell.zshrc = {
+          sourceExtension = null; # Path to an additional zsh config file if needed
+          append = ''
+            # Your custom zsh configuration
+            # alias ll='ls -la'
+            # export MY_ENV_VAR="value"
+          '';
+        };
+
         # Direct configuration through extraModules
         extraModules = [
           # Custom module with direct home-manager settings
