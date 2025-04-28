@@ -15,7 +15,7 @@ function show_usage {
 }
 
 # Parse command line arguments
-RUN_BREW=false
+RUN_BREW=true
 RUN_GC=true
 PROFILE=""
 TRACE=""
@@ -25,8 +25,8 @@ while [[ $# -gt 0 ]]; do
     --help)
       show_usage
       ;;
-    --brew)
-      RUN_BREW=true
+    --no-brew)
+      RUN_BREW=false
       shift
       ;;
     --no-gc)
@@ -57,7 +57,7 @@ home-manager switch --flake ".#${PROFILE}" -b backup ${TRACE}
 # Run brew bundle if requested
 if [ "$RUN_BREW" = true ] && [ "$(uname)" = "Darwin" ] && [ -f "$HOME/.Brewfile" ]; then
   echo "Running brew bundle..."
-  brew bundle --global
+  brew bundle
 fi
 
 # Run garbage collection if enabled
