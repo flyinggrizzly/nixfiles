@@ -8,9 +8,14 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    claude-nix = {
+      url = "github:flyinggrizzly/claude-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, claude-nix, ... }@inputs:
     let
       # Helper function to get the appropriate pkgs for a platform
       getPkgs = platform:
@@ -87,7 +92,10 @@
           in
             home-manager.lib.homeManagerConfiguration {
               inherit pkgs;
-              modules = [ homeConfig ];
+              modules = [
+                homeConfig
+                inputs.claude-nix.homeManagerModules.default
+              ];
             };
 
         # Function for NixOS module integration
@@ -99,7 +107,10 @@
           in {
             imports = [ home-manager.nixosModules.home-manager ];
             home-manager.users.${username} = { config, ... }: {
-              imports = [ homeConfig ];
+              imports = [
+                homeConfig
+                inputs.claude-nix.nixosModules.default
+              ];
             };
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
