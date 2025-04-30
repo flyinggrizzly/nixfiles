@@ -57,6 +57,8 @@ nixfiles/
 │   ├── core.nix            # Core options and imports
 │   ├── darwin.nix          # macOS-specific configuration
 │   ├── desktop.nix         # GUI applications and settings
+│   ├── exclude-packages.nix # Package exclusion system
+│   ├── file-copy.nix       # Copy writable files after activation
 │   ├── git.nix             # Git configuration
 │   ├── neovim.nix          # Neovim setup
 │   ├── secrets.nix         # Secret management
@@ -97,6 +99,13 @@ prepareHome {
   stateVersion = "24.05";
   
   # Module configurations...
+  shell = {};
+  neovim = {};
+  git = {};
+  desktop = {};
+  darwin = {};
+  fileCopy = {};
+  excludePackages = [];
   
   # Additional configuration through extraModules
   extraModules = [
@@ -220,6 +229,81 @@ darwin = {
 };
 ```
 
+#### File Copy
+
+The file-copy module allows you to create writable copies of files after the home-manager generation is complete:
+
+```nix
+modules.fileCopy = {
+  # List of files to copy
+  files = [
+    {
+      # Source file to copy from (can be a path or a derivation output)
+      source = ../config/app.conf;
+      
+      # Destination path where writable copy will be created
+      destination = "/etc/app/config.conf";
+    }
+    {
+      # You can also reference files from your home-manager profile
+      source = "${config.home.path}/etc/some-generated-file.conf";
+      destination = "/var/lib/app/config.conf";
+    }
+    {
+      # Use relative paths for destination - they are relative to $HOME
+      source = ../config/app-user-config.conf;
+      destination = ".config/app/config.conf";
+    }
+  ];
+  
+  # Merging partial JSON configs into existing JSON files
+  mergePartialJsonConfigs = [
+    {
+      # Path to an existing JSON file
+      destination = "/etc/app/config.json";
+      
+      # JSON key where to merge the subJson (supports nested keys with dot notation)
+      key = "database";
+      
+      # Attribute set that will be converted to JSON and merged at the key
+      subJson = {
+        host = "localhost";
+        port = 5432;
+        user = "dbuser";
+      };
+    }
+    {
+      destination = "/etc/app/settings.json";
+      key = "logging.settings";  # Supports nested keys with dot notation
+      subJson = {
+        level = "debug";
+        file = "/var/log/app.log";
+      };
+    }
+    {
+      # Use relative paths for destination - they are relative to $HOME
+      destination = ".config/app/user-settings.json";
+      key = "preferences";
+      subJson = {
+        darkMode = true;
+        fontSize = 14;
+      };
+    }
+  ];
+};
+```
+
+This module provides two main features:
+
+1. **File Copying**: Creates world-writable copies of specified files outside of the Nix store, allowing them to be modified directly. Files are copied anew on each home-manager generation, overwriting any previous changes.
+
+2. **JSON Merging**: Merges JSON fragments into specific locations within existing JSON files. This is useful for:
+   - Adding configuration to existing JSON files without replacing the entire file
+   - Updating specific sections of configuration files while preserving the rest
+   - Dynamically generating parts of configuration files
+
+The JSON merging feature requires that the destination file already exists (it will fail otherwise) and uses `jq` to perform the merging operation. The module automatically adds `jq` as a dependency.
+
 ### Example Configuration
 
 ```nix
@@ -242,6 +326,26 @@ homeConfigurations."user@host" = lib.standaloneHome {
     vscode.enable = true;
   };
   
+  fileCopy = {
+    files = [
+      {
+        source = ./config/myapp.conf;
+        destination = "/etc/myapp/config.conf";
+      }
+    ];
+    mergePartialJsonConfigs = [
+      {
+        destination = "/etc/myapp/settings.json";
+        key = "database.credentials";
+        subJson = {
+          user = "app_user";
+          password = "app_password";
+          host = "localhost";
+        };
+      }
+    ];
+  };
+  
   # Custom configuration through extraModules
   extraModules = [
     ({ config, lib, pkgs, ... }: {
@@ -249,6 +353,22 @@ homeConfigurations."user@host" = lib.standaloneHome {
       home.packages = [ pkgs.ripgrep ];
       home.sessionVariables = { EDITOR = "nvim"; };
       programs.starship.enable = true;
+    })
+    
+    # Include the file-copy module
+    ../modules/file-copy.nix
+    
+    # Configure the file-copy module
+    ({ ... }: {
+      modules.fileCopy = {
+        enable = true;
+        files = [
+          {
+            source = ../config/some-file.conf;
+            destination = "/etc/app/config.conf";
+          }
+        ];
+      };
     })
   ];
 };
@@ -303,6 +423,8 @@ bin/test complete    # Complete configuration tests with all options
 bin/test standalone  # Standalone home-manager tests
 bin/test nixos       # NixOS integration tests
 bin/test exclude     # Package exclusion test
+bin/test filecopy    # File copy module test
+bin/test jsonmerge   # JSON merge functionality test
 ```
 
 You can also run tests directly with Nix:
@@ -315,6 +437,7 @@ nix build .#packages.$(nix eval --impure --expr "builtins.currentSystem").tests
 nix build .#packages.$(nix eval --impure --expr "builtins.currentSystem").tests.testStandaloneComplete
 nix build .#packages.$(nix eval --impure --expr "builtins.currentSystem").tests.testNixosComplete
 nix build .#packages.$(nix eval --impure --expr "builtins.currentSystem").tests.testExcludePackages
+nix build .#packages.$(nix eval --impure --expr "builtins.currentSystem").tests.testFileCopy
 ```
 
 ### What the Tests Verify
@@ -326,6 +449,7 @@ The tests simulate consuming this flake from another flake and verify that these
 3. `testNixosComplete` - A comprehensive NixOS configuration with home-manager integration and all options enabled
 4. `testNixosMinimal` - A minimal NixOS configuration with home-manager integration
 5. `testExcludePackages` - A configuration testing the package exclusion functionality
+6. `testFileCopy` - A test for the file-copy module that creates writable file copies
 
 ### Testing Your Own Flakes
 

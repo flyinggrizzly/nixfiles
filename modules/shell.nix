@@ -2,11 +2,18 @@
 let
   inherit (lib) mkIf mkOption types;
   cfg = config.modules.shell;
-  
   baseZshrc = builtins.readFile ../lib/zshrc;
   finalZshrc = baseZshrc + "\n# Appended ZSH configuration\n" + cfg.zshrc.append;
+  addIf = condition: package: if condition then (lib.toList package) else [];
 in {
   options.modules.shell = {
+    claudeCode = {
+      enable = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Enable Claude Code";
+      };
+    };
     zshrc = {
       sourceExtension = mkOption {
         type = types.nullOr types.path;
@@ -61,8 +68,6 @@ in {
       rustc
       ruby_3_4
 
-      claude-code
-
       # Fonts
       powerline-fonts
       powerline-symbols
@@ -76,7 +81,7 @@ in {
         notebook
         ipython
       ]))
-    ];
+    ] ++ addIf cfg.claudeCode.enable pkgs.claude-code;
 
     home.file = {
       # Configuration files
@@ -108,10 +113,6 @@ in {
 
       # Tool configurations
       "Library/Application Support/lazygit/config.yml".source = ../lib/lazy-git-config.yml;
-      ".claude" = {
-        source = ../lib/claude;
-        recursive = true;
-      };
     };
 
     programs = {
