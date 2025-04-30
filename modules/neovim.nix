@@ -238,6 +238,7 @@ in {
         prettierd
         rubyPackages.sorbet-runtime
         nixd
+        nixfmt
         lua-language-server
         vscode-langservers-extracted
       ] ++ config.modules.neovim.extraPackages;

@@ -67,6 +67,8 @@ in {
       pnpm
       rustc
       ruby_3_4
+      nixd
+      nixfmt
 
       # Fonts
       powerline-fonts

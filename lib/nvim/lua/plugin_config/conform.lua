@@ -5,6 +5,7 @@ conform.setup({
     ruby = {},
     javascript = { "prettierd", "prettier" },
     typescript = { "prettierd", "prettier" },
+    nix = { "nixfmt" },
   },
 
   format_on_save = false,
