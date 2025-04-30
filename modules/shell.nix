@@ -127,14 +127,8 @@ in {
 
       claude-code = mkIf cfg.claudeCode.enable {
         enable = true;
-        commands = [
-          ../lib/claude/commands/blame.md
-          ../lib/claude/commands/dig.md
-          ../lib/claude/commands/merge_conflict.md
-          ../lib/claude/commands/rmfp.md
-          ../lib/claude/commands/rmfr.md
-          ../lib/claude/commands/ruby_tester.md
-        ];
+        commandsDir = ../lib/claude/commands;
+        preClean = true;
       };
     };
   };
