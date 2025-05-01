@@ -9,15 +9,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1746137301,
-        "narHash": "sha256-Hz3o6y4dQWWoQoaHJiJWjMLrOXAFSaotxLQzB4sRA0c=",
+        "lastModified": 1746139246,
+        "narHash": "sha256-TpoN7SD8BYIW1hOAsCdWgyQSshRaHgR2ZrgH/AtqjAo=",
         "owner": "flyinggrizzly",
         "repo": "claude-nix",
-        "rev": "ed66302b1feaa0e2f6273c1c721e7cc6df055e2e",
+        "rev": "49f43255c7d2892ca0b169f9bfc1ae3f5d9113a2",
         "type": "github"
       },
       "original": {
         "owner": "flyinggrizzly",
+        "ref": "backup-support",
         "repo": "claude-nix",
         "type": "github"
       }

@@ -123,6 +123,7 @@ in {
         memory.source = ../lib/claude/CLAUDE.md;
         commandsDir = ../lib/claude/commands;
         forceClean = true;
+        skipBackup = true;
       };
     };
   };

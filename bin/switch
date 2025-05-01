@@ -19,6 +19,7 @@ RUN_BREW=true
 RUN_GC=true
 PROFILE=""
 TRACE=""
+FAST=false
 
 while [[ $# -gt 0 ]]; do
   case $1 in
@@ -37,12 +38,21 @@ while [[ $# -gt 0 ]]; do
       TRACE="--show-trace"
       shift
       ;;
+    -f|--fast)
+      FAST=true
+      shift
+      ;;
     *)
       PROFILE="$1"
       shift
       ;;
   esac
 done
+
+if [ "$FAST" = true ]; then
+  RUN_GC=false
+  RUN_BREW=false
+fi
 
 # Use default profile if none specified
 if [ -z "$PROFILE" ]; then
