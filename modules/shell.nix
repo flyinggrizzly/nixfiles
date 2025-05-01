@@ -122,7 +122,7 @@ in {
         enable = true;
         memory.source = ../lib/claude/CLAUDE.md;
         commandsDir = ../lib/claude/commands;
-        preClean = true;
+        forceClean = true;
       };
     };
   };

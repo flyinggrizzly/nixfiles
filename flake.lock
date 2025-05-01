@@ -9,11 +9,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1746091692,
-        "narHash": "sha256-Omwxmp0unTsxe9oYDUpTMMFlCptEOTMT3j33PgvjjV0=",
+        "lastModified": 1746137301,
+        "narHash": "sha256-Hz3o6y4dQWWoQoaHJiJWjMLrOXAFSaotxLQzB4sRA0c=",
         "owner": "flyinggrizzly",
         "repo": "claude-nix",
-        "rev": "1b170d993b124eba4b4431a648b031ea837e0010",
+        "rev": "ed66302b1feaa0e2f6273c1c721e7cc6df055e2e",
         "type": "github"
       },
       "original": {
