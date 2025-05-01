@@ -7,13 +7,6 @@ let
   addIf = condition: package: if condition then (lib.toList package) else [];
 in {
   options.modules.shell = {
-    claudeCode = {
-      enable = mkOption {
-        type = types.bool;
-        default = true;
-        description = "Enable Claude Code";
-      };
-    };
     zshrc = {
       sourceExtension = mkOption {
         type = types.nullOr types.path;
@@ -83,7 +76,7 @@ in {
         notebook
         ipython
       ]))
-    ] ++ addIf cfg.claudeCode.enable pkgs.claude-code;
+    ];
 
     home.file = {
       # Configuration files
@@ -125,7 +118,7 @@ in {
         enableZshIntegration = true;
       };
 
-      claude-code = mkIf cfg.claudeCode.enable {
+      claude-code = {
         enable = true;
         memory.source = ../lib/claude/CLAUDE.md;
         commandsDir = ../lib/claude/commands;
