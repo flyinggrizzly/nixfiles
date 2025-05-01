@@ -10,24 +10,28 @@ let
     platform = "x86_64-linux";
     extraModules = [
       ../modules/file-copy.nix
-      ({ ... }: {
-        modules.fileCopy = {
-          enable = true;
-          files = [
-            {
-              source = ../lib/zshrc;
-              destination = "/tmp/test-file-copy-zshrc";
-            }
-            {
-              source = ../lib/ripgreprc;
-              destination = "/tmp/test-file-copy-ripgreprc";
-            }
-          ];
-        };
-      })
+      (
+        { ... }:
+        {
+          modules.fileCopy = {
+            enable = true;
+            files = [
+              {
+                source = ../lib/zshrc;
+                destination = "/tmp/test-file-copy-zshrc";
+              }
+              {
+                source = ../lib/ripgreprc;
+                destination = "/tmp/test-file-copy-ripgreprc";
+              }
+            ];
+          };
+        }
+      )
     ];
   };
-in {
+in
+{
   # This allows us to test that our configuration builds without errors
   fileCopyTest = testConfig.activationPackage;
 }

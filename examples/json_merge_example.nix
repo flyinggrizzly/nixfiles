@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   # Create a base JSON configuration file that will be part of the Nix store
@@ -26,7 +31,7 @@ let
     password = "app_password";
     pool = {
       maxConnections = 10;
-      idleTimeout = 60
+      idleTimeout = 60;
     };
   };
 
@@ -38,13 +43,14 @@ let
     maxSize = "10MB";
     maxFiles = 5;
   };
-in {
+in
+{
   # Import the file-copy module if it's not already imported
   imports = [ ../modules/file-copy.nix ];
-  
+
   # Configure the file-copy module
   modules.fileCopy = {
-    
+
     # First, copy the base JSON file to a writable location
     files = [
       {
@@ -53,7 +59,7 @@ in {
         destination = "${config.home.homeDirectory}/.config/myapp/config.json";
       }
     ];
-    
+
     # Then, merge additional configuration into specific keys
     mergePartialJsonConfigs = [
       # Add database configuration to the top level
@@ -62,19 +68,19 @@ in {
         key = "database";
         subJson = databaseConfig;
       }
-      
+
       # Add logging configuration as a nested key
       {
         destination = "${config.home.homeDirectory}/.config/myapp/config.json";
         key = "settings.logging";
         subJson = loggingConfig;
       }
-      
+
       # Update an existing key
       {
         destination = "${config.home.homeDirectory}/.config/myapp/config.json";
         key = "app.version";
-        subJson = "1.1.0";  # String values are also supported
+        subJson = "1.1.0"; # String values are also supported
       }
     ];
   };

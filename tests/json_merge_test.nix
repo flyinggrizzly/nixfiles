@@ -24,10 +24,10 @@ let
     username = "test-user";
     stateVersion = "24.11";
     platform = "x86_64-linux";
-    
+
     fileCopy = {
       enable = true;
-      
+
       # First copy the base JSON file
       files = [
         {
@@ -35,7 +35,7 @@ let
           destination = "/tmp/test-json-merge-file.json";
         }
       ];
-      
+
       # Then merge in additional JSON data
       mergePartialJsonConfigs = [
         {
@@ -59,7 +59,8 @@ let
       ];
     };
   };
-in {
+in
+{
   # This allows us to test that our configuration builds without errors
   jsonMergeTest = testConfig.activationPackage;
 }

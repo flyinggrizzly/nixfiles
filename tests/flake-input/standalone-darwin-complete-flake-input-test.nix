@@ -8,71 +8,85 @@
     home-manager.follows = "nixfiles/home-manager";
   };
 
-  outputs = { self, nixpkgs, nixfiles }: {
-    homeConfigurations."tester@darwin" = nixfiles.lib.standaloneHome {
-      username = "tester";
-      stateVersion = "24.11";
-      platform = "aarch64-darwin";
+  outputs =
+    {
+      self,
+      nixpkgs,
+      nixfiles,
+    }:
+    {
+      homeConfigurations."tester@darwin" = nixfiles.lib.standaloneHome {
+        username = "tester";
+        stateVersion = "24.11";
+        platform = "aarch64-darwin";
 
-      shell.zshrc = {
-        sourceExtension = null;
-        append = ''
-          # Test appended zsh configuration
-          export TEST_VAR="test_value"
-          alias test-alias='echo "This is a test"'
-        '';
-      };
-
-      neovim = {
-        enable = true;
-        enableLlmTools = true;
-        extraPlugins = [];
-        extraPackages = [];
-        extraConfig = ''
-          vim.opt.colorcolumn = "80"
-        '';
-        llmLuaOverride = ../lib/nvim/llm_lua_override.lua;
-      };
-
-      git = {
-        enable = true;
-        username = "Tester User";
-        email = "tester@example.com";
-        extraConfig = {
-          pull.rebase = true;
-          init.defaultBranch = "main";
-          core.editor = "vim";
+        shell.zshrc = {
+          sourceExtension = null;
+          append = ''
+            # Test appended zsh configuration
+            export TEST_VAR="test_value"
+            alias test-alias='echo "This is a test"'
+          '';
         };
-      };
 
-      desktop.enable = true;
-      darwin = {
-        enable = true;
-        defaults = {
-          NSGlobalDomain = {
-            AppleKeyboardUIMode = 3;
-            ApplePressAndHoldEnabled = false;
-          };
-          dock = {
-            autohide = true;
-            orientation = "bottom";
+        neovim = {
+          enable = true;
+          enableLlmTools = true;
+          extraPlugins = [ ];
+          extraPackages = [ ];
+          extraConfig = ''
+            vim.opt.colorcolumn = "80"
+          '';
+          llmLuaOverride = ../lib/nvim/llm_lua_override.lua;
+        };
+
+        git = {
+          enable = true;
+          username = "Tester User";
+          email = "tester@example.com";
+          extraConfig = {
+            pull.rebase = true;
+            init.defaultBranch = "main";
+            core.editor = "vim";
           };
         };
-      };
 
-      excludePackages = [
-        nixpkgs.legacyPackages.aarch64-darwin.ripgrep
-      ];
-
-      extraModules = [
-        ({ config, lib, pkgs, ... }: {
-          home.packages = [ pkgs.ripgrep ];
-          home.sessionVariables = {
-            EDITOR = "nvim";
+        desktop.enable = true;
+        darwin = {
+          enable = true;
+          defaults = {
+            NSGlobalDomain = {
+              AppleKeyboardUIMode = 3;
+              ApplePressAndHoldEnabled = false;
+            };
+            dock = {
+              autohide = true;
+              orientation = "bottom";
+            };
           };
-          programs.starship.enable = true;
-        })
-      ];
+        };
+
+        excludePackages = [
+          nixpkgs.legacyPackages.aarch64-darwin.ripgrep
+        ];
+
+        extraModules = [
+          (
+            {
+              config,
+              lib,
+              pkgs,
+              ...
+            }:
+            {
+              home.packages = [ pkgs.ripgrep ];
+              home.sessionVariables = {
+                EDITOR = "nvim";
+              };
+              programs.starship.enable = true;
+            }
+          )
+        ];
+      };
     };
-  };
 }

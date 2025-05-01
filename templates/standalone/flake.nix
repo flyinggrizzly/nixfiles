@@ -12,12 +12,14 @@
     home-manager.follows = "nixfiles/home-manager";
   };
 
-  outputs = { nixpkgs, nixfiles, ... }:
+  outputs =
+    { nixpkgs, nixfiles, ... }:
     let
       platform = "x86_64-linux"; # Change to your system (aarch64-darwin, x86_64-darwin, etc.)
-      username = "user";       # Change to your username
-      hostname = "hostname";   # Change to your hostname
-    in {
+      username = "user"; # Change to your username
+      hostname = "hostname"; # Change to your hostname
+    in
+    {
       homeConfigurations."${username}@${hostname}" = nixfiles.lib.standaloneHome {
         inherit username platform;
         stateVersion = "24.05";
@@ -39,8 +41,8 @@
         neovim = {
           enable = true;
           enableLlmTools = true;
-          extraPlugins = [];
-          extraPackages = [];
+          extraPlugins = [ ];
+          extraPackages = [ ];
           extraConfig = ''
             -- Your additional Lua configuration
             vim.opt.colorcolumn = "80"
@@ -74,13 +76,16 @@
         # Direct configuration through extraModules
         extraModules = [
           # Custom module with direct home-manager settings
-          ({ config, pkgs, ... }: {
-            # Example configurations:
-            # home.file.".config/custom/settings.json".text = ''{ "setting": "value" }'';
-            # home.packages = [ pkgs.ripgrep ];
-            # home.sessionVariables = { EDITOR = "nvim"; };
-            # programs.starship.enable = true;
-          })
+          (
+            { config, pkgs, ... }:
+            {
+              # Example configurations:
+              # home.file.".config/custom/settings.json".text = ''{ "setting": "value" }'';
+              # home.packages = [ pkgs.ripgrep ];
+              # home.sessionVariables = { EDITOR = "nvim"; };
+              # programs.starship.enable = true;
+            }
+          )
         ];
       };
     };

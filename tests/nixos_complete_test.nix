@@ -2,7 +2,12 @@
 #
 # Test NixOS integration with complete configuration
 
-{ pkgs, lib, getPlatformPkgs, createDerivation }:
+{
+  pkgs,
+  lib,
+  getPlatformPkgs,
+  createDerivation,
+}:
 
 createDerivation {
   name = "nixos-complete";
@@ -18,8 +23,8 @@ createDerivation {
     neovim = {
       enable = true;
       enableLlmTools = true;
-      extraPlugins = [];
-      extraPackages = [];
+      extraPlugins = [ ];
+      extraPackages = [ ];
       extraConfig = ''
         vim.opt.colorcolumn = "80"
       '';
@@ -45,13 +50,21 @@ createDerivation {
 
     # Direct configuration through extraModules
     extraModules = [
-      ({ config, lib, pkgs, ... }: {
-        home.packages = [ pkgs.ripgrep ];
-        home.sessionVariables = {
-          EDITOR = "nvim";
-        };
-        programs.starship.enable = true;
-      })
+      (
+        {
+          config,
+          lib,
+          pkgs,
+          ...
+        }:
+        {
+          home.packages = [ pkgs.ripgrep ];
+          home.sessionVariables = {
+            EDITOR = "nvim";
+          };
+          programs.starship.enable = true;
+        }
+      )
     ];
   };
 }

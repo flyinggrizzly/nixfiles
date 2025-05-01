@@ -12,44 +12,58 @@
     home-manager.follows = "nixfiles/home-manager";
   };
 
-  outputs = { self, nixpkgs, nixfiles, ... }:
+  outputs =
+    {
+      self,
+      nixpkgs,
+      nixfiles,
+      ...
+    }:
     let
       system = "x86_64-linux"; # Change to your system architecture
-      username = "user";       # Change to your username
-      hostname = "hostname";   # Change to your hostname
-    in {
+      username = "user"; # Change to your username
+      hostname = "hostname"; # Change to your hostname
+    in
+    {
       # NixOS configuration
       nixosConfigurations.${hostname} = nixpkgs.lib.nixosSystem {
         inherit system;
         modules = [
           # Your main NixOS configuration
-          ({ pkgs, lib, ... }: {
-            # Basic system configuration
-            networking.hostName = hostname;
-            users.users.${username} = {
-              isNormalUser = true;
-              extraGroups = [ "wheel" "networkmanager" ];
-              # No need to specify packages here as they'll come from home-manager
-            };
+          (
+            { pkgs, lib, ... }:
+            {
+              # Basic system configuration
+              networking.hostName = hostname;
+              users.users.${username} = {
+                isNormalUser = true;
+                extraGroups = [
+                  "wheel"
+                  "networkmanager"
+                ];
+                # No need to specify packages here as they'll come from home-manager
+              };
 
-            # System-level packages
-            environment.systemPackages = with pkgs: [
-              git
-              vim
-              wget
-            ];
+              # System-level packages
+              environment.systemPackages = with pkgs; [
+                git
+                vim
+                wget
+              ];
 
-            # Allow unfree packages (if needed)
-            nixpkgs.config.allowUnfree = true;
+              # Allow unfree packages (if needed)
+              nixpkgs.config.allowUnfree = true;
 
-            # Boot configuration, hardware, etc. would go here
-            # This is just a minimal example
+              # Boot configuration, hardware, etc. would go here
+              # This is just a minimal example
 
-            system.stateVersion = "24.05";
-          })
+              system.stateVersion = "24.05";
+            }
+          )
 
           # Import home-manager NixOS module
-          nixfiles.lib.nixosHome {
+          nixfiles.lib.nixosHome
+          {
             inherit username;
             platform = system;
             stateVersion = "24.05";
@@ -70,8 +84,8 @@
             neovim = {
               enable = true;
               enableLlmTools = true;
-              extraPlugins = [];
-              extraPackages = [];
+              extraPlugins = [ ];
+              extraPackages = [ ];
             };
 
             # Desktop configuration
@@ -95,13 +109,16 @@
             # Direct configuration through extraModules
             extraModules = [
               # Custom module with direct home-manager settings
-              ({ config, pkgs, ... }: {
-                # Example configurations:
-                # home.file.".config/custom/settings.json".text = ''{ "setting": "value" }'';
-                # home.packages = [ pkgs.ripgrep ];
-                # home.sessionVariables = { EDITOR = "nvim"; };
-                # programs.starship.enable = true;
-              })
+              (
+                { config, pkgs, ... }:
+                {
+                  # Example configurations:
+                  # home.file.".config/custom/settings.json".text = ''{ "setting": "value" }'';
+                  # home.packages = [ pkgs.ripgrep ];
+                  # home.sessionVariables = { EDITOR = "nvim"; };
+                  # programs.starship.enable = true;
+                }
+              )
             ];
           }
         ];

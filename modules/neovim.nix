@@ -1,7 +1,17 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
-  inherit (lib) mkOption mkEnableOption mkIf types;
+  inherit (lib)
+    mkOption
+    mkEnableOption
+    mkIf
+    types
+    ;
   cfg = config.modules.neovim;
 
   # Custom plugins
@@ -14,17 +24,6 @@ let
       sha256 = "sha256-s3y8ZuLV00GIhizcK/zqsJOTKecql7Xn3LGYmH7NLsQ=";
     };
   };
-  
-  # Use a more stable repository for codecompanion
-  #codecompanion-nvim = pkgs.vimUtils.buildVimPlugin {
-    #name = "codecompanion-nvim";
-    #src = pkgs.fetchFromGitHub {
-      #owner = "olimorris";
-      #repo = "codecompanion.nvim";
-      #rev = "9654cb31f10c9eda3e777d03d32b29df606ab0fe";
-      #sha256 = "sha256-NKGKfCXgwbmj+6pO0IQH3IWpH7rY9bTzLXKCGt2qxDk=";
-    #};
-  #};
 
   tokyonight = pkgs.vimUtils.buildVimPlugin {
     name = "tokyonight";
@@ -88,14 +87,15 @@ let
 
   claude-fu-nvim = pkgs.vimUtils.buildVimPlugin {
     name = "claude-fu-nvim";
-    src = pkgs.fetchFromGitHub{
+    src = pkgs.fetchFromGitHub {
       owner = "mattkubej";
       repo = "claude-fu.nvim";
       rev = "2cfd685898579be43b29ecbfd3dd9e1e4f255a0d";
       sha256 = "sha256-BdWzrAnWsR6QVqWxI1olRA01hHieLVvT5Vzr9ILh754=";
     };
   };
-in {
+in
+{
   options.modules.neovim = {
     enable = mkOption {
       type = types.bool;
@@ -111,13 +111,13 @@ in {
 
     extraPlugins = mkOption {
       type = types.listOf types.package;
-      default = [];
+      default = [ ];
       description = "Additional packages to install for Neovim";
     };
 
     extraPackages = mkOption {
       type = types.listOf types.package;
-      default = [];
+      default = [ ];
       description = "Additional packages to install for Neovim";
     };
 
@@ -145,103 +145,116 @@ in {
       # Conflicts with dev-managed Ruby and Gem paths
       withRuby = false;
 
-      plugins = with pkgs.vimPlugins; [
-        # UI and themes
-        lualine-nvim
-        nvim-web-devicons
-        dracula-nvim
-        twilight-nvim
+      plugins =
+        with pkgs.vimPlugins;
+        [
+          # UI and themes
+          lualine-nvim
+          nvim-web-devicons
+          dracula-nvim
+          twilight-nvim
 
-        # LSP and completion
-        nvim-lspconfig
-        nvim-treesitter.withAllGrammars
-        nvim-treesitter-textobjects
-        mason-tool-installer-nvim
-        fidget-nvim
-        nvim-cmp
-        cmp-nvim-lsp
-        conform-nvim
-        cmp-buffer
-        cmp-tmux
-        cmp-path
-        mini-nvim
+          # LSP and completion
+          nvim-lspconfig
+          nvim-treesitter.withAllGrammars
+          nvim-treesitter-textobjects
+          mason-tool-installer-nvim
+          fidget-nvim
+          nvim-cmp
+          cmp-nvim-lsp
+          conform-nvim
+          cmp-buffer
+          cmp-tmux
+          cmp-path
+          mini-nvim
 
-        # Telescope
-        telescope-nvim
-        telescope-ui-select-nvim
-        telescope-fzf-native-nvim
-        plenary-nvim
-        which-key-nvim
-        trouble-nvim
+          # Telescope
+          telescope-nvim
+          telescope-ui-select-nvim
+          telescope-fzf-native-nvim
+          plenary-nvim
+          which-key-nvim
+          trouble-nvim
 
-        # Custom tools
-        snacks-nvim
-        lazygit-nvim
-        oil-nvim
+          # Custom tools
+          snacks-nvim
+          lazygit-nvim
+          oil-nvim
 
-        # Git integration
-        vim-fugitive
-        gitsigns
+          # Git integration
+          vim-fugitive
+          gitsigns
 
-        # Editing helpers
-        nvim-autopairs
-        vim-easy-align
-        vim-endwise
-        vim-eunuch
-        incsearch-vim
-        indent-blankline-nvim
-        mkdir-nvim
-        nerdcommenter
-        vim-projectionist
-        vim-repeat
-        vim-run-interactive
-        vim-surround
-        vim-test
-        tmux-complete-vim
-        tslime-vim
-        yescapsquit-vim
+          # Editing helpers
+          nvim-autopairs
+          vim-easy-align
+          vim-endwise
+          vim-eunuch
+          incsearch-vim
+          indent-blankline-nvim
+          mkdir-nvim
+          nerdcommenter
+          vim-projectionist
+          vim-repeat
+          vim-run-interactive
+          vim-surround
+          vim-test
+          tmux-complete-vim
+          tslime-vim
+          yescapsquit-vim
 
-        # Languages
-        emmet-vim
-        vim-haml
-        vim-javascript
-        vim-json
-        vim-nix
-        vim-rails
-        vim-ruby
-        sorbet-vim
+          # Languages
+          emmet-vim
+          vim-haml
+          vim-javascript
+          vim-json
+          vim-nix
+          vim-rails
+          vim-ruby
+          sorbet-vim
 
-        # Tmux integration
-        vim-dispatch
-        vim-tmux-navigator
-        tmuxline-vim
+          # Tmux integration
+          vim-dispatch
+          vim-tmux-navigator
+          tmuxline-vim
 
-        # Utilities
-        vim-heritage
-        vim-sleuth
-        leap-nvim
-        vim-unimpaired
-      ] ++ (if config.modules.neovim.enableLlmTools then with pkgs.vimPlugins; [
-        # AI and code assistance
-        avante-nvim
-        codecompanion-nvim
-        copilot-lua
-        copilot-cmp
-        dressing-nvim
-        nui-nvim
-        claude-fu-nvim
-        render-markdown-nvim
-      ] else []) ++ config.modules.neovim.extraPlugins;
+          # Utilities
+          vim-heritage
+          vim-sleuth
+          leap-nvim
+          vim-unimpaired
+        ]
+        ++ (
+          if config.modules.neovim.enableLlmTools then
+            with pkgs.vimPlugins;
+            [
+              # AI and code assistance
+              avante-nvim
+              codecompanion-nvim
+              copilot-lua
+              copilot-cmp
+              dressing-nvim
+              nui-nvim
+              claude-fu-nvim
+              render-markdown-nvim
+            ]
+          else
+            [ ]
+        )
+        ++ config.modules.neovim.extraPlugins;
 
-      extraPackages = with pkgs; [
-        typescript-language-server
-        prettierd
-        rubyPackages.sorbet-runtime
-        nixd
-        nixfmt
-        lua-language-server
-        vscode-langservers-extracted
-      ] ++ config.modules.neovim.extraPackages;
+      extraPackages =
+        with pkgs;
+        [
+          typescript-language-server
+          prettierd
+          rubyPackages.sorbet-runtime
+          nixd
+          nixfmt-rfc-style
+          lua-language-server
+          vscode-langservers-extracted
+        ]
+        ++ config.modules.neovim.extraPackages;
 
       extraConfig = ''
         source $HOME/.config/nvim/base_init.lua
@@ -260,9 +273,11 @@ in {
     };
 
     # Conditionally override the default llms.lua with a custom one if provided
-    home.file.".config/nvim/lua/plugin_config/llms.lua" = mkIf (config.modules.neovim.llmLuaOverride != null) {
-      source = config.modules.neovim.llmLuaOverride;
-    };
+    home.file.".config/nvim/lua/plugin_config/llms.lua" =
+      mkIf (config.modules.neovim.llmLuaOverride != null)
+        {
+          source = config.modules.neovim.llmLuaOverride;
+        };
 
     home.file.".vim-spell" = {
       source = ../lib/vim-spell;

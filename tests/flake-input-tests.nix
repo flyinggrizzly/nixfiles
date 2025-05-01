@@ -15,40 +15,45 @@ let
     "nixos-minimal-flake-input-test.nix"
     "nixos-complete-flake-input-test.nix"
   ];
-  
+
   # Create test derivations that check each flake can be simply parsed
-  testDerivations = map (filename:
-    let 
-      name = builtins.replaceStrings [".nix"] [""] filename;
+  testDerivations = map (
+    filename:
+    let
+      name = builtins.replaceStrings [ ".nix" ] [ "" ] filename;
       flakePath = ./flake-input/${filename};
     in
     if builtins.pathExists flakePath then
-      pkgs.runCommand "test-${name}" {} ''
+      pkgs.runCommand "test-${name}" { } ''
         echo "Testing ${name}..."
-        
+
         # Just verify that the flake.nix file can be parsed without errors
         ${pkgs.nix}/bin/nix-instantiate --parse ${flakePath} > /dev/null
-        
+
         # If we got here, the test passed
         echo "✓ Test passed: ${name}"
         touch $out
       ''
     else
-      pkgs.runCommand "test-${name}-missing" {} ''
+      pkgs.runCommand "test-${name}-missing" { } ''
         echo "Skipping ${name}, file not found"
         touch $out
       ''
   ) testFiles;
-  
+
   # Run all tests
-  runAllTests = pkgs.runCommand "run-all-flake-input-tests" {
-    buildInputs = testDerivations;
-  } ''
-    echo "All flake input tests passed!"
-    touch $out
-  '';
-  
-in {
+  runAllTests =
+    pkgs.runCommand "run-all-flake-input-tests"
+      {
+        buildInputs = testDerivations;
+      }
+      ''
+        echo "All flake input tests passed!"
+        touch $out
+      '';
+
+in
+{
   # Export all test derivations directly
   inherit testDerivations;
 

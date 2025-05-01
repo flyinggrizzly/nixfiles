@@ -2,7 +2,12 @@
 #
 # Test NixOS integration with minimal configuration
 
-{ pkgs, lib, getPlatformPkgs, createDerivation }:
+{
+  pkgs,
+  lib,
+  getPlatformPkgs,
+  createDerivation,
+}:
 
 createDerivation {
   name = "nixos-minimal";

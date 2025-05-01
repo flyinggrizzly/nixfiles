@@ -15,13 +15,23 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, claude-nix, ... }@inputs:
+  outputs =
+    {
+      self,
+      nixpkgs,
+      home-manager,
+      claude-nix,
+      ...
+    }@inputs:
     let
       # Helper function to get the appropriate pkgs for a platform
-      getPkgs = platform:
+      getPkgs =
+        platform:
         import nixpkgs {
           system = platform;
-          config = { allowUnfree = true; };
+          config = {
+            allowUnfree = true;
+          };
         };
 
       # Supported systems for testing
@@ -39,84 +49,105 @@
       lib = {
         # Core function that creates the basic home configuration
         # This is reused by both standaloneHome and nixosHome
-        prepareHome = {
-          username,
-          stateVersion,
-          platform,
-          shell ? {},
-          neovim ? {},
-          git ? {},
-          desktop ? {},
-          darwin ? {},
-          fileCopy ? {},
-          excludePackages ? [],
-          extraModules ? [],
-        }:
+        prepareHome =
+          {
+            username,
+            stateVersion,
+            platform,
+            shell ? { },
+            neovim ? { },
+            git ? { },
+            desktop ? { },
+            darwin ? { },
+            fileCopy ? { },
+            excludePackages ? [ ],
+            extraModules ? [ ],
+          }:
           let
             pkgs = getPkgs platform;
 
             # The home-manager configuration module that both functions use
-            homeConfig = { config, lib, pkgs, ... }: {
-              imports = [
-                ./modules/neovim.nix
-                ./modules/git.nix
-                ./modules/shell.nix
-                ./modules/desktop.nix
-                ./modules/darwin.nix
-                ./modules/exclude-packages.nix
-                ./modules/file-copy.nix
-              ] ++ extraModules; # Direct import of extra modules
+            homeConfig =
+              {
+                config,
+                lib,
+                pkgs,
+                ...
+              }:
+              {
+                imports = [
+                  ./modules/neovim.nix
+                  ./modules/git.nix
+                  ./modules/shell.nix
+                  ./modules/desktop.nix
+                  ./modules/darwin.nix
+                  ./modules/exclude-packages.nix
+                  ./modules/file-copy.nix
+                ] ++ extraModules; # Direct import of extra modules
 
-              # Basic home configuration
-              home = {
-                inherit username stateVersion;
-                homeDirectory = if pkgs.stdenv.isDarwin
-                  then "/Users/${username}"
-                else "/home/${username}";
-              };
-              programs.home-manager.enable = true;
+                # Basic home configuration
+                home = {
+                  inherit username stateVersion;
+                  homeDirectory = if pkgs.stdenv.isDarwin then "/Users/${username}" else "/home/${username}";
+                };
+                programs.home-manager.enable = true;
 
-              modules = {
-                inherit shell neovim git desktop darwin fileCopy excludePackages;
+                modules = {
+                  inherit
+                    shell
+                    neovim
+                    git
+                    desktop
+                    darwin
+                    fileCopy
+                    excludePackages
+                    ;
+                };
               };
-            };
-          in {
+          in
+          {
             inherit homeConfig pkgs;
           };
 
         # Function for standalone home-manager configuration
-        standaloneHome = args:
+        standaloneHome =
+          args:
           let
             prepared = lib.prepareHome args;
             inherit (prepared) homeConfig pkgs;
           in
-            home-manager.lib.homeManagerConfiguration {
-              inherit pkgs;
-              modules = [
-                homeConfig
-                inputs.claude-nix.homeManagerModules.default
-              ];
-            };
+          home-manager.lib.homeManagerConfiguration {
+            inherit pkgs;
+            modules = [
+              homeConfig
+              inputs.claude-nix.homeManagerModules.default
+            ];
+          };
 
         # Function for NixOS module integration
-        nixosHome = args:
+        nixosHome =
+          args:
           let
             prepared = lib.prepareHome args;
             inherit (prepared) homeConfig;
             inherit (args) username;
-          in {
+          in
+          {
             imports = [ home-manager.nixosModules.home-manager ];
-            home-manager.users.${username} = { config, ... }: {
-              imports = [
-                homeConfig
-                inputs.claude-nix.nixosModules.default
-              ];
-            };
+            home-manager.users.${username} =
+              { config, ... }:
+              {
+                imports = [
+                  homeConfig
+                  inputs.claude-nix.nixosModules.default
+                ];
+              };
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
           };
       };
-    in {
+    in
+    {
       inherit lib home-manager;
 
       templates = {
@@ -144,31 +175,45 @@
           };
           fileCopy = {
             files = [
-              { source = ./lib/claude/commands/blame.md;
-                destination = ".claude/commands/blame.md"; }
-              { source = ./lib/claude/commands/dig.md;
-                destination = ".claude/commands/dig.md"; }
-              { source = ./lib/claude/commands/merge_conflict.md;
-                destination = ".claude/commands/merge_conflict.md"; }
-              { source = ./lib/claude/commands/rmfp.md;
-                destination = ".claude/commands/rmfp.md"; }
-              { source = ./lib/claude/commands/rmfr.md;
-                destination = ".claude/commands/rmfr.md"; }
-              { source = ./lib/claude/commands/ruby_tester.md;
-                destination = ".claude/commands/ruby_tester.md"; }
+              {
+                source = ./lib/claude/commands/blame.md;
+                destination = ".claude/commands/blame.md";
+              }
+              {
+                source = ./lib/claude/commands/dig.md;
+                destination = ".claude/commands/dig.md";
+              }
+              {
+                source = ./lib/claude/commands/merge_conflict.md;
+                destination = ".claude/commands/merge_conflict.md";
+              }
+              {
+                source = ./lib/claude/commands/rmfp.md;
+                destination = ".claude/commands/rmfp.md";
+              }
+              {
+                source = ./lib/claude/commands/rmfr.md;
+                destination = ".claude/commands/rmfr.md";
+              }
+              {
+                source = ./lib/claude/commands/ruby_tester.md;
+                destination = ".claude/commands/ruby_tester.md";
+              }
             ];
           };
         };
       };
 
-      packages = forAllSystems (system:
+      packages = forAllSystems (
+        system:
         let
           testPkgs = getPkgs system;
           tests = import ./tests {
             pkgs = testPkgs;
             inherit (self) lib;
           };
-        in tests
+        in
+        tests
       );
     };
 }

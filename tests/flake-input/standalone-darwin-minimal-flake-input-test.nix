@@ -8,16 +8,22 @@
     home-manager.follows = "nixfiles/home-manager";
   };
 
-  outputs = { self, nixpkgs, nixfiles }: {
-    homeConfigurations."tester@darwin" = nixfiles.lib.standaloneHome {
-      username = "tester";
-      stateVersion = "24.11";
-      platform = "aarch64-darwin";
+  outputs =
+    {
+      self,
+      nixpkgs,
+      nixfiles,
+    }:
+    {
+      homeConfigurations."tester@darwin" = nixfiles.lib.standaloneHome {
+        username = "tester";
+        stateVersion = "24.11";
+        platform = "aarch64-darwin";
 
-      neovim.enable = false;
-      git.enable = false;
-      desktop.enable = false;
-      darwin.enable = true;
+        neovim.enable = false;
+        git.enable = false;
+        desktop.enable = false;
+        darwin.enable = true;
+      };
     };
-  };
 }

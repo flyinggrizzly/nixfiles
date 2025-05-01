@@ -1,12 +1,17 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   # Import the file-copy module
   imports = [ ../modules/file-copy.nix ];
-  
+
   # Configure the file-copy module
   modules.fileCopy = {
-    
+
     # Define files to copy after home-manager generation
     files = [
       {

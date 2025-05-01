@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib) mkIf mkEnableOption types;
@@ -12,8 +17,9 @@ let
 
   cfg = config.modules.darwin;
 
-  addIf = condition: package: if condition then [ package ] else []; 
-in {
+  addIf = condition: package: if condition then [ package ] else [ ];
+in
+{
   options.modules.darwin = {
     enable = mkEnableOption "Enable macOS-specific configuration";
 
@@ -24,7 +30,7 @@ in {
     };
 
     alfred.enable = mkOption {
-      description =  "Enable Alfred configuration";
+      description = "Enable Alfred configuration";
       type = types.bool;
       default = true;
     };
@@ -44,11 +50,14 @@ in {
       }
     ];
 
-    home.packages = with pkgs; [
-      iterm2
-      rectangle
-      the-unarchiver
-    ] ++ (addIf cfg.karabiner.enable karabiner-elements);
+    home.packages =
+      with pkgs;
+      [
+        iterm2
+        rectangle
+        the-unarchiver
+      ]
+      ++ (addIf cfg.karabiner.enable karabiner-elements);
 
     programs.ghostty.package = ghostty-mock;
 

@@ -1,10 +1,16 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.modules.git;
-in {
+in
+{
   options.modules.git = {
     enable = mkOption {
       type = types.bool;
@@ -26,7 +32,7 @@ in {
 
     extraConfig = mkOption {
       type = types.attrs;
-      default = {};
+      default = { };
       description = "Additional Git configuration options";
     };
   };

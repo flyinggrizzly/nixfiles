@@ -1,12 +1,18 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib) mkEnableOption mkIf;
   jetbrains_mono_name = "JetBrains Mono";
   cfg = config.modules.desktop;
 
-  addIf = condition: package: if condition then (lib.toList package) else []; 
-in {
+  addIf = condition: package: if condition then (lib.toList package) else [ ];
+in
+{
   options.modules.desktop = {
     enable = mkEnableOption "Enable desktop applications and configuration";
     ghostty.enable = lib.mkOption {
@@ -32,11 +38,14 @@ in {
 
   config = mkIf cfg.enable {
     # Common desktop packages for all platforms
-    home.packages = with pkgs; [
-      logseq
-      google-chrome
-      code-cursor
-    ] ++ (addIf cfg.kitty.enable kitty-themes)
+    home.packages =
+      with pkgs;
+      [
+        logseq
+        google-chrome
+        code-cursor
+      ]
+      ++ (addIf cfg.kitty.enable kitty-themes)
       ++ (addIf cfg.slack.enable slack)
       ++ (addIf cfg.transmission.enable transmission_3)
       ++ (addIf cfg.discord.enable discord);

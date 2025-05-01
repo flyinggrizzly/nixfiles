@@ -1,11 +1,17 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   inherit (lib) mkIf mkOption types;
   cfg = config.modules.shell;
   baseZshrc = builtins.readFile ../lib/zshrc;
   finalZshrc = baseZshrc + "\n# Appended ZSH configuration\n" + cfg.zshrc.append;
-  addIf = condition: package: if condition then (lib.toList package) else [];
-in {
+  addIf = condition: package: if condition then (lib.toList package) else [ ];
+in
+{
   options.modules.shell = {
     zshrc = {
       sourceExtension = mkOption {
@@ -71,11 +77,13 @@ in {
       nerd-fonts.jetbrains-mono
 
       # Python with common packages
-      (python313.withPackages (ps: with ps; [
-        jupyter
-        notebook
-        ipython
-      ]))
+      (python313.withPackages (
+        ps: with ps; [
+          jupyter
+          notebook
+          ipython
+        ]
+      ))
     ];
 
     home.file = {
