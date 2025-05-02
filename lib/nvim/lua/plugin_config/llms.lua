@@ -1,3 +1,8 @@
+local has_custom_llms, custom_llms = pcall(require, 'plugin_config/custom_llms')
+if has_custom_llms then
+  return custom_llms
+end
+
 if not require('helpers').is_git_subprocess() then
   require('copilot').setup({
     suggestion = { enabled = false },
