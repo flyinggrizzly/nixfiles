@@ -10,7 +10,7 @@
     };
 
     claude-nix = {
-      url = "github:flyinggrizzly/claude-nix/backup-support";
+      url = "github:flyinggrizzly/claude-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
