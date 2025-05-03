@@ -1,3 +1,6 @@
+custom_layouts:
+  revsersed_main_vertical: &revsersed_main_vertical 3f2d,188x53,0,0{46x53,0,0,5,141x53,47,0,9}
+
 name: s
 root: ~/
 
@@ -42,25 +45,25 @@ root: ~/
 windows:
   - main:
       root: ~/
-      layout: 6791,344x78,0,0{76x78,0,0,17,267x78,77,0,7}
+      layout: *revsersed_main_vertical
       panes:
         - zsh
         - nvim
   - blog:
       root: ~/flying-grizzly
-      layout: 6791,344x78,0,0{76x78,0,0,17,267x78,77,0,7}
+      layout: *revsersed_main_vertical
       panes:
         - zsh
         - nvim
   - plamotrack:
       root: ~/src/plamotrack
-      layout: 6791,344x78,0,0{76x78,0,0,17,267x78,77,0,7}
+      layout: *revsersed_main_vertical
       panes:
         - zsh
         - nvim
   - zsh:
   - nixfiles:
-      layout: 6791,344x78,0,0{76x78,0,0,17,267x78,77,0,7}
+      layout: *revsersed_main_vertical
       root: ~/nixfiles/
       panes:
         - zsh
