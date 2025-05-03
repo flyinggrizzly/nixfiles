@@ -272,9 +272,11 @@ in
       text = if config.modules.neovim.enableLlmTools then "return true" else "return false";
     };
 
-    home.file.".config/nvim/lua/plugin_config/custom_llms.lua" = mkIf (config.modules.neovim.llmLuaOverride != null) {
-      source = config.modules.neovim.llmLuaOverride;
-    };
+    home.file.".config/nvim/lua/plugin_config/custom_llms.lua" =
+      mkIf (config.modules.neovim.llmLuaOverride != null)
+        {
+          source = config.modules.neovim.llmLuaOverride;
+        };
 
     home.file.".vim-spell" = {
       source = ../lib/vim-spell;
