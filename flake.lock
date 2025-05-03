@@ -81,6 +81,27 @@
         "type": "github"
       }
     },
+    "home-manager_3": {
+      "inputs": {
+        "nixpkgs": [
+          "tmuxinator-nix",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1746286834,
+        "narHash": "sha256-N6401TfkHPmTTuZzHE02B/wQaKYZAAHtaQ0EQVYLc9w=",
+        "owner": "nix-community",
+        "repo": "home-manager",
+        "rev": "929f8ee8362aec0a2bcbcbbd485e86e701496a73",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "home-manager",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1745526057,
@@ -101,7 +122,8 @@
       "inputs": {
         "claude-nix": "claude-nix",
         "home-manager": "home-manager_2",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "tmuxinator-nix": "tmuxinator-nix"
       }
     },
     "systems": {
@@ -116,6 +138,27 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default",
+        "type": "github"
+      }
+    },
+    "tmuxinator-nix": {
+      "inputs": {
+        "home-manager": "home-manager_3",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1746308470,
+        "narHash": "sha256-WkqJcXuiD2v8t7xXHaIjeNacJ7AiasTYp6AdCZXTTNE=",
+        "owner": "flyinggrizzly",
+        "repo": "tmuxinator-nix",
+        "rev": "de137d6d7a2ba0a7562eecc43ebbf0a0590b5424",
+        "type": "github"
+      },
+      "original": {
+        "owner": "flyinggrizzly",
+        "repo": "tmuxinator-nix",
         "type": "github"
       }
     }

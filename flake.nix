@@ -13,6 +13,11 @@
       url = "github:flyinggrizzly/claude-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    tmuxinator-nix = {
+      url = "github:flyinggrizzly/tmuxinator-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -21,6 +26,7 @@
       nixpkgs,
       home-manager,
       claude-nix,
+      tmuxinator-nix,
       ...
     }@inputs:
     let
@@ -78,7 +84,7 @@
                 imports = [
                   ./modules/neovim.nix
                   ./modules/git.nix
-                  ./modules/shell.nix
+                  (import ./modules/shell.nix { inherit shell config lib pkgs tmuxinator-nix; })
                   ./modules/desktop.nix
                   ./modules/darwin.nix
                   ./modules/exclude-packages.nix
@@ -121,6 +127,7 @@
             modules = [
               homeConfig
               inputs.claude-nix.homeManagerModules.default
+              inputs.tmuxinator-nix.homeManagerModules.default
             ];
           };
 
@@ -172,34 +179,6 @@
             ghostty.enable = true;
             kitty.enable = false;
             transmission.enable = true;
-          };
-          fileCopy = {
-            files = [
-              {
-                source = ./lib/claude/commands/blame.md;
-                destination = ".claude/commands/blame.md";
-              }
-              {
-                source = ./lib/claude/commands/dig.md;
-                destination = ".claude/commands/dig.md";
-              }
-              {
-                source = ./lib/claude/commands/merge_conflict.md;
-                destination = ".claude/commands/merge_conflict.md";
-              }
-              {
-                source = ./lib/claude/commands/rmfp.md;
-                destination = ".claude/commands/rmfp.md";
-              }
-              {
-                source = ./lib/claude/commands/rmfr.md;
-                destination = ".claude/commands/rmfr.md";
-              }
-              {
-                source = ./lib/claude/commands/ruby_tester.md;
-                destination = ".claude/commands/ruby_tester.md";
-              }
-            ];
           };
         };
       };
