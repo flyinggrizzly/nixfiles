@@ -67,7 +67,7 @@ in
       rustc
       ruby_3_4
       nixd
-      nixfmt
+      nixfmt-rfc-style
 
       # Fonts
       powerline-fonts
