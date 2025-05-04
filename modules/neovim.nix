@@ -8,13 +8,21 @@
 let
   inherit (lib)
     mkOption
-    mkEnableOption
     mkIf
     types
     ;
   cfg = config.modules.neovim;
 
-  # Custom plugins
+  claude-code-nvim = pkgs.vimUtils.buildVimPlugin {
+    name = "claude-code-nvim";
+    src = pkgs.fetchFromGitHub {
+      owner = "greggh";
+      repo = "claude-code.nvim";
+      rev = "91b38f289c9b1f08007a0443020ed97bb7539ebe";
+      sha256 = "sha256-4H6zu5+iDPnCY+ISsxuL9gtAZ5lJhVvtOscc8jUsAY8=";
+    };
+  };
+
   gitsigns = pkgs.vimUtils.buildVimPlugin {
     name = "gitsigns";
     src = pkgs.fetchFromGitHub {
@@ -82,16 +90,6 @@ let
       repo = "vim-run-interactive";
       sha256 = "sha256-Dar5OOLRXutTHCIiDDjUEX0C3QnPWpDEnjnNcTctHUI=";
       rev = "6ae33c719bdf185325c3c1836978bb4352157c82";
-    };
-  };
-
-  claude-fu-nvim = pkgs.vimUtils.buildVimPlugin {
-    name = "claude-fu-nvim";
-    src = pkgs.fetchFromGitHub {
-      owner = "mattkubej";
-      repo = "claude-fu.nvim";
-      rev = "2cfd685898579be43b29ecbfd3dd9e1e4f255a0d";
-      sha256 = "sha256-BdWzrAnWsR6QVqWxI1olRA01hHieLVvT5Vzr9ILh754=";
     };
   };
 in
@@ -226,20 +224,19 @@ in
           vim-sleuth
           leap-nvim
           vim-unimpaired
+          render-markdown-nvim
         ]
         ++ (
           if config.modules.neovim.enableLlmTools then
             with pkgs.vimPlugins;
             [
               # AI and code assistance
-              avante-nvim
               codecompanion-nvim
               copilot-lua
               copilot-cmp
               dressing-nvim
               nui-nvim
-              claude-fu-nvim
-              render-markdown-nvim
+              claude-code-nvim
             ]
           else
             [ ]
