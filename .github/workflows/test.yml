@@ -1,0 +1,37 @@
+name: "Test"
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  tests:
+    name: Run flake tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: DeterminateSystems/flakehub-cache-action@main
+      - name: Run all tests
+        run: nix flake check
+      - name: Test building main home configuration
+        run: |
+          nix build .#homeConfigurations."seandmr@m1-grizzly".activationPackage --dry-run
+
+  check-flake:
+    name: Check Nix flake
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: DeterminateSystems/flakehub-cache-action@main
+      - name: Check flake inputs
+        run: nix flake lock --no-update-lock-file
+      - name: Check Nix formatting
+        run: |
+          # Install nixfmt using nix instead of nix-env
+          nix profile install nixpkgs#nixfmt-rfc-style
+          # Find all Nix files and check their formatting
+          # Use -r to handle the case where no files are found
+          find . -name "*.nix" -type f -not -path "./result/*" -exec nixfmt-rfc-style --check {} \;
