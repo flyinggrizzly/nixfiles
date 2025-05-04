@@ -267,10 +267,20 @@ in
       recursive = true;
     };
 
-    # Create a simple flag file that can be checked in Lua
-    home.file.".config/nvim/lua/plugin_config/llms_enabled.lua" = {
-      text = if config.modules.neovim.enableLlmTools then "return true" else "return false";
-    };
+    # Create a simple flag function that is imported by lua/helpers
+    home.file.".config/nvim/lua/helpers/llms_enabled.lua".text =
+      if config.modules.neovim.enableLlmTools then
+        ''
+          return function ()
+            return true
+          end
+        ''
+      else
+        ''
+          return function ()
+            return false
+          end
+        '';
 
     home.file.".config/nvim/lua/plugin_config/custom_llms.lua" =
       mkIf (config.modules.neovim.llmLuaOverride != null)

@@ -1,5 +1,5 @@
 local cmp = require('cmp')
-local llms_enabled = require('plugin_config/llms_enabled')
+local llms_enabled = require('helpers').llms_enabled()
 
 cmp.setup({
   sources = (function()

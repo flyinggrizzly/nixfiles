@@ -18,6 +18,6 @@ require 'plugin_config/trouble'
 require 'plugin_config/twilight'
 require 'plugin_config/leap'
 
-if require('plugin_config/llms_enabled') then
+if require('helpers').llms_enabled() then
   require 'plugin_config/llms'
 end
