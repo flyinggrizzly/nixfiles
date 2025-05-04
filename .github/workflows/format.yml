@@ -1,0 +1,22 @@
+name: "Format"
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  nixfmt:
+    name: Check Nix formatting
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: DeterminateSystems/nix-installer-action@main
+      - name: Check Nix formatting
+        run: |
+          # Install nixfmt using nix profile
+          nix profile install nixpkgs#nixfmt-rfc-style
+          
+          # Find all Nix files and check their formatting
+          # Use -exec instead of xargs to handle the case where no files are found
+          find . -name "*.nix" -type f -not -path "./result/*" -exec nixfmt-rfc-style --check {} \;
