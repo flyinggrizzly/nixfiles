@@ -21,10 +21,11 @@ in
       keyMode = "vi";
       baseIndex = 1;
       historyLimit = 10000;
+      clock24 = true;
+      mouse = true;
+      shell = "$SHELL";
+      term = "screen-256color";
       extraConfig = ''
-        # improve colors
-        set -g default-terminal 'screen-256color'
-
         # act like vim
         #setw -g mode-keys vi
         bind-key h select-pane -L
@@ -33,9 +34,6 @@ in
         bind-key l select-pane -R
         bind-key -r C-h select-window -t :-
         bind-key -r C-l select-window -t :+
-
-        # start window numbers at 1 to match keyboard order with tmux window order
-        set-window-option -g pane-base-index 1
 
         # renumber windows sequentially after closing any of them
         set -g renumber-windows on
@@ -63,6 +61,7 @@ in
         bind-key -n 'C-j' if-shell "$is_vim" 'send-keys C-j'  'select-pane -D'
         bind-key -n 'C-k' if-shell "$is_vim" 'send-keys C-k'  'select-pane -U'
         bind-key -n 'C-l' if-shell "$is_vim" 'send-keys C-l'  'select-pane -R'
+
         tmux_version='$(tmux -V | sed -En "s/^tmux ([0-9]+(.[0-9]+)?).*/\1/p")'
         if-shell -b '[ "$(echo "$tmux_version < 3.0" | bc)" = 1 ]' \
             "bind-key -n 'C-\\' if-shell \"$is_vim\" 'send-keys C-\\'  'select-pane -l'"
@@ -150,11 +149,8 @@ in
 
         ## }
 
-        set-option -g default-shell $SHELL
-
         # Undercurls for tokyonight vim theme
         # see https://github.com/folke/tokyonight.nvim?tab=readme-ov-file#fix-undercurls-in-tmux
-        set -g default-terminal "''${TERM}" # double single quotes is the standard escape for string interpolation in nix
         set -as terminal-overrides ',*:Smulx=\E[4::%p1%dm'  # undercurl support
         set -as terminal-overrides ',*:Setulc=\E[58::2::%p1%{65536}%/%d::%p1%{256}%/%{255}%&%d::%p1%{255}%&%d%;m'  # underscore colours - needs tmux-3.0
       '';
