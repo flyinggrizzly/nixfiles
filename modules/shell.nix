@@ -8,15 +8,6 @@
 let
   inherit (lib) mkIf mkOption types;
 
-  defaultTmuxWindow = name: root: {
-    inherit name root;
-    layout = tmuxinator-nix.lib.constants.layouts.wideRightMainVertical;
-    panes = [
-      "zsh"
-      "vi"
-    ];
-  };
-
   cfg = config.modules.shell;
   baseZshrc = builtins.readFile ../lib/zshrc;
   finalZshrc = baseZshrc + "\n# Appended ZSH configuration\n" + cfg.zshrc.append;
@@ -41,13 +32,16 @@ in
     };
   };
 
+  imports = [
+    (import ./shell/tmux.nix { inherit tmuxinator-nix; })
+  ];
+
   config = {
     home.packages = with pkgs; [
       _1password-cli
 
       # Core terminal utilities
       mosh
-      tmux
 
       # Version control
       git
@@ -98,7 +92,6 @@ in
     home.file = {
       # Configuration files
       ".ripgreprc".source = ../lib/ripgreprc;
-      ".tmux.conf".source = ../lib/tmux.conf;
       ".aliases".source = ../lib/aliases;
       ".bin" = {
         source = ../lib/bin;
@@ -129,25 +122,6 @@ in
       direnv = {
         enable = true;
         enableZshIntegration = true;
-      };
-
-      tmuxinator = {
-        enable = true;
-        rubyPackage = null; # use the package defined above
-        projects = {
-          s = {
-            root = "~/";
-            windows = [
-              (defaultTmuxWindow "main" "~/")
-              (defaultTmuxWindow "blog" "~/flying-grizzly")
-              (defaultTmuxWindow "plamotrack" "~/src/plamotrack")
-              { name = "tty"; }
-              (defaultTmuxWindow "nixfiles" "~/nixfiles")
-              (defaultTmuxWindow "claude-nix" "~/src/claude-nix")
-              (defaultTmuxWindow "tmuxinator-nix" "~/src/tmuxinator-nix")
-            ];
-          };
-        };
       };
 
       claude-code = {
