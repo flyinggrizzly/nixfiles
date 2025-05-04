@@ -4,13 +4,21 @@ local llms_enabled = require('helpers').llms_enabled()
 cmp.setup({
   sources = (function()
     local sources = {
-      { name = 'nvim_lsp' },
-      { name = 'buffer', },
-      { name = 'tmux' },
+      {
+        name = 'nvim_lsp',
+        priority = 1000,
+        group_index = 1,
+        entry_filter = function(entry, _ctx)
+          return require('cmp.types').lsp.CompletionItemKind[entry:get_kind()] ~= 'Text'
+        end
+      },
+      { name = 'nvim_lsp_signature_help', priority = 900, group_index = 1, },
+      { name = 'emoji',                   priority = 100, group_index = 1, },
+      { name = 'git',                     priority = 400, group_index = 1, }
     }
 
     if llms_enabled then
-      table.insert(sources, 1, { name = 'copilot' })
+      table.insert(sources, 1, { name = 'copilot', priority = 1100, group_index = 1, })
     end
 
     return sources
@@ -46,11 +54,13 @@ cmp.setup({
   },
 })
 
+require('cmp_git').setup()
+
 if llms_enabled then
   require("copilot_cmp").setup()
 end
 
 -- Add these highlight groups to your colorscheme setup or after/colors
-vim.api.nvim_set_hl(0, 'CmpPmenu', { bg = '#e8e8e8' })  -- Light gray background
-vim.api.nvim_set_hl(0, 'CmpPmenuBorder', { fg = '#999999' })  -- Border color
-vim.api.nvim_set_hl(0, 'CmpDoc', { bg = '#f0f0f0' })  -- Even lighter documentation bg
+vim.api.nvim_set_hl(0, 'CmpPmenu', { bg = '#e8e8e8' })       -- Light gray background
+vim.api.nvim_set_hl(0, 'CmpPmenuBorder', { fg = '#999999' }) -- Border color
+vim.api.nvim_set_hl(0, 'CmpDoc', { bg = '#f0f0f0' })         -- Even lighter documentation bg

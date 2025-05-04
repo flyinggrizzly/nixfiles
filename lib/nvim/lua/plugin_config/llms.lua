@@ -7,6 +7,7 @@ if not require('helpers').is_git_subprocess() then
   require('copilot').setup({
     suggestion = { enabled = false },
     panel = { enabled = false },
+    copilot_model = "gpt-4o-copilot",
   })
 
   require("plugin_config/llms/codecompanion_fidget"):init()

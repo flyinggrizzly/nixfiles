@@ -162,11 +162,14 @@ in
           fidget-nvim
           nvim-cmp
           cmp-nvim-lsp
-          conform-nvim
+          cmp-nvim-lsp-signature-help
+          cmp-git
+          cmp-emoji
           cmp-buffer
           cmp-tmux
           cmp-path
           mini-nvim
+          conform-nvim
 
           # Telescope
           telescope-nvim
