@@ -39,8 +39,6 @@ let
   testExcludePackages = import ./exclude_packages_test.nix testHelpers;
   testNixosComplete = import ./nixos_complete_test.nix testHelpers;
   testNixosMinimal = import ./nixos_minimal_test.nix testHelpers;
-  testFileCopy = import ./file_copy_test.nix { inherit pkgs lib; };
-  testJsonMerge = import ./json_merge_test.nix { inherit pkgs lib; };
 
   # Import flake input tests
   flakeInputTests = import ./flake-input-tests.nix { inherit pkgs lib; };
@@ -56,8 +54,6 @@ let
           testNixosComplete
           testNixosMinimal
           testExcludePackages
-          testFileCopy
-          testJsonMerge
           flakeInputRunAllTests
         ];
       }
@@ -73,8 +69,6 @@ in
   testNixosComplete = testNixosComplete;
   testNixosMinimal = testNixosMinimal;
   testExcludePackages = testExcludePackages;
-  testFileCopy = testFileCopy;
-  testJsonMerge = testJsonMerge;
   flakeInputTests = flakeInputRunAllTests;
   runAllTests = runAllTests;
 

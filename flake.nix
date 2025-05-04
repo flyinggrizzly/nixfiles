@@ -65,7 +65,6 @@
             git ? { },
             desktop ? { },
             darwin ? { },
-            fileCopy ? { },
             excludePackages ? [ ],
             extraModules ? [ ],
           }:
@@ -88,7 +87,6 @@
                   ./modules/desktop.nix
                   ./modules/darwin.nix
                   ./modules/exclude-packages.nix
-                  ./modules/file-copy.nix
                 ] ++ extraModules; # Direct import of extra modules
 
                 # Basic home configuration
@@ -105,7 +103,6 @@
                     git
                     desktop
                     darwin
-                    fileCopy
                     excludePackages
                     ;
                 };
