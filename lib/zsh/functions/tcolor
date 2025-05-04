@@ -1,0 +1,23 @@
+tcolor() {
+  local use_less=false
+
+  while [[ $# -gt 0 ]]; do
+    case $1 in
+      -l|--less)
+        use_less=true
+        shift
+        ;;
+      *)
+        shift
+        ;;
+    esac
+  done
+
+  local cmd="for i in {0..255}; do printf \"\x1b[38;5;\${i}mcolour\${i}\x1b[0m\n\"; done"
+
+  if $use_less; then
+    eval "$cmd | less -R"
+  else
+    eval "$cmd"
+  fi
+}
