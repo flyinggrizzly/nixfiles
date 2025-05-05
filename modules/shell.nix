@@ -32,9 +32,7 @@ in
     };
   };
 
-  imports = [
-    (import ./shell/tmux.nix { inherit tmuxinator-nix; })
-  ];
+  imports = [ ./shell/tmux.nix ];
 
   config = {
     home.packages = with pkgs; [
@@ -130,6 +128,7 @@ in
         commandsDir = ../lib/claude/commands;
         forceClean = true;
         skipBackup = true;
+        mcpServers = { };
       };
     };
   };

@@ -74,8 +74,6 @@
             # The home-manager configuration module that both functions use
             homeConfig =
               {
-                config,
-                lib,
                 pkgs,
                 ...
               }:
@@ -83,7 +81,7 @@
                 imports = [
                   ./modules/neovim.nix
                   ./modules/git.nix
-                  (import ./modules/shell.nix { inherit shell config lib pkgs tmuxinator-nix; })
+                  ./modules/shell.nix
                   ./modules/desktop.nix
                   ./modules/darwin.nix
                   ./modules/exclude-packages.nix
@@ -110,6 +108,16 @@
           in
           {
             inherit homeConfig pkgs;
+            specialArgs = {
+              # This is passed to the home-manager module through extraSpecialArgs for both nixos and
+              # standalone cases, so that we can access the lib.constants data in our config
+              inherit tmuxinator-nix;
+            };
+            hmModules = [
+              homeConfig
+              inputs.claude-nix.homeManagerModules.default
+              inputs.tmuxinator-nix.homeManagerModules.default
+            ];
           };
 
         # Function for standalone home-manager configuration
@@ -117,15 +125,11 @@
           args:
           let
             prepared = lib.prepareHome args;
-            inherit (prepared) homeConfig pkgs;
           in
           home-manager.lib.homeManagerConfiguration {
-            inherit pkgs;
-            modules = [
-              homeConfig
-              inputs.claude-nix.homeManagerModules.default
-              inputs.tmuxinator-nix.homeManagerModules.default
-            ];
+            pkgs = prepared.pkgs;
+            modules = prepared.hmModules;
+            extraSpecialArgs = prepared.specialArgs;
           };
 
         # Function for NixOS module integration
@@ -133,21 +137,20 @@
           args:
           let
             prepared = lib.prepareHome args;
-            inherit (prepared) homeConfig;
             inherit (args) username;
           in
           {
             imports = [ home-manager.nixosModules.home-manager ];
-            home-manager.users.${username} =
-              { config, ... }:
-              {
-                imports = [
-                  homeConfig
-                  inputs.claude-nix.nixosModules.default
-                ];
-              };
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
+            home-manager = {
+              users.${username} =
+                { config, ... }:
+                {
+                  imports = prepared.hmModules;
+                };
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              extraSpecialArgs = prepared.specialArgs;
+            };
           };
       };
     in

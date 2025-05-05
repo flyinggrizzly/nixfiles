@@ -2,3 +2,5 @@
 .home.nix.swp
 result
 secrets/**/*
+
+**/.claude/settings.local.json
