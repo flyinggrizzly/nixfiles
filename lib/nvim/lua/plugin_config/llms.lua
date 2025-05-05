@@ -18,7 +18,7 @@ if not require('helpers').is_git_subprocess() then
       chat = {
         adapter = "sonnet_37",
         send = {
-          modes = { n = "<C-s>", i = "<C-s>" },
+          modes = { n = "<C-i>", i = "<C-i>" },
         },
       },
 
