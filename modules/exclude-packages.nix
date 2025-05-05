@@ -2,10 +2,7 @@
 
 let
   inherit (lib) types mkOption mkIf;
-
-  # Note that we're not using `pkgs` from the module arguments
-  # This forces consumers to provide fully initialized pkgs
-  cfg = config.modules.excludePackages;
+  excludeList = config.modules.excludePackages;
 in
 {
   options.modules.excludePackages = mkOption {
@@ -28,18 +25,16 @@ in
     '';
   };
 
-  config = mkIf (cfg != [ ]) {
-    # Apply a more efficient overlay that only affects the excluded packages
+  config = mkIf (excludeList != [ ]) {
     nixpkgs.overlays = [
       (
         final: prev:
         let
-          # Create a set of package names to exclude
           excludeSet = builtins.listToAttrs (
             map (p: {
               name = p.pname or p.name;
               value = p; # Store the original package for metadata
-            }) cfg
+            }) excludeList
           );
 
           # Create the overlay with empty packages only for excluded ones
