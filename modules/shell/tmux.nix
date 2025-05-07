@@ -16,7 +16,6 @@ in
   config.programs = {
     tmux = {
       enable = true;
-      prefix = "C-s";
       escapeTime = 0;
       keyMode = "vi";
       baseIndex = 1;
@@ -26,6 +25,8 @@ in
       shell = "$SHELL";
       terminal = "screen-256color";
       extraConfig = ''
+        bind-key C-s send-prefix -2
+
         # Don't suspend tmux
         unbind-key C-z
 
