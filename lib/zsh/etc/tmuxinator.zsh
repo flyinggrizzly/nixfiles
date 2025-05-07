@@ -11,6 +11,14 @@ _tmuxinator() {
       copy|debug|delete|open|start)
         _arguments '*:projects:($projects)'
       ;;
+      rrc|rc)
+        if [[ -z $words[3] ]]; then
+          tmux source-file ~/.tmux.conf >/dev/null 2>&1
+          echo "Tmux configuration reloaded"
+          # Return 0 to indicate success and prevent further completion
+          return 0
+        fi
+      ;;
     esac
   fi
 
