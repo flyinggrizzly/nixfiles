@@ -8,6 +8,8 @@ alias v="$VISUAL"
 # Pretty print the path
 alias path='echo $PATH | tr -s ":" "\n"'
 
+alias muxr='tmux source-file ~/.tmux.conf >/dev/null 2>&1'
+
 # Git
 
 # http://codeinthehole.com/writing/tips-for-using-a-git-pre-commit-hook/
