@@ -227,7 +227,7 @@ in
           render-markdown-nvim
         ]
         ++ (
-          if config.modules.neovim.enableLlmTools then
+          if cfg.enableLlmTools then
             with pkgs.vimPlugins;
             [
               # AI and code assistance
@@ -241,7 +241,7 @@ in
           else
             [ ]
         )
-        ++ config.modules.neovim.extraPlugins;
+        ++ cfg.extraPlugins;
 
       extraPackages =
         with pkgs;
@@ -254,7 +254,7 @@ in
           lua-language-server
           vscode-langservers-extracted
         ]
-        ++ config.modules.neovim.extraPackages;
+        ++ cfg.extraPackages;
 
       extraConfig = ''
         source $HOME/.config/nvim/base_init.lua
@@ -269,7 +269,7 @@ in
 
     # Create a simple flag function that is imported by lua/helpers
     home.file.".config/nvim/lua/helpers/llms_enabled.lua".text =
-      if config.modules.neovim.enableLlmTools then
+      if cfg.enableLlmTools then
         ''
           return function ()
             return true
@@ -283,9 +283,9 @@ in
         '';
 
     home.file.".config/nvim/lua/plugin_config/custom_llms.lua" =
-      mkIf (config.modules.neovim.llmLuaOverride != null)
+      mkIf (cfg.llmLuaOverride != null)
         {
-          source = config.modules.neovim.llmLuaOverride;
+          source = cfg.llmLuaOverride;
         };
 
     home.file.".vim-spell" = {
