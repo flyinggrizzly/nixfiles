@@ -25,7 +25,7 @@ in
       shell = "$SHELL";
       terminal = "screen-256color";
       extraConfig = ''
-        bind-key C-s send-prefix -2
+        set -g prefix2 C-s
 
         # Don't suspend tmux
         unbind-key C-z
