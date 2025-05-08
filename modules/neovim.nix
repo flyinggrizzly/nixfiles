@@ -119,10 +119,16 @@ in
       description = "Additional packages to install for Neovim";
     };
 
-    extraConfig = mkOption {
-      type = types.nullOr types.str;
-      default = null;
-      description = "Additional Lua configuration for Neovim";
+    init.prepend = mkOption {
+      type = types.str;
+      default = "";
+      description = "Prepend to init.lua";
+    };
+
+    init.append = mkOption {
+      type = types.str;
+      default = "";
+      description = "Append to init.lua";
     };
 
     llmLuaOverride = mkOption {
@@ -257,7 +263,11 @@ in
         ++ cfg.extraPackages;
 
       extraConfig = ''
+        ${cfg.init.prepend}
+
         source $HOME/.config/nvim/base_init.lua
+
+        ${cfg.init.append}
       '';
     };
 
