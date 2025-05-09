@@ -14,7 +14,18 @@ cmp.setup({
       },
       { name = 'nvim_lsp_signature_help', priority = 900, group_index = 1, },
       { name = 'emoji',                   priority = 100, group_index = 1, },
-      { name = 'git',                     priority = 400, group_index = 1, }
+      { name = 'git',                     priority = 400, group_index = 1, },
+      {
+        name = 'buffer',
+        priority = 300,
+        group_index = 1,
+        option = {
+          -- Use all open buffers
+          get_bufnrs = function()
+            return vim.api.nvim_list_bufs()
+          end
+        }
+      },
     }
 
     if llms_enabled then
