@@ -1,6 +1,7 @@
 # Coding style
 - DO NOT USE CODE COMMENTS, unless the code is very surprising or non-obvious
 - ALWAYS CLEAN UP EXTRA WHITESPACE
+- Prefere singleton modules in Ruby over instantiable classes when no internal state is managed. Use the `extend(self)` style for declaring the singleton module
 
 # Approach
 - STAY FOCUSED ON THE IMMEDIATE TASK AT HAND!!!
