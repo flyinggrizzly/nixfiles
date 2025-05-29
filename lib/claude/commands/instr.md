@@ -2,12 +2,13 @@ Follow the instructions in #ARGUMENT precisely, and complete the task rigorously
 
 If anything is unclear, ask me to clarify for you.
 
-Once you have clarity, make a copy of the document in #ARGUMENT, inserting `.vN` to the filename. Then follow that new
-document.
+Once you have clarity, either create a new document, or make a copy of the document in #ARGUMENT. Insert `.vN` to the filename. Then follow that new document.
 
 If we have to make multiple clarifications, repeat this process for each clarification.
 
-Once the task is clear, follow the instructions precisely and rigorously.
+Once the task is clear, create a new plan document with the steps we have agreed on, and any detail necessary. If a
+document was provided in #ARGUMENT, use the name as a base. For example, if `poetry_instructions.md` was the document,
+you would create `poetry_plan.md`.
 
 <examples>
   <example>
