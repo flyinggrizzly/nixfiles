@@ -5,6 +5,6 @@ nix-git-sha() {
     exit 1
   fi
 
-  nix-prefetch fetchFromGitHub --owner "$1" --repo "$2" --rev "$3"
+  nix-prefetch-url --unpack "https://github.com/$1/$2/archive/$3.tar.gz"
 }
 
