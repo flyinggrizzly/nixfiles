@@ -36,7 +36,7 @@ mapn('<leader>sg', snacks.picker.grep, '[S]earch [G]rep')
 mapn('<leader>sr', snacks.picker.resume, '[S]earch [R]esume')
 mapn('<leader>s.', snacks.picker.recent, '[S]earch Recent Files')
 mapn('<leader>sc', snacks.picker.commands, '[S]earch [C]ommands')
-mapn('<leader><leader>', snacks.picker.buffers, '[S]earch [B]uffers')
+mapn('<leader>sb', snacks.picker.buffers, '[S]earch [B]uffers')
 mapn('<C-n>', snacks.explorer.reveal, 'Ctrl-N Search Explorer')
 mapn('<leader>/', snacks.picker.lines, '[/] Fuzzy buffer search')
 

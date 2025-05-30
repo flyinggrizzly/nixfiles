@@ -13,16 +13,6 @@ let
     ;
   cfg = config.modules.neovim;
 
-  claude-code-nvim = pkgs.vimUtils.buildVimPlugin {
-    name = "claude-code-nvim";
-    src = pkgs.fetchFromGitHub {
-      owner = "greggh";
-      repo = "claude-code.nvim";
-      rev = "91b38f289c9b1f08007a0443020ed97bb7539ebe";
-      sha256 = "sha256-4H6zu5+iDPnCY+ISsxuL9gtAZ5lJhVvtOscc8jUsAY8=";
-    };
-  };
-
   gitsigns = pkgs.vimUtils.buildVimPlugin {
     name = "gitsigns";
     src = pkgs.fetchFromGitHub {

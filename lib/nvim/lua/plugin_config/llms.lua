@@ -109,4 +109,7 @@ if not require('helpers').is_git_subprocess() then
   map('<leader>lc', '<cmd>CodeCompanionChat Toggle<cr>', 'Open [L]LM [C]hat', { 'n', 'v' })
   map('<leader>la', '<cmd>CodeCompanionActions<cr>', 'Open [L]LM [A]ctions', { 'n', 'v' })
   map('al', '<cmd>CodeCompanionChat Add<cr>', '[A]dd selection to [L]LM chat', 'v')
+  map('<leader>ll', '<cmd>ClaudeCode<cr>', '[L]aunch C[L]aude Code', { 'n', 'v' })
+  map('<leader>llc', '<cmd>ClaudeCodeContinue<cr>', '[L]aunch C[L]aude Code, [C]ontinue last convo', { 'n', 'v' })
+  map('<leader>llr', '<cmd>ClaudeCodeResume<cr>', '[L]aunch C[L]aude Code, and [R]esume a convo from picker', { 'n', 'v' })
 end
