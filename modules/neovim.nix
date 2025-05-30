@@ -13,26 +13,6 @@ let
     ;
   cfg = config.modules.neovim;
 
-  gitsigns = pkgs.vimUtils.buildVimPlugin {
-    name = "gitsigns";
-    src = pkgs.fetchFromGitHub {
-      owner = "lewis6991";
-      repo = "gitsigns.nvim";
-      rev = "1ef74b546732f185d0f806860fa5404df7614f28";
-      sha256 = "sha256-s3y8ZuLV00GIhizcK/zqsJOTKecql7Xn3LGYmH7NLsQ=";
-    };
-  };
-
-  tokyonight = pkgs.vimUtils.buildVimPlugin {
-    name = "tokyonight";
-    src = pkgs.fetchFromGitHub {
-      owner = "folke";
-      repo = "tokyonight.nvim";
-      rev = "817bb6ffff1b9ce72cdd45d9fcfa8c9cd1ad3839";
-      sha256 = "sha256-d0izq6GCa5XWigiQMY3ODrdJ3jV8Lw8KCTADQA6GbXc=";
-    };
-  };
-
   sorbet-vim = pkgs.vimUtils.buildVimPlugin {
     name = "sorbet-vim";
     src = pkgs.fetchFromGitHub {
@@ -50,16 +30,6 @@ let
       repo = "vim-heritage";
       rev = "cffa05c78c0991c998adc4504d761b3068547db6";
       sha256 = "sha256-Lebe5V1XFxn4kSZ+ImZ69Vst9Nbc0N7eA9IzOCijFS0=";
-    };
-  };
-
-  render-markdown-nvim = pkgs.vimUtils.buildVimPlugin {
-    name = "render-markdown-nvim";
-    src = pkgs.fetchFromGitHub {
-      owner = "MeanderingProgrammer";
-      repo = "render-markdown.nvim";
-      rev = "7808306438e51d7222534759011cddedf36ce580";
-      sha256 = "sha256-K2YbO4vIjVgYrWF4MVxqiaTmONF1ZvMXxZVIW/UYwRo=";
     };
   };
 
@@ -180,7 +150,7 @@ in
 
           # Git integration
           vim-fugitive
-          gitsigns
+          gitsigns-nvim
 
           # Editing helpers
           nvim-autopairs
