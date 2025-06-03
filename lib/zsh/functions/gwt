@@ -1,0 +1,581 @@
+#!/bin/zsh
+
+function gwt() {
+    local WORKTREE_BASE="$HOME/worktrees"
+    local AUTO_CD=false
+
+    # Helper function to get repository name
+    _get_repo_name() {
+        basename "$(git rev-parse --show-toplevel 2>/dev/null)"
+    }
+
+    # Helper function to get worktree path
+    _get_worktree_path() {
+        local branch="$1"
+        local custom_dir="$2"
+        if [[ -n "$custom_dir" ]]; then
+            echo "$custom_dir"
+        else
+            local repo_name="$(_get_repo_name)"
+            echo "$WORKTREE_BASE/$repo_name/$branch"
+        fi
+    }
+
+    # Helper function to check if worktree exists
+    _worktree_exists() {
+        local branch="$1"
+        # Check if the branch exists in git's worktree list
+        while IFS=':' read -r wt_branch wt_path; do
+            if [[ "$wt_branch" == "$branch" ]]; then
+                return 0
+            fi
+        done < <(_get_all_worktrees)
+        return 1
+    }
+
+    # Helper function to check if branch exists
+    _branch_exists() {
+        local branch="$1"
+        git show-ref --verify --quiet "refs/heads/$branch"
+    }
+
+    # Helper function to check if branch has unmerged changes
+    _has_unmerged_changes() {
+        local branch="$1"
+        local main_branch="$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@')"
+        if [[ -z "$main_branch" ]]; then
+            main_branch="main"
+        fi
+        local merge_base="$(git merge-base "$main_branch" "$branch" 2>/dev/null)"
+        local branch_head="$(git rev-parse "$branch" 2>/dev/null)"
+        [[ -n "$merge_base" && -n "$branch_head" && "$merge_base" != "$branch_head" ]]
+    }
+
+    # Helper function to check if worktree is dirty
+    _is_worktree_dirty() {
+        local worktree_path="$1"
+        if [[ -d "$worktree_path" ]]; then
+            ! git -C "$worktree_path" diff-index --quiet HEAD -- 2>/dev/null
+        else
+            false
+        fi
+    }
+
+    # Helper function to resolve path or branch name to branch name
+    _resolve_to_branch() {
+        local input="$1"
+
+        # If it's a path, try to resolve it to a branch
+        if [[ "$input" == /* || "$input" == ~* || "$input" == .* ]]; then
+            # Expand the path to absolute
+            local abs_path="$(realpath "$input" 2>/dev/null || echo "$input")"
+
+            # Check all worktrees to find matching path
+            while IFS=':' read -r branch worktree_path; do
+                if [[ "$abs_path" == "$worktree_path" ]]; then
+                    echo "$branch"
+                    return 0
+                fi
+            done < <(_get_all_worktrees)
+
+            # Also check if it's the main worktree
+            local main_repo="$(_get_main_repo)"
+
+            if [[ "$abs_path" == "$main_repo" ]]; then
+                echo "Error: Cannot delete the main worktree" >&2
+                return 1
+            fi
+
+            echo "Error: Path '$input' does not resolve to a worktree" >&2
+            return 1
+        else
+            # It's already a branch name
+            echo "$input"
+            return 0
+        fi
+    }
+
+    # Helper function to get main repository path
+    _get_main_repo() {
+        local main_repo=""
+        while IFS= read -r worktree_line; do
+            local wt_path="$(echo "$worktree_line" | awk '{print $1}')"
+            if [[ -n "$wt_path" && -d "$wt_path/.git" ]]; then
+                main_repo="$wt_path"
+                break
+            fi
+        done < <(git worktree list)
+        echo "$main_repo"
+    }
+
+    # Helper function to get worktree status
+    _get_worktree_status() {
+        local worktree_path="$1"
+        local branch="$2"
+
+        if _is_worktree_dirty "$worktree_path"; then
+            echo "dirty"
+        elif [[ -n "$branch" ]] && _has_unmerged_changes "$branch"; then
+            echo "unmerged"
+        else
+            echo "clean"
+        fi
+    }
+
+    # Helper function to display worktree status with formatting
+    _display_worktree_status() {
+        local format="$1"
+        local include_main="$2"
+        local show_headers="$3"
+
+        if [[ "$show_headers" == true ]]; then
+            if [[ "$include_main" == true ]]; then
+                printf "$format" "TYPE" "BRANCH" "PATH" "STATUS"
+                printf "$format" "----" "------" "----" "------"
+            else
+                printf "$format" "BRANCH" "PATH" "STATUS"
+                printf "$format" "------" "----" "------"
+            fi
+        fi
+
+        # Show main worktree if requested
+        if [[ "$include_main" == true ]]; then
+            local main_repo="$(_get_main_repo)"
+            if [[ -n "$main_repo" ]]; then
+                local main_branch="$(cd "$main_repo" && git symbolic-ref --short HEAD 2>/dev/null || echo "HEAD")"
+                local main_status="$(_get_worktree_status "$main_repo" "")"
+                local display_path="$(_format_display_path "$main_repo")"
+                printf "$format" "main" "$main_branch" "$display_path" "$main_status"
+            fi
+        fi
+
+        # Show linked worktrees
+        local worktree_list="$(_get_all_worktrees)"
+        if [[ -n "$worktree_list" ]]; then
+            while IFS=':' read -r branch worktree_path; do
+                local wt_status="$(_get_worktree_status "$worktree_path" "$branch")"
+                local display_path="$(_format_display_path "$worktree_path")"
+
+                if [[ "$include_main" == true ]]; then
+                    printf "$format" "linked" "$branch" "$display_path" "$wt_status"
+                else
+                    printf "$format" "$branch" "$display_path" "$wt_status"
+                fi
+            done <<< "$worktree_list"
+        fi
+    }
+
+    # Helper function to format display path
+    _format_display_path() {
+        local path="$1"
+        echo "${path/#$HOME/~}"
+    }
+
+    # Helper function to remove worktree and branch
+    _remove_worktree_and_branch() {
+        local branch="$1"
+        local worktree_path="$2"
+
+        echo "Removing worktree for branch '$branch'"
+        git worktree remove "$worktree_path" --force
+        if _branch_exists "$branch"; then
+            git branch -D "$branch"
+        fi
+    }
+
+    # Helper function to load user settings
+    _load_user_settings() {
+        local settings_file="$HOME/.config/gwt/settings.json"
+        if [[ -f "$settings_file" ]]; then
+            local default_location=$(jq -r '.defaultWorktreeLocation // empty' "$settings_file" 2>/dev/null)
+            local auto_cd_setting=$(jq -r '.autoCd // false' "$settings_file" 2>/dev/null)
+            
+            if [[ -n "$default_location" && "$default_location" != "null" ]]; then
+                WORKTREE_BASE="$default_location"
+            fi
+            
+            if [[ "$auto_cd_setting" == "true" ]]; then
+                AUTO_CD=true
+            fi
+        fi
+    }
+    
+    # Helper function to save user settings
+    _save_user_settings() {
+        local default_location="$1"
+        local auto_cd="$2"
+        local settings_dir="$HOME/.config/gwt"
+        local settings_file="$settings_dir/settings.json"
+        
+        mkdir -p "$settings_dir"
+        
+        jq -n \
+            --arg location "$default_location" \
+            --argjson autocd "$auto_cd" \
+            '{defaultWorktreeLocation: $location, autoCd: $autocd}' \
+            > "$settings_file"
+    }
+    
+    # Helper function to print usage information
+    _print_usage() {
+        echo "Usage:"
+        echo "  gwt <branch>                    Create worktree for existing branch"
+        echo "  gwt -b <branch>                 Create new branch and worktree"
+        echo "  gwt -p|--path <path> <branch>   Create worktree at specified path"
+        echo "  gwt [options] --cd              Change to worktree after creation"
+        echo "  gwt [options] --no-cd           Don't change to worktree (overrides auto-cd)"
+        echo "  gwt init                        Configure default settings"
+        echo "  gwt cd [<branch>]               Change to worktree (or parent if no branch)"
+        echo "  gwt status                      List all worktrees with headers"
+        echo "  gwt status -m                   Include main worktree in listing"
+        echo "  gwt status --porcelain          List without headers"
+        echo "  gwt -d <branch|path>            Delete branch and worktree (safe)"
+        echo "  gwt -D <branch|path>            Force delete branch and worktree"
+        echo "  gwt reset                       Delete all worktrees (safe)"
+        echo "  gwt reset --force               Force delete all worktrees"
+        echo "  gwt --help                      Show this help message"
+        echo "  gwt                             List all worktrees (same as 'gwt status -m')"
+    }
+
+    # Helper function to get all worktrees
+    _get_all_worktrees() {
+        local main_repo_path="$(_get_main_repo)"
+
+        git worktree list --porcelain | awk -v main_path="$main_repo_path" '
+            /^worktree / { wt_path = substr($0, 10) }
+            /^branch / { branch = substr($0, 8); gsub(/^refs\/heads\//, "", branch) }
+            /^$/ {
+                if (wt_path && branch && wt_path != main_path) {
+                    print branch ":" wt_path
+                }
+                wt_path=""; branch=""
+            }
+            END {
+                if (wt_path && branch && wt_path != main_path) {
+                    print branch ":" wt_path
+                }
+            }
+        '
+    }
+
+    # Load user settings
+    _load_user_settings
+    
+    # Parse arguments
+    local create_branch=false
+    local change_dir=$AUTO_CD
+    local delete_branch=false
+    local force_delete=false
+    local force_reset=false
+    local include_main_worktree=false
+    local porcelain=false
+    local branch_name=""
+    local command=""
+    local custom_path=""
+
+
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            -b)
+                create_branch=true
+                shift
+                ;;
+            --cd)
+                change_dir=true
+                shift
+                ;;
+            --no-cd)
+                change_dir=false
+                shift
+                ;;
+            -p|--path)
+                if [[ -n "$2" && ! "$2" =~ ^- ]]; then
+                    custom_path="$2"
+                    shift 2
+                else
+                    echo "Error: $1 requires a path argument" >&2
+                    return 1
+                fi
+                ;;
+            -d)
+                delete_branch=true
+                shift
+                ;;
+            -D)
+                delete_branch=true
+                force_delete=true
+                shift
+                ;;
+            -f|--force)
+                force_reset=true
+                shift
+                ;;
+            -m|--include-main-worktree)
+                include_main_worktree=true
+                shift
+                ;;
+            --porcelain)
+                porcelain=true
+                shift
+                ;;
+            --help)
+                command="help"
+                shift
+                ;;
+            init)
+                command="init"
+                shift
+                ;;
+            cd)
+                command="cd"
+                shift
+                ;;
+            status)
+                command="status"
+                shift
+                ;;
+            reset)
+                command="reset"
+                shift
+                ;;
+            *)
+                if [[ -z "$branch_name" && -z "$command" ]]; then
+                    branch_name="$1"
+                elif [[ "$command" == "cd" && -z "$branch_name" ]]; then
+                    branch_name="$1"
+                fi
+                shift
+                ;;
+        esac
+    done
+
+
+    # Ensure we're in a git repository
+    if ! git rev-parse --git-dir >/dev/null 2>&1; then
+        echo "Error: Not in a git repository" >&2
+        return 1
+    fi
+
+    # Handle different commands
+    case "$command" in
+        "cd")
+            if [[ -n "$branch_name" ]]; then
+                # cd to branch worktree
+                local worktree_path="$(_get_worktree_path "$branch_name")"
+                if ! _worktree_exists "$branch_name"; then
+                    echo "Error: Worktree for branch '$branch_name' does not exist" >&2
+                    return 1
+                fi
+                cd "$worktree_path"
+                return 0
+            else
+                # cd to parent (main worktree - the one with a real .git directory)
+                local main_repo="$(_get_main_repo)"
+                cd "$main_repo"
+                return 0
+            fi
+            ;;
+        "status")
+            # List all worktrees with optional main worktree inclusion
+            local format
+            if [[ "$include_main_worktree" == true ]]; then
+                format="%-10s %-20s %-50s %s\n"
+            else
+                format="%-20s %-50s %s\n"
+            fi
+
+            local show_headers=true
+            if [[ "$porcelain" == true ]]; then
+                show_headers=false
+            fi
+
+            _display_worktree_status "$format" "$include_main_worktree" "$show_headers"
+            return 0
+            ;;
+        "help")
+            _print_usage
+            return 0
+            ;;
+        "init")
+            echo "GWT Configuration Setup"
+            echo "======================"
+            echo
+            
+            # Prompt for default worktree location
+            echo "Current default worktree location: $WORKTREE_BASE"
+            echo -n "Enter new default worktree location (or press Enter to keep current): "
+            read new_location
+            
+            if [[ -z "$new_location" ]]; then
+                new_location="$WORKTREE_BASE"
+            fi
+            
+            # Expand tilde if present
+            new_location="${new_location/#\~/$HOME}"
+            
+            # Prompt for auto-cd setting
+            echo
+            current_autocd="false"
+            if [[ "$AUTO_CD" == "true" ]]; then
+                current_autocd="true"
+            fi
+            echo "Current auto-cd setting: $current_autocd"
+            if [[ "$AUTO_CD" == "true" ]]; then
+                echo -n "Should 'gwt <branch>' automatically cd to the new worktree? (Y/n): "
+            else
+                echo -n "Should 'gwt <branch>' automatically cd to the new worktree? (y/N): "
+            fi
+            read autocd_input
+            
+            local autocd_setting="false"
+            if [[ "$AUTO_CD" == "true" ]]; then
+                if [[ ! "$autocd_input" =~ ^[Nn] ]]; then
+                    autocd_setting="true"
+                fi
+            else
+                if [[ "$autocd_input" =~ ^[Yy] ]]; then
+                    autocd_setting="true"
+                fi
+            fi
+            
+            # Save settings
+            _save_user_settings "$new_location" "$autocd_setting"
+            
+            echo
+            echo "✓ Settings saved to ~/.config/gwt/settings.json"
+            echo "  Default worktree location: $new_location"
+            echo "  Auto-cd enabled: $autocd_setting"
+            echo
+            echo "Settings will take effect on next gwt command."
+            return 0
+            ;;
+        "reset")
+            # Reset all worktrees
+            local worktrees=()
+            local dirty_worktrees=()
+
+            while IFS=':' read -r branch worktree_path; do
+                worktrees+=("$branch:$worktree_path")
+                if _is_worktree_dirty "$worktree_path" || _has_unmerged_changes "$branch"; then
+                    dirty_worktrees+=("$branch")
+                fi
+            done < <(_get_all_worktrees)
+
+            if [[ ${#dirty_worktrees[@]} -gt 0 && "$force_reset" != true ]]; then
+                echo "Error: The following worktrees have unmerged changes or are dirty:" >&2
+                for dirty_branch in "${dirty_worktrees[@]}"; do
+                    echo "  - $dirty_branch" >&2
+                done
+                echo "Use 'gwt reset --force' to delete them anyway" >&2
+                return 1
+            fi
+
+            for worktree in "${worktrees[@]}"; do
+                local branch="${worktree%%:*}"
+                local worktree_path="${worktree##*:}"
+                _remove_worktree_and_branch "$branch" "$worktree_path"
+            done
+            return 0
+            ;;
+        "")
+            if [[ -z "$branch_name" ]]; then
+                # List all worktrees (same as gwt status -m)
+                local format="%-10s %-20s %-50s %s\n"
+                _display_worktree_status "$format" true true
+                return 0
+            fi
+            ;;
+    esac
+
+    # Handle branch deletion
+    if [[ "$delete_branch" == true ]]; then
+        if [[ -z "$branch_name" ]]; then
+            echo "Error: Branch name or path required for deletion" >&2
+            return 1
+        fi
+
+        # Resolve the input to a branch name
+        local resolved_branch="$(_resolve_to_branch "$branch_name")"
+        if [[ $? -ne 0 ]]; then
+            return 1
+        fi
+
+        # Get the actual worktree path from git's worktree list
+        local worktree_path=""
+        while IFS=':' read -r wt_branch wt_path; do
+            if [[ "$wt_branch" == "$resolved_branch" ]]; then
+                worktree_path="$wt_path"
+                break
+            fi
+        done < <(_get_all_worktrees)
+
+        if [[ -z "$worktree_path" ]]; then
+            echo "Error: Worktree for branch '$resolved_branch' does not exist" >&2
+            return 1
+        fi
+
+        # Check if we're currently in the worktree we're about to delete
+        local current_dir="$(pwd)"
+        if [[ "$current_dir" == "$worktree_path"* ]]; then
+            echo "Currently in worktree being deleted, navigating to parent repository..."
+            # Find and navigate to main worktree
+            local main_repo="$(_get_main_repo)"
+            cd "$main_repo"
+        fi
+
+        if [[ "$force_delete" != true ]]; then
+            if _is_worktree_dirty "$worktree_path"; then
+                echo "Error: Worktree for branch '$resolved_branch' has uncommitted changes" >&2
+                echo "Use 'gwt -D $branch_name' to force delete" >&2
+                return 1
+            fi
+
+            if _has_unmerged_changes "$resolved_branch"; then
+                echo "Error: Branch '$resolved_branch' has unmerged changes" >&2
+                echo "Use 'gwt -D $branch_name' to force delete" >&2
+                return 1
+            fi
+        fi
+
+        _remove_worktree_and_branch "$resolved_branch" "$worktree_path"
+        return 0
+    fi
+
+    # Handle worktree creation
+    if [[ -n "$branch_name" ]]; then
+        if _worktree_exists "$branch_name"; then
+            echo "Error: Worktree for branch '$branch_name' already exists at $(_get_worktree_path "$branch_name" "$custom_path")" >&2
+            return 1
+        fi
+
+        local worktree_path="$(_get_worktree_path "$branch_name" "$custom_path")"
+        mkdir -p "$(dirname "$worktree_path")"
+
+        if [[ "$create_branch" == true ]]; then
+            if _branch_exists "$branch_name"; then
+                echo "Error: Branch '$branch_name' already exists" >&2
+                return 1
+            fi
+            echo "Creating new branch '$branch_name' and worktree at '$worktree_path'"
+            git worktree add -b "$branch_name" "$worktree_path"
+            return 0
+        else
+            if ! _branch_exists "$branch_name"; then
+                echo "Error: Branch '$branch_name' does not exist" >&2
+                return 1
+            fi
+            echo "Creating worktree for existing branch '$branch_name' at '$worktree_path'"
+            git worktree add "$worktree_path" "$branch_name"
+        fi
+
+        if [[ "$change_dir" == true ]]; then
+            cd "$worktree_path"
+        fi
+
+        return 0
+    fi
+
+    # If we get here, show usage
+    _print_usage
+    return 1
+}
