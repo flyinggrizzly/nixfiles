@@ -120,6 +120,7 @@ in
 
           # LSP and completion
           nvim-lspconfig
+          rustaceanvim
           nvim-treesitter.withAllGrammars
           nvim-treesitter-textobjects
           mason-tool-installer-nvim
@@ -216,6 +217,7 @@ in
           prettierd
           rubyPackages.sorbet-runtime
           nixd
+          rust-analyzer
           nixfmt-rfc-style
           lua-language-server
           vscode-langservers-extracted
