@@ -190,6 +190,133 @@ main() {
         fail "Custom path worktree was not created"
     fi
     
+    # Test 10: New flag behavior - basic -d only deletes worktree
+    print_test "gwt -d only deletes worktree, preserves branch"
+    result=$(bash -c "
+        cd /tmp && mkdir -p gwt-flag-test-$$ && cd gwt-flag-test-$$ 
+        git init >/dev/null 2>&1
+        git config user.name 'Test' && git config user.email 'test@test.com'
+        echo test > file && git add . && git commit -m 'test' >/dev/null 2>&1
+        git checkout -b test-delete-branch >/dev/null 2>&1 && git checkout main >/dev/null 2>&1
+        source /Users/seandmr/nixfiles/lib/zsh/functions/gwt
+        gwt test-delete-branch >/dev/null 2>&1
+        gwt -d test-delete-branch >/dev/null 2>&1
+        if git show-ref --verify --quiet refs/heads/test-delete-branch; then
+            echo 'branch-exists'
+        else
+            echo 'branch-deleted'
+        fi
+        cd / && rm -rf gwt-flag-test-$$ 2>/dev/null || true
+        rm -rf ~/worktrees/gwt-flag-test-* 2>/dev/null || true
+    " 2>/dev/null)
+    if [[ "$result" == "branch-exists" ]]; then
+        pass
+    else
+        fail "Branch was deleted when it should have been preserved"
+    fi
+    
+    # Test 11: New flag behavior - --delete-branch deletes both
+    print_test "gwt -d --delete-branch deletes both worktree and branch"
+    result=$(bash -c "
+        cd /tmp && mkdir -p gwt-flag-test-$$ && cd gwt-flag-test-$$ 
+        git init >/dev/null 2>&1
+        git config user.name 'Test' && git config user.email 'test@test.com'
+        echo test > file && git add . && git commit -m 'test' >/dev/null 2>&1
+        git checkout -b test-delete-both >/dev/null 2>&1 && git checkout main >/dev/null 2>&1
+        source /Users/seandmr/nixfiles/lib/zsh/functions/gwt
+        gwt test-delete-both >/dev/null 2>&1
+        gwt -d test-delete-both --delete-branch >/dev/null 2>&1
+        if git show-ref --verify --quiet refs/heads/test-delete-both; then
+            echo 'branch-exists'
+        else
+            echo 'branch-deleted'
+        fi
+        cd / && rm -rf gwt-flag-test-$$ 2>/dev/null || true
+        rm -rf ~/worktrees/gwt-flag-test-* 2>/dev/null || true
+    " 2>/dev/null)
+    if [[ "$result" == "branch-deleted" ]]; then
+        pass
+    else
+        fail "Branch was not deleted when --delete-branch was specified"
+    fi
+    
+    # Test 12: Flag precedence - --preserve-branch overrides --delete-branch
+    print_test "gwt -d --delete-branch --preserve-branch preserves branch (-pb precedence)"
+    result=$(bash -c "
+        cd /tmp && mkdir -p gwt-flag-test-$$ && cd gwt-flag-test-$$ 
+        git init >/dev/null 2>&1
+        git config user.name 'Test' && git config user.email 'test@test.com'
+        echo test > file && git add . && git commit -m 'test' >/dev/null 2>&1
+        git checkout -b test-precedence >/dev/null 2>&1 && git checkout main >/dev/null 2>&1
+        source /Users/seandmr/nixfiles/lib/zsh/functions/gwt
+        gwt test-precedence >/dev/null 2>&1
+        gwt -d test-precedence --delete-branch --preserve-branch >/dev/null 2>&1
+        if git show-ref --verify --quiet refs/heads/test-precedence; then
+            echo 'branch-exists'
+        else
+            echo 'branch-deleted'
+        fi
+        cd / && rm -rf gwt-flag-test-$$ 2>/dev/null || true
+        rm -rf ~/worktrees/gwt-flag-test-* 2>/dev/null || true
+    " 2>/dev/null)
+    if [[ "$result" == "branch-exists" ]]; then
+        pass
+    else
+        fail "--preserve-branch did not take precedence over --delete-branch"
+    fi
+    
+    # Test 13: Short flag aliases work
+    print_test "gwt -d -db and -pb short flags work correctly"
+    result=$(bash -c "
+        cd /tmp && mkdir -p gwt-flag-test-$$ && cd gwt-flag-test-$$ 
+        git init >/dev/null 2>&1
+        git config user.name 'Test' && git config user.email 'test@test.com'
+        echo test > file && git add . && git commit -m 'test' >/dev/null 2>&1
+        git checkout -b test-short-flags >/dev/null 2>&1 && git checkout main >/dev/null 2>&1
+        source /Users/seandmr/nixfiles/lib/zsh/functions/gwt
+        gwt test-short-flags >/dev/null 2>&1
+        gwt -d test-short-flags -db -pb >/dev/null 2>&1
+        if git show-ref --verify --quiet refs/heads/test-short-flags; then
+            echo 'branch-exists'
+        else
+            echo 'branch-deleted'
+        fi
+        cd / && rm -rf gwt-flag-test-$$ 2>/dev/null || true
+        rm -rf ~/worktrees/gwt-flag-test-* 2>/dev/null || true
+    " 2>/dev/null)
+    if [[ "$result" == "branch-exists" ]]; then
+        pass
+    else
+        fail "Short flags -db and -pb did not work correctly"
+    fi
+    
+    # Test 14: Force delete with --delete-branch
+    print_test "gwt -D --delete-branch force deletes both worktree and branch"
+    result=$(bash -c "
+        cd /tmp && mkdir -p gwt-flag-test-$$ && cd gwt-flag-test-$$ 
+        git init >/dev/null 2>&1
+        git config user.name 'Test' && git config user.email 'test@test.com'
+        echo test > file && git add . && git commit -m 'test' >/dev/null 2>&1
+        git checkout -b test-force-delete >/dev/null 2>&1 
+        echo dirty > file2 && git add file2
+        git checkout main >/dev/null 2>&1
+        source /Users/seandmr/nixfiles/lib/zsh/functions/gwt
+        gwt test-force-delete >/dev/null 2>&1
+        gwt -D test-force-delete --delete-branch >/dev/null 2>&1
+        if git show-ref --verify --quiet refs/heads/test-force-delete; then
+            echo 'branch-exists'
+        else
+            echo 'branch-deleted'
+        fi
+        cd / && rm -rf gwt-flag-test-$$ 2>/dev/null || true
+        rm -rf ~/worktrees/gwt-flag-test-* 2>/dev/null || true
+    " 2>/dev/null)
+    if [[ "$result" == "branch-deleted" ]]; then
+        pass
+    else
+        fail "Force delete with --delete-branch did not delete branch"
+    fi
+    
     # Skipped tests (known issues)
     print_test "gwt -b existing-branch fails"
     skip "This test hangs in current environment - needs investigation"

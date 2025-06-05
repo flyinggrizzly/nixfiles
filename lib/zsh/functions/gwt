@@ -1,8 +1,124 @@
 #!/bin/zsh
 
+#===============================================================================
+# GWT (Git Worktree) - Advanced Git Worktree Management Function
+#===============================================================================
+#
+# An opinionated `git worktree` macro tool.
+#
+# Assumes that you have 1 worktree per branch, and creates all worktrees in a default location (configurable and overrideable).
+#
+# AUTHOR: Sean DMR <sean@flyinggrizzly.net>
+# VERSION: 1.0
+# REQUIREMENTS: zsh, git, jq (for configuration management)
+#
+#===============================================================================
+# EXAMPLES:
+#===============================================================================
+#
+#   gwt -b my-branch               # Create new branch and worktree
+#   gwt cd my-branch               # Navigate to the worktree
+#   gwt -d .                       # Delete current worktree (auto-navigates to parent repo)
+#
+#===============================================================================
+# COMMANDS:
+#===============================================================================
+#
+# CREATE WORKTREE:
+#   gwt <branch>                   Create worktree for existing branch
+#   gwt -b <branch>                Create new branch and worktree
+#     Options:
+#       -p|--path <path>           Use custom path instead of default location
+#       --cd                       Change to worktree after creation
+#       --no-cd                    Don't change to worktree (overrides config)
+#
+# DELETE WORKTREE:
+#   gwt -d <branch|path>           Delete worktree (safe - checks for changes)
+#   gwt -D <branch|path>           Force delete worktree
+#     Options:
+#       --delete-branch|-db        Also delete the git branch
+#       --preserve-branch|-pb      Keep the git branch (explicit override)
+#
+# LIST WORKTREES:
+#   gwt                            List all worktrees (same as 'gwt status -m')
+#   gwt status                     List worktrees with headers
+#     Options:
+#       -m                         Include main worktree in listing
+#       --porcelain                Machine-readable output (no headers)
+#
+# NAVIGATE:
+#   gwt cd <branch>                Change to worktree directory
+#   gwt cd                         Change to main repository
+#
+# BULK OPERATIONS:
+#   gwt reset                      Delete all worktrees
+#     Options:
+#       --force                    Ignore uncommitted changes
+#       --delete-branch|-db        Also delete all branches
+#       --preserve-branch|-pb      Keep all branches (takes precedence)
+#
+# CONFIGURATION:
+#   gwt init                       Interactive configuration setup
+#   gwt --help                     Show this help message
+#
+#===============================================================================
+# CONFIGURATION:
+#===============================================================================
+#
+# Configuration file: ~/.config/gwt/settings.json
+#
+# Settings:
+#   - defaultWorktreeLocation: Base directory for worktrees
+#     Default: "$HOME/worktrees"
+#   - autoCd: Automatically change to worktree after creation
+#     Default: false
+#   - deleteBranchWithTree: Delete branch when deleting worktree
+#     Default: false
+#
+# Example configuration:
+#   {
+#     "defaultWorktreeLocation": "/home/user/dev/worktrees",
+#     "autoCd": true,
+#     "deleteBranchWithTree": false
+#   }
+#
+#===============================================================================
+# STATUS INDICATORS:
+#===============================================================================
+#
+# Worktree status values:
+#   clean     - No uncommitted changes, no unmerged commits
+#   dirty     - Has uncommitted changes
+#   unmerged  - Has commits not merged to main branch
+#
+# Worktree types (when using -m flag):
+#   main      - Primary repository worktree
+#   linked    - Additional worktrees
+#
+#===============================================================================
+# RETURN CODES:
+#===============================================================================
+#
+# 0 - Success
+# 1 - Error (various conditions detailed in error messages)
+#
+#===============================================================================
+# DEPENDENCIES:
+#===============================================================================
+#
+# Required:
+#   - git
+#   - zsh
+#
+# Optional:
+#   - jq (required for configuration management)
+#
+#===============================================================================
+
 function gwt() {
     local WORKTREE_BASE="$HOME/worktrees"
     local AUTO_CD=false
+    local DELETE_BRANCH_WITH_TREE=false
 
     # Helper function to get repository name
     _get_repo_name() {
@@ -171,15 +287,20 @@ function gwt() {
         echo "${path/#$HOME/~}"
     }
 
-    # Helper function to remove worktree and branch
+    # Helper function to remove worktree and optionally branch
     _remove_worktree_and_branch() {
         local branch="$1"
         local worktree_path="$2"
+        local also_delete_branch="$3"
 
         echo "Removing worktree for branch '$branch'"
         git worktree remove "$worktree_path" --force
-        if _branch_exists "$branch"; then
-            git branch -D "$branch"
+
+        if [[ "$also_delete_branch" == "true" && "$branch" != "" ]]; then
+            if _branch_exists "$branch"; then
+                echo "Removing branch '$branch'"
+                git branch -D "$branch"
+            fi
         fi
     }
 
@@ -189,52 +310,73 @@ function gwt() {
         if [[ -f "$settings_file" ]]; then
             local default_location=$(jq -r '.defaultWorktreeLocation // empty' "$settings_file" 2>/dev/null)
             local auto_cd_setting=$(jq -r '.autoCd // false' "$settings_file" 2>/dev/null)
-            
+            local delete_branch_setting=$(jq -r 'if has("deleteBranchWithTree") then .deleteBranchWithTree else false end' "$settings_file" 2>/dev/null)
+
             if [[ -n "$default_location" && "$default_location" != "null" ]]; then
                 WORKTREE_BASE="$default_location"
             fi
-            
+
             if [[ "$auto_cd_setting" == "true" ]]; then
                 AUTO_CD=true
             fi
+
+            if [[ "$delete_branch_setting" == "true" ]]; then
+                DELETE_BRANCH_WITH_TREE=true
+            fi
         fi
     }
-    
+
     # Helper function to save user settings
     _save_user_settings() {
         local default_location="$1"
         local auto_cd="$2"
+        local delete_branch_with_tree="$3"
         local settings_dir="$HOME/.config/gwt"
         local settings_file="$settings_dir/settings.json"
-        
+
         mkdir -p "$settings_dir"
-        
+
         jq -n \
             --arg location "$default_location" \
             --argjson autocd "$auto_cd" \
-            '{defaultWorktreeLocation: $location, autoCd: $autocd}' \
+            --argjson deletebranch "$delete_branch_with_tree" \
+            '{defaultWorktreeLocation: $location, autoCd: $autocd, deleteBranchWithTree: $deletebranch}' \
             > "$settings_file"
     }
-    
+
     # Helper function to print usage information
     _print_usage() {
-        echo "Usage:"
-        echo "  gwt <branch>                    Create worktree for existing branch"
-        echo "  gwt -b <branch>                 Create new branch and worktree"
-        echo "  gwt -p|--path <path> <branch>   Create worktree at specified path"
-        echo "  gwt [options] --cd              Change to worktree after creation"
-        echo "  gwt [options] --no-cd           Don't change to worktree (overrides auto-cd)"
-        echo "  gwt init                        Configure default settings"
-        echo "  gwt cd [<branch>]               Change to worktree (or parent if no branch)"
-        echo "  gwt status                      List all worktrees with headers"
-        echo "  gwt status -m                   Include main worktree in listing"
-        echo "  gwt status --porcelain          List without headers"
-        echo "  gwt -d <branch|path>            Delete branch and worktree (safe)"
-        echo "  gwt -D <branch|path>            Force delete branch and worktree"
-        echo "  gwt reset                       Delete all worktrees (safe)"
-        echo "  gwt reset --force               Force delete all worktrees"
-        echo "  gwt --help                      Show this help message"
-        echo "  gwt                             List all worktrees (same as 'gwt status -m')"
+        echo "GWT - Git Worktree Management Tool"
+        echo ""
+        echo "CREATE WORKTREE:"
+        echo "  gwt <branch>                   Create worktree for existing branch"
+        echo "  gwt -b <branch>                Create new branch and worktree"
+        echo "    -p|--path <path>             Use custom path"
+        echo "    --cd|--no-cd                 Control directory change behavior"
+        echo ""
+        echo "DELETE WORKTREE:"
+        echo "  gwt -d <branch|path>           Delete worktree (safe)"
+        echo "  gwt -D <branch|path>           Force delete worktree"
+        echo "    --delete-branch|-db          Also delete the git branch"
+        echo "    --preserve-branch|-pb        Keep the git branch (takes precedence)"
+        echo ""
+        echo "LIST WORKTREES:"
+        echo "  gwt                            List all worktrees (same as 'gwt status -m')"
+        echo "  gwt status                     List with headers"
+        echo "    -m                           Include main worktree"
+        echo "    --porcelain                  Machine-readable output"
+        echo ""
+        echo "NAVIGATE:"
+        echo "  gwt cd <branch>                Navigate to worktree directory"
+        echo "  gwt cd                         Navigate to main repository"
+        echo ""
+        echo "OTHER COMMANDS:"
+        echo "  gwt reset                      Delete all worktrees"
+        echo "    --force                      Ignore uncommitted changes"
+        echo "    --delete-branch|-db          Also delete all branches"
+        echo "    --preserve-branch|-pb        Keep all branches (takes precedence)"
+        echo "  gwt init                       Configure settings"
+        echo "  gwt --help                     Show this help"
     }
 
     # Helper function to get all worktrees
@@ -260,7 +402,7 @@ function gwt() {
 
     # Load user settings
     _load_user_settings
-    
+
     # Parse arguments
     local create_branch=false
     local change_dir=$AUTO_CD
@@ -269,6 +411,7 @@ function gwt() {
     local force_reset=false
     local include_main_worktree=false
     local porcelain=false
+    local delete_branch_with_tree=$DELETE_BRANCH_WITH_TREE
     local branch_name=""
     local command=""
     local custom_path=""
@@ -304,6 +447,15 @@ function gwt() {
             -D)
                 delete_branch=true
                 force_delete=true
+                shift
+                ;;
+            --delete-branch|-db)
+                delete_branch_with_tree=true
+                shift
+                ;;
+            --preserve-branch|-pb)
+                # MUST come after --delete-branch case to ensure -pb takes precedence
+                delete_branch_with_tree=false
                 shift
                 ;;
             -f|--force)
@@ -400,19 +552,19 @@ function gwt() {
             echo "GWT Configuration Setup"
             echo "======================"
             echo
-            
+
             # Prompt for default worktree location
             echo "Current default worktree location: $WORKTREE_BASE"
             echo -n "Enter new default worktree location (or press Enter to keep current): "
             read new_location
-            
+
             if [[ -z "$new_location" ]]; then
                 new_location="$WORKTREE_BASE"
             fi
-            
+
             # Expand tilde if present
             new_location="${new_location/#\~/$HOME}"
-            
+
             # Prompt for auto-cd setting
             echo
             current_autocd="false"
@@ -426,7 +578,7 @@ function gwt() {
                 echo -n "Should 'gwt <branch>' automatically cd to the new worktree? (y/N): "
             fi
             read autocd_input
-            
+
             local autocd_setting="false"
             if [[ "$AUTO_CD" == "true" ]]; then
                 if [[ ! "$autocd_input" =~ ^[Nn] ]]; then
@@ -437,14 +589,40 @@ function gwt() {
                     autocd_setting="true"
                 fi
             fi
-            
+
+            # Prompt for delete-branch-with-tree setting
+            echo
+            current_delete_branch="false"
+            if [[ "$DELETE_BRANCH_WITH_TREE" == "true" ]]; then
+                current_delete_branch="true"
+            fi
+            echo "Current delete-branch-with-tree setting: $current_delete_branch"
+            if [[ "$DELETE_BRANCH_WITH_TREE" == "true" ]]; then
+                echo -n "Should 'gwt -d' also delete the branch by default? (Y/n): "
+            else
+                echo -n "Should 'gwt -d' also delete the branch by default? (y/N): "
+            fi
+            read delete_branch_input
+
+            local delete_branch_setting="false"
+            if [[ "$DELETE_BRANCH_WITH_TREE" == "true" ]]; then
+                if [[ ! "$delete_branch_input" =~ ^[Nn] ]]; then
+                    delete_branch_setting="true"
+                fi
+            else
+                if [[ "$delete_branch_input" =~ ^[Yy] ]]; then
+                    delete_branch_setting="true"
+                fi
+            fi
+
             # Save settings
-            _save_user_settings "$new_location" "$autocd_setting"
-            
+            _save_user_settings "$new_location" "$autocd_setting" "$delete_branch_setting"
+
             echo
             echo "✓ Settings saved to ~/.config/gwt/settings.json"
             echo "  Default worktree location: $new_location"
             echo "  Auto-cd enabled: $autocd_setting"
+            echo "  Delete branch with tree: $delete_branch_setting"
             echo
             echo "Settings will take effect on next gwt command."
             return 0
@@ -473,7 +651,7 @@ function gwt() {
             for worktree in "${worktrees[@]}"; do
                 local branch="${worktree%%:*}"
                 local worktree_path="${worktree##*:}"
-                _remove_worktree_and_branch "$branch" "$worktree_path"
+                _remove_worktree_and_branch "$branch" "$worktree_path" "$delete_branch_with_tree"
             done
             return 0
             ;;
@@ -537,7 +715,7 @@ function gwt() {
             fi
         fi
 
-        _remove_worktree_and_branch "$resolved_branch" "$worktree_path"
+        _remove_worktree_and_branch "$resolved_branch" "$worktree_path" "$delete_branch_with_tree"
         return 0
     fi
 
