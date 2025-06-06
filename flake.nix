@@ -18,6 +18,11 @@
       url = "github:flyinggrizzly/tmuxinator-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    gwt = {
+      url = "github:flyinggrizzly/gwt";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -27,6 +32,7 @@
       home-manager,
       claude-nix,
       tmuxinator-nix,
+      gwt,
       ...
     }@inputs:
     let
@@ -117,6 +123,7 @@
               homeConfig
               inputs.claude-nix.homeManagerModules.default
               inputs.tmuxinator-nix.homeManagerModules.default
+              inputs.gwt.homeManagerModules.default
             ];
           };
 
