@@ -1,4 +1,4 @@
-local keymap = require'lib.utils'.keymap
+local keymap = require 'lib.utils'.keymap
 
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
@@ -67,5 +67,103 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 -- or just use <C-\><C-n> to exit terminal mode
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
+-- Markdown TODO keybindings
+vim.keymap.set('n', '<leader>dd', function()
+  if vim.bo.filetype ~= "markdown" then return end
 
--- TODO add whichkey stuff here
+  local line = vim.fn.getline('.')
+  local new_line = line:gsub("^(%s*)%-%s%[(.)%]%s?(.*)", function(indent, status, text)
+    local new_status = status == " " and "x" or " "
+    return indent .. "- [" .. new_status .. "] " .. text
+  end)
+
+  vim.fn.setline('.', new_line)
+end, { desc = 'Toggle markdown TODOs' })
+
+vim.keymap.set('v', '<leader>dd', function()
+  if vim.bo.filetype ~= "markdown" then return end
+
+  local start_line = vim.fn.line('v')
+  local end_line = vim.fn.line('.')
+  
+  if start_line > end_line then
+    start_line, end_line = end_line, start_line
+  end
+
+  for line_nr = start_line, end_line do
+    local line = vim.fn.getline(line_nr)
+    local new_line = line:gsub("^(%s*)%-%s%[(.)%]%s?(.*)", function(indent, status, text)
+      local new_status = status == " " and "x" or " "
+      return indent .. "- [" .. new_status .. "] " .. text
+    end)
+    vim.fn.setline(line_nr, new_line)
+  end
+end, { desc = 'Toggle markdown TODOs' })
+
+vim.keymap.set('n', '<leader>dx', function()
+  if vim.bo.filetype ~= "markdown" then return end
+
+  local line = vim.fn.getline('.')
+  local new_line = line:gsub("^(%s*)%-%s%[.%]%s?(.*)", function(indent, text)
+    return indent .. "- ~~" .. text .. "~~"
+  end)
+
+  vim.fn.setline('.', new_line)
+end, { desc = 'Cancel markdown TODOs' })
+
+vim.keymap.set('v', '<leader>dx', function()
+  if vim.bo.filetype ~= "markdown" then return end
+
+  local start_pos = vim.api.nvim_buf_get_mark(0, '<')
+  local end_pos = vim.api.nvim_buf_get_mark(0, '>')
+  local start_line = start_pos[1]
+  local end_line = end_pos[1]
+
+  for line_nr = start_line, end_line do
+    local line = vim.fn.getline(line_nr)
+    local new_line = line:gsub("^(%s*)%-%s%[.%]%s?(.*)", function(indent, text)
+      return indent .. "- ~~" .. text .. "~~"
+    end)
+    vim.fn.setline(line_nr, new_line)
+  end
+end, { desc = 'Cancel markdown TODOs' })
+
+vim.keymap.set('n', '<leader>dX', function()
+  if vim.bo.filetype ~= "markdown" then return end
+
+  require('snacks').input({
+    prompt = "Cancellation reason: ",
+  }, function(reason)
+    if not reason then return end
+
+    local line = vim.fn.getline('.')
+    local new_line = line:gsub("^(%s*)%-%s%[.%]%s?(.*)", function(indent, text)
+      return indent .. "- ~~" .. text .. "~~ CANCELLED: " .. reason
+    end)
+
+    vim.fn.setline('.', new_line)
+  end)
+end, { desc = 'Cancel markdown TODOs with reason' })
+
+vim.keymap.set('v', '<leader>dX', function()
+  if vim.bo.filetype ~= "markdown" then return end
+
+  require('snacks').input({
+    prompt = "Cancellation reason: ",
+  }, function(reason)
+    if not reason then return end
+
+    local start_pos = vim.api.nvim_buf_get_mark(0, '<')
+    local end_pos = vim.api.nvim_buf_get_mark(0, '>')
+    local start_line = start_pos[1]
+    local end_line = end_pos[1]
+
+    for line_nr = start_line, end_line do
+      local line = vim.fn.getline(line_nr)
+      local new_line = line:gsub("^(%s*)%-%s%[.%]%s?(.*)", function(indent, text)
+        return indent .. "- ~~" .. text .. "~~ CANCELLED: " .. reason
+      end)
+      vim.fn.setline(line_nr, new_line)
+    end
+  end)
+end, { desc = 'Cancel markdown TODOs' })
