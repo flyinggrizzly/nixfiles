@@ -56,7 +56,6 @@ in
         "/log"
         "/node_modules/"
         "/tmp"
-        "/vendor"
         "db/*.sqlite3"
         "log/*.log"
         "rerun.txt"

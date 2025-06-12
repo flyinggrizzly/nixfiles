@@ -13,6 +13,16 @@ let
     ;
   cfg = config.modules.neovim;
 
+  json-nvim = pkgs.vimUtils.buildVimPlugin {
+    name = "json-nvim";
+    src = pkgs.fetchFromGitHub {
+      owner = "VPavliashvili";
+      repo = "json-nvim";
+      rev = "beb76a5ffa0a936677695bc82cc868654aad4398";
+      sha256 = "sha256-hSkQkvL8eHGFaWqop+tF6HazpTT3kN4uVhTqhLnDUcY=";
+    };
+  };
+
   sorbet-vim = pkgs.vimUtils.buildVimPlugin {
     name = "sorbet-vim";
     src = pkgs.fetchFromGitHub {
@@ -180,6 +190,7 @@ in
           vim-rails
           vim-ruby
           sorbet-vim
+          json-nvim
 
           # Tmux integration
           vim-dispatch
