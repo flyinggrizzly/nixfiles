@@ -5,6 +5,9 @@ conform.setup({
     ruby = {},
     javascript = { "prettierd", "prettier" },
     typescript = { "prettierd", "prettier" },
+    html = { "prettierd", "prettier" },
+    css = { "prettierd", "prettier" },
+    erb = { "erb-format", "prettierd", "prettier" },
     nix = { "nixfmt" },
   },
 
