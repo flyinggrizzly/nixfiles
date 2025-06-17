@@ -30,9 +30,7 @@
       self,
       nixpkgs,
       home-manager,
-      claude-nix,
       tmuxinator-nix,
-      gwt,
       ...
     }@inputs:
     let
