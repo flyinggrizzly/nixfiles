@@ -61,7 +61,7 @@ in
         "rerun.txt"
         "tmp/**/*"
         "/tags"
-        ".claude/"
+        "/.claude/"
       ];
 
       aliases = {
