@@ -227,6 +227,7 @@ in
           typescript-language-server
           prettierd
           rubyPackages.sorbet-runtime
+          rubyPackages.erb-formatter
           nixd
           rust-analyzer
           nixfmt-rfc-style
