@@ -62,6 +62,7 @@ in
         "tmp/**/*"
         "/tags"
         "/.claude/"
+        "/.direnv/"
       ];
 
       aliases = {
