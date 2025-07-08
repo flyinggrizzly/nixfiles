@@ -1,0 +1,77 @@
+#!/usr/bin/env ruby
+
+require 'open3'
+require 'find'
+
+def check_exiftool!
+  stdout, stderr, status = Open3.capture3('which', 'exiftool')
+  unless status.success?
+    raise "exiftool is not in PATH. Please install it first."
+  end
+end
+check_exiftool!
+
+LENS_TABLE = {
+  'm:biogon28' => ["-LensModel=Zeiss ZM 28/2.8 Biogon", "-FocalLength=28"],
+}
+
+def find_images(path)
+  images = []
+  Find.find(path) do |file|
+    if file =~ /\.(jpg|jpeg|png|tiff|tif|raw|nef|cr2|arw|dng)$/i
+      images << file
+    end
+  end
+  images
+end
+
+def set_lens_exif(changes, files)
+  files.each do |file|
+    cmd = ["exiftool", "-m",  "-overwrite_original", *changes, file]
+    stdout, stderr, status = Open3.capture3(*cmd)
+
+    if status.success?
+      puts "✓ #{file}"
+    else
+      puts "✗ #{file}: #{stderr.strip}"
+    end
+  end
+end
+
+def print_lens_lookup
+  puts "\nAvailable lens IDs:"
+  LENS_TABLE.each do |id, name|
+    puts "  #{id}: #{name}"
+  end
+end
+
+if ARGV.length != 2
+  puts "Usage: #{$0} <lens-id> <path>"
+  print_lens_lookup
+  exit 1
+end
+
+lens_id = ARGV[0]
+path = ARGV[1]
+
+unless LENS_TABLE.key?(lens_id)
+  puts "Error: Unknown lens ID '#{lens_id}'"
+  print_lens_lookup
+  exit 1
+end
+
+unless File.exist?(path)
+  puts "Error: Path '#{path}' does not exist"
+  exit 1
+end
+
+changes = LENS_TABLE[lens_id]
+images = find_images(path)
+
+if images.empty?
+  puts "No image files found in #{path}"
+  exit 0
+end
+
+puts "Setting lens '#{changes}' on #{images.length} images..."
+set_lens_exif(changes, images)
