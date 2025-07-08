@@ -53,6 +53,7 @@ in
       fd
       fzf
       tree
+      exiftool
 
       # Development tools
       libyaml.dev
