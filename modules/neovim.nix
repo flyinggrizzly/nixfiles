@@ -13,6 +13,16 @@ let
     ;
   cfg = config.modules.neovim;
 
+  coder-claude-code-nvim = pkgs.vimUtils.buildVimPlugin {
+    name = "claude-code-nvim";
+    src = pkgs.fetchFromGitHub {
+      owner = "coder";
+      repo = "claudecode.nvim";
+      rev = "985b4b117ea13ec85c92830ecac8f63543dd5ead";
+      sha256 = "05hxpsgw694870gcy8d72d44irlnc4dqyg8jb9p4bhm8i8lc523g";
+    };
+  };
+
   json-nvim = pkgs.vimUtils.buildVimPlugin {
     name = "json-nvim";
     src = pkgs.fetchFromGitHub {
@@ -214,7 +224,7 @@ in
               copilot-cmp
               dressing-nvim
               nui-nvim
-              claude-code-nvim
+              coder-claude-code-nvim
             ]
           else
             [ ]
