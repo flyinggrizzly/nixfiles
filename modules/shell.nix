@@ -16,18 +16,11 @@ in
 {
   options.modules.shell = {
     zshrc = {
-      sourceExtension = mkOption {
-        type = types.nullOr types.path;
-        default = null;
-        description = "Additional ZSH config file--included at end of main zshrc";
-      };
-
       append = mkOption {
         type = types.str;
         default = "";
         description = ''
-          Additional ZSH configuration to append to zshrc. Will be appended after `sourceExtension` is
-          sourced if present.
+          Additional ZSH configuration to append to zshrc.
         '';
       };
     };
@@ -104,10 +97,6 @@ in
       };
 
       # Shell configuration
-      ".zshrc".text = finalZshrc;
-      ".zshrc.extend" = mkIf (cfg.zshrc.sourceExtension != null) {
-        source = cfg.zshrc.sourceExtension;
-      };
       ".zsh" = {
         source = ../lib/zsh;
         recursive = true;
@@ -118,7 +107,10 @@ in
     };
 
     programs = {
-      zsh.enable = true;
+      zsh = {
+        enable = true;
+        initContent = finalZshrc;
+      };
 
       direnv = {
         enable = true;
