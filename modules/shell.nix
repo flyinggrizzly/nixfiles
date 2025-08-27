@@ -3,6 +3,7 @@
   lib,
   pkgs,
   tmuxinator-nix,
+  helpers,
   ...
 }:
 let
@@ -126,10 +127,7 @@ in
 
       claude-code = {
         enable = true;
-        memory.source = ../lib/claude/CLAUDE.md;
-        commandsDir = ../lib/claude/commands;
-        forceClean = true;
-        skipBackup = true;
+        commands = helpers.claude.commandDirToTable ../lib/claude/commands;
         mcpServers = { };
       };
     };

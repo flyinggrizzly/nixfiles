@@ -9,11 +9,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    claude-nix = {
-      url = "github:flyinggrizzly/claude-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     tmuxinator-nix = {
       url = "github:flyinggrizzly/tmuxinator-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -55,8 +50,24 @@
       # Helper to create flake outputs for each system
       forAllSystems = f: nixpkgs.lib.genAttrs systems (system: f system);
 
+      # Helper functions
+      helpers = {
+        claude.commandDirToTable =
+          path:
+          let
+            files = builtins.readDir path;
+            regularFiles = nixpkgs.lib.filterAttrs (name: type: type == "regular") files;
+          in
+          nixpkgs.lib.mapAttrs' (name: _: {
+            name = nixpkgs.lib.removeSuffix ".md" name;
+            value = builtins.readFile (path + "/${name}");
+          }) regularFiles;
+      };
+
       # Library functions
       lib = {
+        inherit helpers;
+
         # Core function that creates the basic home configuration
         # This is reused by both standaloneHome and nixosHome
         prepareHome =
@@ -115,11 +126,10 @@
             specialArgs = {
               # This is passed to the home-manager module through extraSpecialArgs for both nixos and
               # standalone cases, so that we can access the lib.constants data in our config
-              inherit tmuxinator-nix;
+              inherit tmuxinator-nix helpers;
             };
             hmModules = [
               homeConfig
-              inputs.claude-nix.homeManagerModules.default
               inputs.tmuxinator-nix.homeManagerModules.default
               inputs.gwt.homeManagerModules.default
             ];
@@ -160,7 +170,7 @@
       };
     in
     {
-      inherit lib home-manager;
+      inherit lib home-manager helpers;
 
       templates = {
         standalone = {
