@@ -4,6 +4,10 @@ This is Iteration #ARGUMENT. If #ARGUMENT is not provided, this is Iteration 1.
 
 Plan and prepare to peform the task described in `task_v${Iteration}.md`, and record your plan in `plan_v${Iteration}.md`
 
+Assume that another AI agent, equally careful and conscientious, but who is focused on following precise instructions
+will be executing on your plan, and write it so that both a human and the agent can follow it clearly. Steps like
+testing should be built around the same tools you have access to, and require as little human input as possible.
+
 Consider edge cases, and plan for verification in a red/green approach (e.g. you should first verify that your
 verification plan produces a failing result before you take any action).
 
