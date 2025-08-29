@@ -8,7 +8,7 @@ snacks.setup({
       input = {
         keys = {
           ["y"] = "explorer_yank",
-          ["<C-y>"] = { "explorer_yank", mode = { "n", "i"} },
+          ["<C-y>"] = { "explorer_yank", mode = { "n", "i" } },
         },
       },
     },
@@ -60,6 +60,32 @@ mapn('<leader>gd', snacks.picker.git_diff, '[G]it [D]iff')
 mapn('<leader>gg', snacks.lazygit.open, 'Lazy [G]it')
 mapn('<leader>gH', snacks.gitbrowse.open, 'Open in [G]it[H]ub')
 
--- Diagnostic mappings
 mapn('<leader>sd', snacks.picker.diagnostics_buffer, '[S]earch [D]ocument diagnostics')
 mapn('<leader>sD', snacks.picker.diagnostics, '[S]earch workspace [D]iagnostics')
+
+vim.keymap.set({ 'n', 'i' }, '<C-m>', function()
+  local buf = vim.api.nvim_get_current_buf()
+  local cursor_pos = vim.api.nvim_win_get_cursor(0)
+
+  snacks.picker.files({
+    actions = {
+      insert_path = function(picker, item)
+        picker:action("explorer_yank")
+        picker:close()
+
+        vim.api.nvim_set_current_buf(buf)
+        vim.api.nvim_win_set_cursor(0, cursor_pos)
+
+        local filepath = vim.fn.getreg('"'):gsub("^%s*(.-)%s*$", "%1")
+        vim.api.nvim_feedkeys('i' .. filepath, 'n', false)
+      end
+    },
+    win = {
+      input = {
+        keys = {
+          ["<cr>"] = { "insert_path", mode = { "n", "i" } },
+        },
+      },
+    },
+  })
+end, { desc = 'Open file picker to insert path at cursor' })
