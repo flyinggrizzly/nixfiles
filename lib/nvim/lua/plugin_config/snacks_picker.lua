@@ -2,7 +2,17 @@ local snacks = require('snacks')
 local colors = require('dracula').colors()
 
 snacks.setup({
-  picker = { enabled = true, },
+  picker = {
+    enabled = true,
+    win = {
+      input = {
+        keys = {
+          ["y"] = "explorer_yank",
+          ["<C-y>"] = { "explorer_yank", mode = { "n", "i"} },
+        },
+      },
+    },
+  },
   explorer = { enabled = true },
 
   bigfile = { enabled = false },
