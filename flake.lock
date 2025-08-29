@@ -26,11 +26,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1756387591,
-        "narHash": "sha256-bg7xGcnN6zOOmJz9WZwS35JzSjh02nton5JaNSxMW24=",
+        "lastModified": 1756463377,
+        "narHash": "sha256-CiBrLmUaIpRhn9ZoURW9qnjZnvVILKmUOiPRL+OjMW4=",
         "owner": "flyinggrizzly",
         "repo": "gwt",
-        "rev": "8e5b724332a28e4064763177b6c765daa9d19dfe",
+        "rev": "556be3160b693969f60b8318c1d489e62d4dff1b",
         "type": "github"
       },
       "original": {
