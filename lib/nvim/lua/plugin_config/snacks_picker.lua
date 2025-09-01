@@ -63,7 +63,7 @@ mapn('<leader>gH', snacks.gitbrowse.open, 'Open in [G]it[H]ub')
 mapn('<leader>sd', snacks.picker.diagnostics_buffer, '[S]earch [D]ocument diagnostics')
 mapn('<leader>sD', snacks.picker.diagnostics, '[S]earch workspace [D]iagnostics')
 
-vim.keymap.set({ 'n', 'i' }, '<C-m>', function()
+vim.keymap.set({ 'n', 'i' }, '<C-f>', function()
   local buf = vim.api.nvim_get_current_buf()
   local cursor_pos = vim.api.nvim_win_get_cursor(0)
 
