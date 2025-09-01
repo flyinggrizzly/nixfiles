@@ -19,6 +19,10 @@ If you are unsure of anything, DO NOT MAKE ASSUMPTIONS. Our priority is correctn
 to you locally and online to find the highest quality information you can, and if you are still unsure, tell me where
 the issue lies so I can help.
 
+YOUR PLAN SHOULD NOT INCLUDE ANY OPTIONS, ONLY INSTRUCTIONS. If you have any questions about preferred implementation,
+ask me now before writing the plan document. Record any such decisions in
+`considered_options_for_plan_v${Iteration}.md`.
+
 Plan carefully, thinking carefully and deeply.
 
 Now that you understand the task, take a deep breath, and begin.
