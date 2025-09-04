@@ -20,6 +20,10 @@ Include helpful context notes about your reasoning, including references to file
 etc. Someone should be able to look at your plan and execute it with all the necessary resources contained in the single
 plan document.
 
+If testing is required, require red/green tdd testing patterns. Mocks should not be used.
+
+IT IS CRITICAL THAT THE PLAN INCLUDE A CHECKLIST, AND INSTRUCTIONS TO USE IT.
+
 If you are unsure of anything, DO NOT MAKE ASSUMPTIONS. Our priority is correctness, not speed. Use resources available
 to you locally and online to find the highest quality information you can, and if you are still unsure, tell me where
 the issue lies so I can help.
