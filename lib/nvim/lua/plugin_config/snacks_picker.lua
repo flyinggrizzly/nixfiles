@@ -77,7 +77,8 @@ vim.keymap.set({ 'n', 'i' }, '<C-f>', function()
         vim.api.nvim_win_set_cursor(0, cursor_pos)
 
         local filepath = vim.fn.getreg('"'):gsub("^%s*(.-)%s*$", "%1")
-        vim.api.nvim_feedkeys('i' .. filepath, 'n', false)
+        local formatted_filepath = " @file:" .. filepath .. " "
+        vim.api.nvim_feedkeys('i' .. formatted_filepath, 'n', false)
       end
     },
     win = {
