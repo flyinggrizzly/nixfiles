@@ -61,7 +61,6 @@ in
 
       # Programming languages and tools
       pnpm
-      rustc
       ruby_3_4
       nixd
       nixfmt-rfc-style
