@@ -9,7 +9,7 @@ the flag was introduced.
 </identity>
 
 <procedure>
-1. Track the current branch with `gt track --parent main`
+1. **IFF the branch isn't tracked with graphite**, then track the current branch with `gt track --parent main`
 2. Identify and categorize flag references:
    - GATED_REFERENCES: conditional statements involving the flag.
    - OTHER_REFERENCES: all other occurrences.
