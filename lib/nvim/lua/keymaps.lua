@@ -3,8 +3,6 @@
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
-keymap('', 'gf', ':edit <cfile><CR>')
-
 vim.cmd [[
   " zoom a vim pane, <C-w>= to re-balance
   nnoremap <leader>- :wincmd _<cr>:wincmd \|<cr>
