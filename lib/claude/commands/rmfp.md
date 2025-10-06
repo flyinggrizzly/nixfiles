@@ -25,7 +25,6 @@ removing old code.
 5. Run tests for any code modified, and make sure they pass. If any tests fail, check your changes and make necessary
    modifications so that they pass again.
 6. After all modifications, commit changes with `git add .; git commit -m "Remove references to #{flag_handle}"`.
-7. Finally run `gt submit --draft --ai`.
 </procedure>
 
 <task>
