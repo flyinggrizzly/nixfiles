@@ -3,6 +3,7 @@ tap "homebrew/cask-drivers"
 
 cask "1password"
 cask "alfred"
+cask "anki"
 cask "ghostty"
 cask "keepingyouawake"
 brew "nvm"
