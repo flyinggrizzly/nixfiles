@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# Parse the direction parameter (default: right)
+direction="${1:-right}"
+
+case "$direction" in
+    left|l)
+        # Split to the left (create new pane, then swap)
+        tmux split-window -h -c "#{pane_current_path}" -b
+        ;;
+    right|r)
+        # Split to the right (default)
+        tmux split-window -h -c "#{pane_current_path}"
+        ;;
+    up|u|top|t)
+        # Split above
+        tmux split-window -v -c "#{pane_current_path}" -b
+        ;;
+    down|d|b|below)
+        # Split below
+        tmux split-window -v -c "#{pane_current_path}"
+        ;;
+    *)
+        echo "Usage: $0 [left|l|right|r|up|u|top|t|down|d|b|below]"
+        echo "  left/l         - Split to the left"
+        echo "  right/r        - Split to the right (default)"
+        echo "  up/u/top/t     - Split above"
+        echo "  down/d/below/b - Split below"
+        exit 1
+        ;;
+esac
