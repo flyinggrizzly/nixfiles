@@ -57,6 +57,8 @@ wiggum() {
             cat "$prompt_file"
             cat <<EOF
 
+ONLY WORK ON A SINGLE TASK.
+
 ## Iteration context
 
 This prompt is iteration number $iteration.
@@ -92,7 +94,11 @@ If wiggum_log.json doesn't exist, create it. It should be a JSON file containing
 ]
 \`\`\`
 
+ONLY WORK ON A SINGLE TASK.
+
 If there is no further work to do, output exactly WIGGUM:OVER
+
+ONLY WORK ON A SINGLE TASK.
 EOF
         } | claude -p \
             --dangerously-skip-permissions \
