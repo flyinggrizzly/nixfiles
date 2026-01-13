@@ -63,6 +63,7 @@ This prompt is iteration number $iteration.
 
 After you have completed the task, append an entry to wiggum_log.json with:
 
+- a timestamp in ISO 8601 format
 - a summary of what was done
 - a list of actions taken
 - a list of all commands run
@@ -75,6 +76,7 @@ If wiggum_log.json doesn't exist, create it. It should be a JSON file containing
 [
   {
     "iteration": 1,
+    "timestamp": "2024-01-15T14:30:00Z",
     "success": true,
     "summary": "CSS added to style header",
     "steps_taken": [
