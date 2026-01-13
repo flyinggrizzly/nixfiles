@@ -63,38 +63,15 @@ ONLY WORK ON A SINGLE TASK.
 
 This prompt is iteration number $iteration.
 
-After you have completed the task, append an entry to wiggum_log.json with:
-
-- a summary of what was done
-- a list of actions taken
-- a list of all commands run
-- errors or issues encountered
-- success or failure
-
-If wiggum_log.json doesn't exist, create it. It should be a JSON file containing an array of objects:
+After you have completed the task, output a log entry as JSON on a single line prefixed with WIGGUM_LOG:
 
 \`\`\`
-[
-  {
-    "iteration": 1,
-    "success": true,
-    "summary": "CSS added to style header",
-    "steps_taken": [
-      "decided to name CSS file foo.css",
-      "created CSS file"
-    ],
-    "commands_run": [
-      "touch ./foo.css",
-    ],
-    "issues_encountered": [],
-  },
-  ...
-]
+WIGGUM_LOG:{"success":true,"summary":"CSS added to style header","steps_taken":["decided to name CSS file foo.css","created CSS file"],"commands_run":["touch ./foo.css"],"issues_encountered":[]}
 \`\`\`
 
 ONLY WORK ON A SINGLE TASK.
 
-If there is no further work to do, output exactly WIGGUM:OVER
+If there is no further work to do, output exactly WIGGUM:OVER instead of a log entry.
 
 ONLY WORK ON A SINGLE TASK.
 EOF
@@ -109,14 +86,19 @@ EOF
             break
         fi
 
-        if [[ -f "wiggum_log.json" ]] && [[ $(jq '.[-1] | has("timestamp") | not' wiggum_log.json) == "true" ]]; then
+        local log_json=$(echo "$output" | grep -oE 'WIGGUM_LOG:\{[^}]+\}' | head -1 | sed 's/WIGGUM_LOG://' | sed 's/\\"/"/g')
+        if [[ -n "$log_json" ]]; then
             local ts=$(date -Iseconds)
-            jq --arg ts "$ts" '.[-1].timestamp = $ts' wiggum_log.json > wiggum_log.json.tmp && mv wiggum_log.json.tmp wiggum_log.json
-        fi
+            local entry=$(echo "$log_json" | jq --arg ts "$ts" --argjson iter "$iteration" '. + {timestamp: $ts, iteration: $iter}')
 
-        if [[ -f "wiggum_log.json" ]]; then
+            if [[ -f "wiggum_log.json" ]]; then
+                jq --argjson entry "$entry" '. += [$entry]' wiggum_log.json > wiggum_log.json.tmp && mv wiggum_log.json.tmp wiggum_log.json
+            else
+                echo "[$entry]" | jq '.' > wiggum_log.json
+            fi
+
             echo -e "\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            jq ".[] | select(.iteration == $iteration)" wiggum_log.json
+            echo "$entry" | jq '.'
             echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
         fi
 
