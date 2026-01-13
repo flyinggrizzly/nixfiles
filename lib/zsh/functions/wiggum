@@ -65,7 +65,6 @@ This prompt is iteration number $iteration.
 
 After you have completed the task, append an entry to wiggum_log.json with:
 
-- a timestamp in ISO 8601 format
 - a summary of what was done
 - a list of actions taken
 - a list of all commands run
@@ -78,7 +77,6 @@ If wiggum_log.json doesn't exist, create it. It should be a JSON file containing
 [
   {
     "iteration": 1,
-    "timestamp": "2024-01-15T14:30:00Z",
     "success": true,
     "summary": "CSS added to style header",
     "steps_taken": [
@@ -109,6 +107,11 @@ EOF
         if [[ "$output" == *"WIGGUM:OVER"* ]]; then
             echo "Work complete (WIGGUM:OVER)"
             break
+        fi
+
+        if [[ -f "wiggum_log.json" ]] && [[ $(jq '.[-1] | has("timestamp") | not' wiggum_log.json) == "true" ]]; then
+            local ts=$(date -Iseconds)
+            jq --arg ts "$ts" '.[-1].timestamp = $ts' wiggum_log.json > wiggum_log.json.tmp && mv wiggum_log.json.tmp wiggum_log.json
         fi
 
         if [[ -f "wiggum_log.json" ]]; then
