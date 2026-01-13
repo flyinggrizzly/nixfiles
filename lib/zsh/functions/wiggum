@@ -1,0 +1,114 @@
+wiggum() {
+    local prompt_file max_iterations iteration current_branch custom_prompt no_git model
+
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            -p|--prompt)
+                custom_prompt="$2"
+                shift 2
+                ;;
+            --no-git)
+                no_git=1
+                shift
+                ;;
+            -i|--iterations)
+                max_iterations="$2"
+                shift 2
+                ;;
+            -m|--model)
+                model="$2"
+                shift 2
+                ;;
+            *)
+                shift
+                ;;
+        esac
+    done
+
+    max_iterations="${max_iterations:-0}"
+    prompt_file="${custom_prompt:-PROMPT.md}"
+
+    iteration=0
+    current_branch=$(git branch --show-current)
+
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "Prompt: $prompt_file"
+    echo "Model:  ${model:-opus}"
+    echo "Branch: $current_branch"
+    [[ $max_iterations -gt 0 ]] && echo "Max:    $max_iterations iterations" || echo "Max:    unlimited"
+    [[ -z "$no_git" ]] && echo "Commit: true" || echo "Commit: false"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+    if [[ ! -f "$prompt_file" ]]; then
+        echo "Error: $prompt_file not found"
+        return 1
+    fi
+
+    while true; do
+        iteration=$((iteration + 1))
+        echo -e "\n======================== LOOP $iteration ========================\n"
+
+        if [[ $max_iterations -gt 0 ]] && [[ $iteration -gt $max_iterations ]]; then
+            echo "Reached max iterations: $max_iterations"
+            break
+        fi
+
+        local output=$({
+            cat "$prompt_file"
+            cat <<EOF
+
+## Iteration context
+
+This prompt is iteration number $iteration.
+
+After you have completed the task, append an entry to wiggum_log.json with:
+
+- a summary of what was done
+- a list of actions taken
+- a list of all commands run
+- errors or issues encountered
+- success or failure
+
+If wiggum_log.json doesn't exist, create it. It should be a JSON file containing an array of objects:
+
+\`\`\`
+[
+  {
+    "iteration": 1,
+    "success": true,
+    "summary": "CSS added to style header",
+    "steps_taken": [
+      "decided to name CSS file foo.css",
+      "created CSS file"
+    ],
+    "commands_run": [
+      "touch ./foo.css",
+    ],
+    "issues_encountered": [],
+  },
+  ...
+]
+\`\`\`
+
+If there is no further work to do, output exactly WIGGUM:OVER
+EOF
+        } | claude -p \
+            --dangerously-skip-permissions \
+            --output-format=stream-json \
+            --model "${model:-opus}" \
+            --verbose)
+
+        if [[ "$output" == *"WIGGUM:OVER"* ]]; then
+            echo "Work complete (WIGGUM:OVER)"
+            break
+        fi
+
+        if [[ -f "wiggum_log.json" ]]; then
+            echo -e "\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            jq ".[] | select(.iteration == $iteration)" wiggum_log.json
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        fi
+
+        [[ -z "$no_git" ]] && git commit -am "Wiggum iteration $iteration"
+    done
+}
