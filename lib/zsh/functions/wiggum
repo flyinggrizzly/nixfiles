@@ -88,17 +88,15 @@ UNDER NO CIRCUMESTANCES SHOULD YOU MODIFY, DELETE, etc FILES LIKE:
 
 This prompt is iteration number $iteration.
 
-After you have completed the task, output a log entry as JSON on a single line prefixed with WIGGUM_LOG:
-
-\`\`\`
-WIGGUM_LOG:{"success":true,"summary":"CSS added to style header","steps_taken":["decided to name CSS file foo.css","created CSS file"],"commands_run":["touch ./foo.css"],"issues_encountered":[]}
-\`\`\`
-
 ONLY WORK ON A SINGLE TASK.
 
-If there is no further work to do, output exactly WIGGUM:OVER instead of a log entry.
+## Response format
 
-ONLY WORK ON A SINGLE TASK.
+Your final line of output MUST be raw JSON (not wrapped in markdown) in this exact format:
+
+{"done":false,"success":true,"summary":"CSS added to style header","steps_taken":["decided to name CSS file foo.css","created CSS file"],"commands_run":["touch ./foo.css"],"issues_encountered":[]}
+
+Set "done":true when there is no further work to do. Set "done":false if more iterations are needed.
 EOF
         } | claude -p \
             --dangerously-skip-permissions \
@@ -107,42 +105,47 @@ EOF
         local end_time=$(date -Iseconds)
 
         local result_text=$(echo "$output" | jq -r '.result // empty')
+        local json_line=$(echo "$result_text" | grep '^{' | tail -1)
+        local log_json=$(echo "$json_line" | jq -c '.' 2>/dev/null)
 
-        if [[ "$result_text" == *"WIGGUM:OVER"* ]]; then
-            echo "Work complete (WIGGUM:OVER)"
+        if [[ -z "$log_json" ]]; then
+            echo "Warning: Failed to parse log JSON"
+            echo "Last JSON-like line: $json_line"
+            continue
+        fi
+
+        if [[ $(echo "$log_json" | jq -r '.done') == "true" ]]; then
+            echo "Work complete (done:true)"
             break
         fi
-        local log_json=$(echo "$result_text" | grep -oE 'WIGGUM_LOG:\{[^}]+\}' | head -1 | sed 's/WIGGUM_LOG://')
         local input_tokens=$(echo "$output" | jq -r '.usage.input_tokens // 0')
         local output_tokens=$(echo "$output" | jq -r '.usage.output_tokens // 0')
         local start_epoch=$(date -j -f "%Y-%m-%dT%H:%M:%S" "${start_time%[-+]*}" "+%s" 2>/dev/null)
         local end_epoch=$(date -j -f "%Y-%m-%dT%H:%M:%S" "${end_time%[-+]*}" "+%s" 2>/dev/null)
         local duration_secs=$((end_epoch - start_epoch))
 
-        if [[ -n "$log_json" ]]; then
-            local entry=$(echo "$log_json" | jq \
-                --arg start "$start_time" \
-                --arg end "$end_time" \
-                --argjson iter "$iteration" \
-                --argjson input "${input_tokens:-0}" \
-                --argjson output "${output_tokens:-0}" \
-                --argjson duration "$duration_secs" \
-                '. + {iteration: $iter, start_time: $start, end_time: $end, duration_secs: $duration, input_tokens: $input, output_tokens: $output}')
+        local entry=$(echo "$log_json" | jq \
+            --arg start "$start_time" \
+            --arg end "$end_time" \
+            --argjson iter "$iteration" \
+            --argjson input "${input_tokens:-0}" \
+            --argjson output "${output_tokens:-0}" \
+            --argjson duration "$duration_secs" \
+            '. + {iteration: $iter, start_time: $start, end_time: $end, duration_secs: $duration, input_tokens: $input, output_tokens: $output}')
 
-            if [[ -f "wiggum_log.json" ]]; then
-                jq --argjson entry "$entry" '. += [$entry]' wiggum_log.json > wiggum_log.json.tmp && mv wiggum_log.json.tmp wiggum_log.json
-            else
-                echo "[$entry]" | jq '.' > wiggum_log.json
-            fi
-
-            echo -e "\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            echo "$entry" | jq -r '"Success:  \(.success)\nSummary:  \(.summary)\nSteps:    \(.steps_taken | join(", "))\nCommands: \(.commands_run | join(", "))\nIssues:   \(.issues_encountered | if length == 0 then "none" else join(", ") end)\nDuration: \(.duration_secs)s\nTokens:   \(.input_tokens) in / \(.output_tokens) out"'
-            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-
-            total_duration=$((total_duration + duration_secs))
-            total_input_tokens=$((total_input_tokens + input_tokens))
-            total_output_tokens=$((total_output_tokens + output_tokens))
+        if [[ -f "wiggum_log.json" ]]; then
+            jq --argjson entry "$entry" '. += [$entry]' wiggum_log.json > wiggum_log.json.tmp && mv wiggum_log.json.tmp wiggum_log.json
+        else
+            echo "[$entry]" | jq '.' > wiggum_log.json
         fi
+
+        echo -e "\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        echo "$entry" | jq -r '"Success:  \(.success)\nSummary:  \(.summary)\nSteps:    \(.steps_taken | join(", "))\nCommands: \(.commands_run | join(", "))\nIssues:   \(.issues_encountered | if length == 0 then "none" else join(", ") end)\nDuration: \(.duration_secs)s\nTokens:   \(.input_tokens) in / \(.output_tokens) out"'
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+        total_duration=$((total_duration + duration_secs))
+        total_input_tokens=$((total_input_tokens + input_tokens))
+        total_output_tokens=$((total_output_tokens + output_tokens))
 
         [[ -z "$no_git" ]] && git commit -am "Wiggum iteration $iteration"
     done
