@@ -71,6 +71,19 @@ wiggum() {
 
 ONLY WORK ON A SINGLE TASK.
 
+## Git rules
+
+DO NOT RUN ANY GIT COMMANDS. Wiggum handles commits automatically after each iteration.
+
+If your instructions mention git operations, IGNORE THEM - wiggum manages version control.
+
+## Files rules
+
+UNDER NO CIRCUMESTANCES SHOULD YOU MODIFY, DELETE, etc FILES LIKE:
+
+- untracked markdown files, especially not ones named PROMPT.md
+- wiggum_log.json
+
 ## Iteration context
 
 This prompt is iteration number $iteration.
