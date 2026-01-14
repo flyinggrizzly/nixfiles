@@ -44,6 +44,10 @@ wiggum() {
         return 1
     fi
 
+    local total_duration=0
+    local total_input_tokens=0
+    local total_output_tokens=0
+
     while true; do
         iteration=$((iteration + 1))
         echo -e "\n======================== LOOP $iteration ========================\n"
@@ -82,12 +86,12 @@ EOF
             --model "${model:-opus}")
         local end_time=$(date -Iseconds)
 
-        if [[ "$output" == *"WIGGUM:OVER"* ]]; then
+        local result_text=$(echo "$output" | jq -r '.result // empty')
+
+        if [[ "$result_text" == *"WIGGUM:OVER"* ]]; then
             echo "Work complete (WIGGUM:OVER)"
             break
         fi
-
-        local result_text=$(echo "$output" | jq -r '.result // empty')
         local log_json=$(echo "$result_text" | grep -oE 'WIGGUM_LOG:\{[^}]+\}' | head -1 | sed 's/WIGGUM_LOG://')
         local input_tokens=$(echo "$output" | jq -r '.usage.input_tokens // 0')
         local output_tokens=$(echo "$output" | jq -r '.usage.output_tokens // 0')
@@ -114,8 +118,20 @@ EOF
             echo -e "\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
             echo "$entry" | jq -r '"Success:  \(.success)\nSummary:  \(.summary)\nSteps:    \(.steps_taken | join(", "))\nCommands: \(.commands_run | join(", "))\nIssues:   \(.issues_encountered | if length == 0 then "none" else join(", ") end)\nDuration: \(.duration_secs)s\nTokens:   \(.input_tokens) in / \(.output_tokens) out"'
             echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+            total_duration=$((total_duration + duration_secs))
+            total_input_tokens=$((total_input_tokens + input_tokens))
+            total_output_tokens=$((total_output_tokens + output_tokens))
         fi
 
         [[ -z "$no_git" ]] && git commit -am "Wiggum iteration $iteration"
     done
+
+    echo -e "\n════════════════════════════════════════"
+    echo "TOTALS"
+    echo "════════════════════════════════════════"
+    echo "Iterations: $((iteration - 1))"
+    echo "Duration:   ${total_duration}s"
+    echo "Tokens:     ${total_input_tokens} in / ${total_output_tokens} out"
+    echo "════════════════════════════════════════"
 }
