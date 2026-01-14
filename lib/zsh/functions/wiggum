@@ -7,7 +7,7 @@ wiggum() {
                 custom_prompt="$2"
                 shift 2
                 ;;
-            --no-git)
+            --no-commit|--no-git)
                 no_git=1
                 shift
                 ;;
@@ -19,8 +19,15 @@ wiggum() {
                 model="$2"
                 shift 2
                 ;;
+            -*)
+                echo "Error: Unknown option '$1'"
+                echo "Usage: wiggum [-p|--prompt <file>] [-i|--iterations <n>] [-m|--model <model>] [--no-commit]"
+                return 1
+                ;;
             *)
-                shift
+                echo "Error: Unexpected argument '$1'"
+                echo "Usage: wiggum [-p|--prompt <file>] [-i|--iterations <n>] [-m|--model <model>] [--no-commit]"
+                return 1
                 ;;
         esac
     done
