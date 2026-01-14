@@ -53,6 +53,7 @@ wiggum() {
             break
         fi
 
+        local start_time=$(date -Iseconds)
         local output=$({
             cat "$prompt_file"
             cat <<EOF
@@ -77,19 +78,32 @@ ONLY WORK ON A SINGLE TASK.
 EOF
         } | claude -p \
             --dangerously-skip-permissions \
-            --output-format=stream-json \
-            --model "${model:-opus}" \
-            --verbose)
+            --output-format=json \
+            --model "${model:-opus}")
+        local end_time=$(date -Iseconds)
 
         if [[ "$output" == *"WIGGUM:OVER"* ]]; then
             echo "Work complete (WIGGUM:OVER)"
             break
         fi
 
-        local log_json=$(echo "$output" | grep -oE 'WIGGUM_LOG:\{[^}]+\}' | head -1 | sed 's/WIGGUM_LOG://' | sed 's/\\"/"/g')
+        local result_text=$(echo "$output" | jq -r '.result // empty')
+        local log_json=$(echo "$result_text" | grep -oE 'WIGGUM_LOG:\{[^}]+\}' | head -1 | sed 's/WIGGUM_LOG://')
+        local input_tokens=$(echo "$output" | jq -r '.usage.input_tokens // 0')
+        local output_tokens=$(echo "$output" | jq -r '.usage.output_tokens // 0')
+        local start_epoch=$(date -j -f "%Y-%m-%dT%H:%M:%S" "${start_time%[-+]*}" "+%s" 2>/dev/null)
+        local end_epoch=$(date -j -f "%Y-%m-%dT%H:%M:%S" "${end_time%[-+]*}" "+%s" 2>/dev/null)
+        local duration_secs=$((end_epoch - start_epoch))
+
         if [[ -n "$log_json" ]]; then
-            local ts=$(date -Iseconds)
-            local entry=$(echo "$log_json" | jq --arg ts "$ts" --argjson iter "$iteration" '. + {timestamp: $ts, iteration: $iter}')
+            local entry=$(echo "$log_json" | jq \
+                --arg start "$start_time" \
+                --arg end "$end_time" \
+                --argjson iter "$iteration" \
+                --argjson input "${input_tokens:-0}" \
+                --argjson output "${output_tokens:-0}" \
+                --argjson duration "$duration_secs" \
+                '. + {iteration: $iter, start_time: $start, end_time: $end, duration_secs: $duration, input_tokens: $input, output_tokens: $output}')
 
             if [[ -f "wiggum_log.json" ]]; then
                 jq --argjson entry "$entry" '. += [$entry]' wiggum_log.json > wiggum_log.json.tmp && mv wiggum_log.json.tmp wiggum_log.json
@@ -98,7 +112,7 @@ EOF
             fi
 
             echo -e "\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            echo "$entry" | jq '.'
+            echo "$entry" | jq -r '"Success:  \(.success)\nSummary:  \(.summary)\nSteps:    \(.steps_taken | join(", "))\nCommands: \(.commands_run | join(", "))\nIssues:   \(.issues_encountered | if length == 0 then "none" else join(", ") end)\nDuration: \(.duration_secs)s\nTokens:   \(.input_tokens) in / \(.output_tokens) out"'
             echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
         fi
 
