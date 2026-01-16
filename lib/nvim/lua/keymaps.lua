@@ -165,5 +165,3 @@ vim.keymap.set('v', '<leader>dX', function()
     end
   end)
 end, { desc = 'Cancel markdown TODOs' })
-
-vim.keymap.set('n', '<leader>tm', '<cmd>TableModeToggle<cr>', { desc = 'Toggle [T]able [M]ode' })

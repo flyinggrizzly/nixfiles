@@ -190,7 +190,6 @@ in
           tmux-complete-vim
           tslime-vim
           yescapsquit-vim
-          vim-table-mode
 
           # Languages
           emmet-vim
