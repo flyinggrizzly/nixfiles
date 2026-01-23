@@ -5,11 +5,20 @@ require 'json'
 require 'optparse'
 require 'open3'
 
+BASE_COMMAND = "ralph"
+LOOP_COMMAND = "loop"
+NEXT_COMMAND = "next-task"
+UPDATE_COMMAND = "update-task"
+HELP_COMMAND = "help"
+
+
 def parsed_loop_options
   options = {
     "model" => "opus",
     "completion_promise" => "ALLDONE",
     "max_iterations" => 100,
+    "file" => 'ralph-tasks.json',
+    "open_status" => 'open',
   }
 
   OptionParser.new do |opts|
@@ -17,6 +26,8 @@ def parsed_loop_options
     opts.on('--completion-promise COMPLETION_PROMISE', 'completion promise') { |it| options["completion_promise"] = it }
     opts.on('--max-iterations MAX_ITERATIONS', 'maximum iterations') { |it| options["max_iterations"] = it.to_i }
     opts.on('--model MODEL', 'model to use') { |it| options["model"] = it }
+    opts.on('--file FILE', 'task file') { |it| options["file"] = it }
+    opts.on('--open-status STATUS', 'status indicating open task') { |it| options["open_status"] = it }
   end.parse!
 
   options
@@ -53,15 +64,24 @@ def parsed_update_options
 end
 
 class Loop
-  def initialize(prompt:, completion_promise:, max_iterations:, model:)
+  def initialize(
+    prompt:, 
+    completion_promise:, 
+    max_iterations:, 
+    model:,
+    file:,
+    open_status:
+  )
     @prompt_file = prompt
     @completion_promise = completion_promise
     @max_iterations = max_iterations
     @model = model
     @iteration = 0
+    @task_file = file
+    @open_status = open_status
   end
 
-  attr_reader :completion_promise, :max_iterations, :iteration, :model, :prompt_file
+  attr_reader :completion_promise, :max_iterations, :iteration, :model, :prompt_file, :task_file, :open_status
 
   def run!
     puts <<~START
@@ -105,12 +125,25 @@ class Loop
     <<~PROMPT
       #{prompt_file}
 
-     ## Tool reference
+      ## How to get the next task
 
-     - `./ralph help` prints usage
-     - `./ralph next-task` - returns JSON of the task to work on.
-       - If it returns `'{ "_no_remaining_tasks": true }'`, that means no tasks remain to work on. Immediately exit
-     - `./ralph update-task` - updates the status and data on a task. Use it to update tasks after you have attempted them.
+      When instructed to "get the next task" or something like that, you should run:
+
+      `#{BASE_COMMAND} #{NEXT_COMMAND} --file #{task_file} --open-status #{open_status}`
+
+      It will either return you a JSON object representing the next task to work on, or `'{ "_no_remaining_tasks": true }'` if there are no remaining tasks.
+
+      If you receive `'{ "_no_remaining_tasks": true }'`, output exactly #{completion_promise} and exit immediately.
+
+      ## How to update a task
+
+      When instructed to "update the task" or something like that, you should run:
+
+      `#{BASE_COMMAND} #{UPDATE_COMMAND} --id <task_id> --status <new_status> --comment "<comments in quotes>" [--pull-request <pull_request>] --file #{task_file}`
+
+      ## Tooling help
+
+      Running `#{BASE_COMMAND} #{HELP_COMMAND}` prints all available commands.
     PROMPT
   end
 end
@@ -166,11 +199,6 @@ class UpdateTask
   end
 end
 
-LOOP_COMMAND = "loop"
-NEXT_COMMAND = "next-task"
-UPDATE_COMMAND = "update-task"
-HELP_COMMAND = "help"
-
 command = ARGV.shift
 
 case command
@@ -182,6 +210,8 @@ when LOOP_COMMAND
     completion_promise: loop_options.fetch("completion_promise"),
     max_iterations: loop_options.fetch("max_iterations"),
     model: loop_options.fetch("model"),
+    file: loop_options.fetch("file"),
+    open_status: loop_options.fetch("open_status"),
   ).run!
 when NEXT_COMMAND
   next_options = parsed_next_options
