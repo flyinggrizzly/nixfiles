@@ -18,6 +18,11 @@
       url = "github:flyinggrizzly/gwt";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    wiggum-nix = {
+      url = "github:flyinggrizzly/wiggum-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -132,6 +137,7 @@
               homeConfig
               inputs.tmuxinator-nix.homeManagerModules.default
               inputs.gwt.homeManagerModules.default
+              inputs.wiggum-nix.homeManagerModules.default
             ];
           };
 
