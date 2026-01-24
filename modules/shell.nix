@@ -64,7 +64,6 @@ in
       ruby_3_4
       nixd
       nixfmt-rfc-style
-      opencode
 
       # Fonts
       powerline-fonts
