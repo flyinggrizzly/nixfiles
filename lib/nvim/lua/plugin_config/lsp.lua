@@ -300,10 +300,11 @@ vim.api.nvim_create_autocmd('LspAttach', {
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
 
-local lsp = require('lspconfig')
+local lsp_config = vim.lsp.config
+local lsp_enable = vim.lsp.enable
 
 local function sorbet_root_dir(fname)
-  return lsp.util.root_pattern('Gemfile', 'sorbet')(fname)
+  return lsp_config.util.root_pattern('Gemfile', 'sorbet')(fname)
 end
 
 local servers = {
@@ -357,30 +358,27 @@ local servers = {
 
 }
 
-local function lsp_binary_exists(defaults, config)
-  local composed_config = vim.tbl_deep_extend(
-    'force',
-    defaults.document_config.default_config or {},
-    config or {}
-  )
+local function lsp_binary_exists(config)
+  local cmd = (config or {}).cmd
 
   -- cmd must alwayus be an array table of at least one element
-  if not (type(composed_config.cmd) == "table" and #composed_config.cmd >= 1) then
+  if not (type(cmd) == "table" and #cmd >= 1) then
     return false
   end
 
-  return vim.fn.executable(composed_config.cmd[1]) == 1
+  return vim.fn.executable(cmd[1]) == 1
 end
 
 for server_name, config in pairs(servers) do
-  local server = lsp[server_name]
+  lsp_config(server_name, config)
+  local server = lsp_config[server_name]
 
   -- Not every server will always be available, especially for more Ruby and JS-like projecst where the server will be
   -- part of the application package.
   --
   -- Only enable servers if we have an executable to avoid the annoying red popup
-  if lsp_binary_exists(server, config) then
+  if lsp_binary_exists(server) then
     config.capabilities = vim.tbl_deep_extend('force', {}, capabilities, config.capabilities or {})
-    server.setup(config)
+    lsp_enable(server_name)
   end
 end
