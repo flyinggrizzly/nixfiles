@@ -47,7 +47,7 @@ in
       ]
       ++ (addIf cfg.kitty.enable kitty-themes)
       ++ (addIf cfg.slack.enable slack)
-      ++ (addIf cfg.transmission.enable transmission_3)
+      ++ (addIf cfg.transmission.enable transmission_4)
       ++ (addIf cfg.discord.enable discord);
 
     # Kitty terminal
