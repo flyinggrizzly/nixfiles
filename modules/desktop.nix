@@ -122,6 +122,7 @@ in
     };
 
     programs.firefox = mkIf cfg.firefox.enable {
+      package = pkgs.firefox-bin;
       enable = true;
       languagePacks = [ "en-US" ];
       policies = {
