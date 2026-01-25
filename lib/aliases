@@ -36,3 +36,4 @@ alias grc="git rebase --continue"
 (( $+commands[bundle] )) && alias be='bundle exec'
 
 alias upstack="gt submit --stack --update-only"
+alias prl="prompt-lib"

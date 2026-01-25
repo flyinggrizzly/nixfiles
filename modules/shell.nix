@@ -123,6 +123,7 @@ in
       };
 
       wiggum.enable = true;
+      prompt-lib.enable = true;
     };
   };
 }
