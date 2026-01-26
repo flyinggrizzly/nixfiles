@@ -304,7 +304,7 @@ local lsp_config = vim.lsp.config
 local lsp_enable = vim.lsp.enable
 
 local function sorbet_root_dir(fname)
-  return lsp_config.util.root_pattern('Gemfile', 'sorbet')(fname)
+  return require('lspconfig').util.root_pattern('Gemfile', 'sorbet')(fname)
 end
 
 local servers = {
