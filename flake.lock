@@ -237,11 +237,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1769438296,
-        "narHash": "sha256-Q3HeMAlV4KBerxrvRCVoqpD8WTGoUUj9JeIWaK/ZJNE=",
+        "lastModified": 1769443313,
+        "narHash": "sha256-nisO43ahOxNCfrp/n9/E1/fymwVWdTVKk/Yr0D/mMGQ=",
         "owner": "flyinggrizzly",
         "repo": "wiggum-nix",
-        "rev": "68f4c4fb5b622376f753b6f102a6e42fcabdcae7",
+        "rev": "918d5a2f08c5338e61ef3f9ea48842c042c024f2",
         "type": "github"
       },
       "original": {
