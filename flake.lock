@@ -140,11 +140,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1769380172,
-        "narHash": "sha256-1yzSPn1GgE0l4dkTScUZAqWpQQpJT8Xkh6JtPzCcWhc=",
+        "lastModified": 1769437648,
+        "narHash": "sha256-wf8nqCYa3Snw6iyXHSuwXfhDVM0wTt8Qco0dtmbYbBo=",
         "owner": "flyinggrizzly",
         "repo": "prompt-lib",
-        "rev": "cec5aa8f49b845850bd2bb801008c2388755b724",
+        "rev": "d9a4977d6fc1f9abd3a72f4aa8861b3b6577a9d0",
         "type": "github"
       },
       "original": {
