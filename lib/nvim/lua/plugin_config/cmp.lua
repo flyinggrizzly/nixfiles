@@ -67,9 +67,6 @@ cmp.setup({
 
 require('cmp_git').setup()
 
-if llms_enabled then
-  require("copilot_cmp").setup()
-end
 
 -- Add these highlight groups to your colorscheme setup or after/colors
 vim.api.nvim_set_hl(0, 'CmpPmenu', { bg = '#e8e8e8' })       -- Light gray background

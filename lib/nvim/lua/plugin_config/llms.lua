@@ -9,6 +9,7 @@ if not require('helpers').is_git_subprocess() then
     panel = { enabled = false },
     copilot_model = "gpt-4o-copilot",
   })
+  require("copilot_cmp").setup()
 
   local map = function(keys, func, desc, mode)
     mode = mode or 'n'
