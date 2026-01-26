@@ -6,9 +6,10 @@ function show_usage {
   echo "Usage: switch [OPTIONS] [PROFILE]"
   echo
   echo "Options:"
-  echo "  --brew     Run brew bundle after successful switch"
-  echo "  --no-gc    Skip running nix garbage collection"
-  echo "  --help     Show this help message"
+  echo "  --brew        Run brew bundle after successful switch"
+  echo "  --no-gc       Skip running nix garbage collection"
+  echo "  --skip-todos  Allow switch even if TODO comments exist"
+  echo "  --help        Show this help message"
   echo
   echo "If PROFILE is not specified, username@hostname will be used."
   exit 0
@@ -17,6 +18,7 @@ function show_usage {
 # Parse command line arguments
 RUN_BREW=true
 RUN_GC=true
+SKIP_TODOS=false
 PROFILE=""
 TRACE=""
 FAST=false
@@ -42,6 +44,10 @@ while [[ $# -gt 0 ]]; do
       FAST=true
       shift
       ;;
+    --skip-todos)
+      SKIP_TODOS=true
+      shift
+      ;;
     *)
       PROFILE="$1"
       shift
@@ -52,11 +58,24 @@ done
 if [ "$FAST" = true ]; then
   RUN_GC=false
   RUN_BREW=false
+  SKIP_TODOS=true
 fi
 
 # Use default profile if none specified
 if [ -z "$PROFILE" ]; then
   PROFILE="$(whoami)@$(hostname -s)"
+fi
+
+# Check for TODO comments
+if [ "$SKIP_TODOS" = false ]; then
+  TODO_FILES=$(grep -rl --exclude-dir=.git "TODO" . 2>/dev/null || true)
+  if [ -n "$TODO_FILES" ]; then
+    echo "Error: TODO comments found in the following files:"
+    echo "$TODO_FILES"
+    echo
+    echo "Resolve the TODOs or use --skip-todos to proceed anyway."
+    exit 1
+  fi
 fi
 
 echo "Switching to profile: $PROFILE"

@@ -53,7 +53,6 @@ in
       libyaml.dev
       jq
       direnv
-      gdb
 
       # Nix tools
       nix-prefetch
