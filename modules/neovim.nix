@@ -239,7 +239,7 @@ in
           rubyPackages.erb-formatter
           nixd
           rust-analyzer
-          nixfmt-rfc-style
+          nixfmt
           lua-language-server
           vscode-langservers-extracted
         ]

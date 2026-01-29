@@ -62,7 +62,7 @@ in
       pnpm
       ruby_3_4
       nixd
-      nixfmt-rfc-style
+      nixfmt
 
       # Fonts
       powerline-fonts
