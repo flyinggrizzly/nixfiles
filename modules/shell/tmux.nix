@@ -123,8 +123,7 @@ in
             (defaultTmuxWindow "plamotrack" "~/src/plamotrack")
             { name = "tty"; }
             (defaultTmuxWindow "nixfiles" "~/nixfiles")
-            (defaultTmuxWindow "wiggum-nix" "~/src/wiggum-nix")
-            (defaultTmuxWindow "tmuxinator-nix" "~/src/tmuxinator-nix")
+            (defaultTmuxWindow "life-jam" "~/src/life-jam")
           ];
         };
       };
