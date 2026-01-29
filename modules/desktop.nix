@@ -47,7 +47,8 @@ in
       ]
       ++ (addIf cfg.kitty.enable kitty-themes)
       ++ (addIf cfg.slack.enable slack)
-      ++ (addIf cfg.transmission.enable transmission_4)
+      # TODO: Re-enable when arm64 build is fixed
+      # ++ (addIf cfg.transmission.enable transmission_4)
       ++ (addIf cfg.discord.enable discord);
 
     # Kitty terminal

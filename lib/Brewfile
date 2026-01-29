@@ -10,4 +10,6 @@ brew "nvm"
 cask "nordvpn"
 cask "pdf-expert"
 cask "tailscale"
+# TODO: Remove when nixpkg is fixed
+cask "transmission"
 cask "vlc"
