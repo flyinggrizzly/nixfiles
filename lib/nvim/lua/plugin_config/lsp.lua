@@ -303,10 +303,6 @@ capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp'
 local lsp_config = vim.lsp.config
 local lsp_enable = vim.lsp.enable
 
-local function sorbet_root_dir(fname)
-  return require('lspconfig').util.root_pattern('Gemfile', 'sorbet')(fname)
-end
-
 local servers = {
   nixd = {},
   graphql = {},
@@ -352,7 +348,7 @@ local servers = {
   sorbet = {
     cmd = { 'srb', 'tc', '--lsp' },
     filetypes = { 'ruby' },
-    root_dir = sorbet_root_dir,
+    root_markers = { 'sorbet', 'Gemfile', '.git' },
     priority = 1000000,
   },
 
