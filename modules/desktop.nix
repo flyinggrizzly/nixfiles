@@ -43,7 +43,6 @@ in
       [
         logseq
         google-chrome
-        code-cursor
       ]
       ++ (addIf cfg.kitty.enable kitty-themes)
       ++ (addIf cfg.slack.enable slack)
