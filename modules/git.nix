@@ -102,6 +102,7 @@ in
         "/tags"
         "/.claude/"
         "/.direnv/"
+        "prompt.md"
       ];
 
     };
