@@ -1,5 +1,6 @@
 {
   tmuxinator-nix,
+  pkgs,
   ...
 }:
 let
@@ -24,6 +25,19 @@ in
       mouse = true;
       shell = "$SHELL";
       terminal = "screen-256color";
+      plugins = with pkgs; [
+        {
+          plugin = tmuxPlugins.resurrect;
+          extraConfig = "set -g @resurrect-strategy-nvim 'session'";
+        }
+        {
+          plugin = tmuxPlugins.continuum;
+          extraConfig = ''
+            set -g @continuum-restore 'on'
+            set -g @continuum-save-interval '5' # minutes
+          '';
+        }
+      ];
       extraConfig = ''
         set -g prefix2 C-s
 
