@@ -100,6 +100,11 @@ in
         recursive = true;
       };
 
+      ".pi" = {
+        source = ../lib/pi;
+        recursive = true;
+      };
+
       # Tool configurations
       "Library/Application Support/lazygit/config.yml".source = ../lib/lazy-git-config.yml;
     };
