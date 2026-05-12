@@ -50,7 +50,7 @@ If no PR exists for the current branch, stop and tell the user.
 Prefix the body with this banner exactly:
 
 ```markdown
-> [!INFO]
+> [!NOTE]
 > Posted on behalf of flyinggrizzly by Pi/<model_name>
 ```
 
