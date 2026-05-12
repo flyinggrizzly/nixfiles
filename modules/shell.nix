@@ -105,6 +105,11 @@ in
         recursive = true;
       };
 
+      ".agents" = {
+        source = ../lib/agents;
+        recursive = true;
+      };
+
       # Tool configurations
       "Library/Application Support/lazygit/config.yml".source = ../lib/lazy-git-config.yml;
     };
