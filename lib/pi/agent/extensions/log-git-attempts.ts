@@ -17,7 +17,7 @@
  *     snippet around as best-effort "consternation" context — the agent's own
  *     words leading up to the command. Optional, may be empty.
  *
- * Logs land at: ~/.agents/var/logs/prefer-graphite/<timestamp>-<session>.log
+ * Logs land at: ~/.agents/var/log/prefer-graphite/<timestamp>-<session>.log
  * Each line is a JSON record. We do NOT block, modify, or rewrite anything.
  */
 
@@ -27,7 +27,7 @@ import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
 
-const LOG_DIR = path.join(os.homedir(), ".agents", "var", "logs", "prefer-graphite");
+const LOG_DIR = path.join(os.homedir(), ".agents", "var", "log", "prefer-graphite");
 
 /** Max chars of agent assistant text to attach as "consternation" context. */
 const CONSTERNATION_MAX_CHARS = 600;
@@ -339,9 +339,10 @@ export default function (pi: ExtensionAPI) {
     const sessionId = ctx.sessionManager?.getSessionId?.() ?? "unknown";
     const reasonText = truncate(extractResultText(event.content), REASON_MAX_CHARS);
 
+    // Result rows omit `session` and `invocations` — both are present on the
+    // matching call row and joinable via toolCallId.
     writeRecord(sessionId, {
       ts: new Date().toISOString(),
-      session: sessionId,
       phase: "result",
       toolCallId: event.toolCallId,
       isError: event.isError,
@@ -349,7 +350,6 @@ export default function (pi: ExtensionAPI) {
       // Recording isError + the snippet lets us classify outcomes downstream without
       // hardcoding that string here.
       resultSnippet: reasonText,
-      invocations: pending.invocations,
     });
 
     return undefined;
