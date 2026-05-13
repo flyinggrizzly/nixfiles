@@ -10,11 +10,16 @@ description: |
 
 # evaluate-pr-comments
 
+## Reply tone
+
+Replies generated for `--submit` follow `pr-comment`'s Tone rules. State what changed, link commit SHA, no preamble.
+
 ## Input
 
 `$ARGUMENTS` may contain:
 
 - `--submit` — push commits and post replies after applying
+- `--no-bots` — exclude bot comments (default: include all, incl. bots)
 - extra context (reviewer name, thread, file) to narrow scope
 
 ## Procedure
@@ -33,19 +38,21 @@ If no PR exists for the current branch, stop and tell the user.
 
 ### Step 3: Pull review comments
 
-Inline review comments (skip bots):
+Inline review comments:
 
 ```bash
 gh api "repos/<owner>/<repo>/pulls/<number>/comments" --paginate \
-  --jq '.[] | select(.user.type != "Bot") | {id, in_reply_to_id, path, line, body, user: .user.login, html_url, commit_id}'
+  --jq '.[] | {id, in_reply_to_id, path, line, body, user: .user.login, user_type: .user.type, html_url, commit_id}'
 ```
 
 Top-level issue comments:
 
 ```bash
 gh api "repos/<owner>/<repo>/issues/<number>/comments" --paginate \
-  --jq '.[] | select(.user.type != "Bot") | {id, body, user: .user.login, html_url}'
+  --jq '.[] | {id, body, user: .user.login, user_type: .user.type, html_url}'
 ```
+
+If `--no-bots` passed, drop entries where `user_type == "Bot"` before grouping.
 
 Group inline comments into threads via `in_reply_to_id`. If `$ARGUMENTS`
 narrows scope, filter accordingly.

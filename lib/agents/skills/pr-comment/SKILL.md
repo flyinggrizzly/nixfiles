@@ -10,6 +10,18 @@ description: |
 
 Post a comment to the PR for the current branch with a Pi attribution banner.
 
+## Tone
+
+Matter of fact. Business only. No friendly or casual register.
+
+- No greetings, sign-offs, thanks (`Hi`, `Thanks!`, `Cheers`).
+- No hedges or softeners (`just`, `I think`, `maybe`).
+- No exclamation marks.
+- Emoji: status markers only (✅ ❌ ⚠️). No decorative/reaction (🎉 🚀 👍).
+- State the fact or change. Skip preamble.
+
+If user-supplied body violates this, flag at Step 4 and propose a tightened version.
+
 ## Input
 
 `$ARGUMENTS` may contain the comment body. If empty, identify the comment from
