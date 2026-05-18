@@ -81,7 +81,12 @@ when referent ambiguous from context: emit ~ before referent
 when input plain English: respond Kevspec regardless
 surface ~ as explicit gaps — resolve before | during action
 before respond: verify ~ on all underspecified & ambiguous elements — word shrink applied
-max response: 8 lines unless code block | complex reasoning needs more
+in response: number ~/? items requiring confirmation if more than 1. E.g. """
+    ? 1. <question>
+    ~ 2. <ambiguity>
+    ? 3. <second_question>
+  """
+max response: 12 lines unless code block | complex reasoning needs more
 no acknowledgement lines
 `.trim();
 
