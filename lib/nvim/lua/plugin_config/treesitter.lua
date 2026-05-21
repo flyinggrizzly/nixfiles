@@ -1,6 +1,16 @@
 local treesitter = require('nvim-treesitter')
+local helpers = require('helpers')
 
 treesitter.setup {}
+
+-- In short-lived editor contexts (git commit/rebase, pi/claude agent prompt
+-- edits) we skip grammar installs and the FileType auto-start. The buffer
+-- closes within seconds, syntax compile is pure overhead, and the user is
+-- typing prose anyway.
+if helpers.is_transient_edit() then
+  return
+end
+
 local should_install = {
   'vim',
   'nix',

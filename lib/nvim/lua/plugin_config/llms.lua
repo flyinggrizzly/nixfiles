@@ -3,7 +3,7 @@ if has_custom_llms then
   return custom_llms
 end
 
-if not require('helpers').is_git_subprocess() then
+if not require('helpers').is_transient_edit() then
   require('copilot').setup({
     suggestion = { enabled = false },
     panel = { enabled = false },
