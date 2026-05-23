@@ -130,9 +130,6 @@ in
         commands = helpers.claude.commandDirToTable ../lib/claude/commands;
         mcpServers = { };
       };
-
-      wiggum.enable = true;
-      prompt-lib.enable = true;
     };
   };
 }
