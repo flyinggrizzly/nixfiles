@@ -129,6 +129,8 @@ in
       # Conflicts with dev-managed Ruby and Gem paths
       withRuby = false;
 
+      withPython3 = false;
+
       plugins =
         with pkgs.vimPlugins;
         [
