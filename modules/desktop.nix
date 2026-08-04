@@ -43,6 +43,7 @@ in
       [
         logseq
         google-chrome
+        zotero
       ]
       ++ (addIf cfg.kitty.enable kitty-themes)
       ++ (addIf cfg.slack.enable slack)
