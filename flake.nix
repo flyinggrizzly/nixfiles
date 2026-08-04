@@ -36,6 +36,11 @@
           system = platform;
           config = {
             allowUnfree = true;
+            # TODO: remove once logseq updates its deps
+            # Logseq dependency
+            permittedInsecurePackages = [
+              "electron-39.8.10"
+            ];
           };
         };
 
