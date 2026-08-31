@@ -1,4 +1,6 @@
 vim.cmd [[
+  let g:test#custom_runners = {'_Generic': ['VimTestJson']}
+
   let g:tslime_always_current_session = 1
   let g:tslime_always_current_window = 1
 
