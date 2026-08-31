@@ -42,6 +42,8 @@ in
       with pkgs;
       [
         logseq
+        zotero
+        javaPackages.compiler.temurin-bin.jdk-25 # supports zotero-libreoffice plugin
         google-chrome
         zotero
       ]
