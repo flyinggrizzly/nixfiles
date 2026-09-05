@@ -43,7 +43,7 @@ in
       [
         logseq
         zotero
-        javaPackages.compiler.temurin-bin.jdk-25 # supports zotero-libreoffice plugin
+        jdk25 # supports zotero-libreoffice plugin
         google-chrome
         zotero
       ]
