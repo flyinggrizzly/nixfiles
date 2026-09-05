@@ -9,13 +9,15 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    tmuxinator-nix = {
-      url = "github:flyinggrizzly/tmuxinator-nix";
+    gwt = {
+      url = "github:flyinggrizzly/gwt";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    gwt = {
-      url = "github:flyinggrizzly/gwt";
+    nvf.url = "github:notashelf/nvf";
+
+    tmuxinator-nix = {
+      url = "github:flyinggrizzly/tmuxinator-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -202,17 +204,5 @@
           };
         };
       };
-
-      packages = forAllSystems (
-        system:
-        let
-          testPkgs = getPkgs system;
-          tests = import ./tests {
-            pkgs = testPkgs;
-            inherit (self) lib;
-          };
-        in
-        tests
-      );
     };
 }
