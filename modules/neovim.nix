@@ -1,291 +1,127 @@
 {
-  config,
-  lib,
   pkgs,
+  nvf,
   ...
 }:
-
 let
-  inherit (lib)
-    mkOption
-    mkIf
-    types
-    ;
-  cfg = config.modules.neovim;
+  luaMap =
+    key: action:
+    opts@{ mode ? "n",
+      ...
+    }:
+    {
+      inherit key action mode;
+      lua = true;
+    }
+    // opts;
 
-  coder-claude-code-nvim = pkgs.vimUtils.buildVimPlugin {
-    name = "claude-code-nvim";
-    src = pkgs.fetchFromGitHub {
-      owner = "coder";
-      repo = "claudecode.nvim";
-      rev = "985b4b117ea13ec85c92830ecac8f63543dd5ead";
-      sha256 = "05hxpsgw694870gcy8d72d44irlnc4dqyg8jb9p4bhm8i8lc523g";
+  nvfConfig = {
+    vim = {
+      viAlias = true;
+      vimAlias = true;
+
+      theme.name = "dracula";
+
+      extraPackages = with pkgs; [
+        fzf
+        ripgrep
+      ];
+
+      lsp = {
+        enable = true;
+        formatOnSave = false;
+        lspkind.enable = false;
+        lightbulb.enable = false;
+        lspsaga.enable = false;
+        inlayHints.enable = true;
+        otter-nvim = {
+          enable = true;
+          setupOpts.buffers.write_to_disk = true;
+        };
+        trouble.enable = true;
+        lspSignature.enable = true;
+        nvim-docs-view.enable = false; # lags *horribly* whenever l is pressed
+      };
+
+      languages = {
+        enableFormat = true;
+        enableTreesitter = true;
+        enableExtraDiagnostics = true;
+
+        bash.enable = true;
+        css.enable = true;
+        lua.enable = true;
+        markdown.enable = true;
+        nix = {
+          enable = true;
+          lsp.servers = [
+            "nixd"
+            "nil"
+          ];
+        };
+        ruby = {
+          enable = true;
+          lsp.servers = [
+            "ruby-lsp" # add rails extension
+            "stimulus-language-server"
+          ];
+        };
+        typescript = {
+          enable = true;
+          extraDiagnostics.enable = false;
+        };
+      };
+
+      statusline.lualine = {
+        enable = true;
+      };
+
+      treesitter = {
+        context.enable = true;
+        grammars = with pkgs.vimPlugins.nvim-treesitter.builtGrammars; [
+          ruby
+          javascript
+          typescript
+          markdown
+          markdown_inline
+          toml
+          yaml
+        ];
+      };
+
+      utility = {
+        snacks-nvim = {
+          enable = true;
+          setupOpts = {
+            picker = {
+              enabled = true;
+            };
+            explorer = {
+              enabled = true;
+            };
+          };
+        };
+
+      };
+
+      keymaps = [
+        (luaMap "<C-p>" ''
+          function()
+            require('snacks').picker.smart()
+          end
+        '')
+      ];
     };
   };
 
-  json-nvim = pkgs.vimUtils.buildVimPlugin {
-    name = "json-nvim";
-    src = pkgs.fetchFromGitHub {
-      owner = "VPavliashvili";
-      repo = "json-nvim";
-      rev = "beb76a5ffa0a936677695bc82cc868654aad4398";
-      sha256 = "sha256-hSkQkvL8eHGFaWqop+tF6HazpTT3kN4uVhTqhLnDUcY=";
-    };
-  };
+  configuredNeovim = nvf.lib.neovimConfiguration {
+    inherit pkgs;
 
-  sorbet-vim = pkgs.vimUtils.buildVimPlugin {
-    name = "sorbet-vim";
-    src = pkgs.fetchFromGitHub {
-      owner = "zackhsi";
-      repo = "sorbet.vim";
-      rev = "41fda1edd8d790aa23542f52bd18570cdf739ea3";
-      sha256 = "sha256-FYHvIoCyFHE3wWe1VVBBsHm3eet1xDR9yKxVUboaK8g=";
-    };
-  };
-
-  vim-heritage = pkgs.vimUtils.buildVimPlugin {
-    name = "vim-heritage";
-    src = pkgs.fetchFromGitHub {
-      owner = "jessarcher";
-      repo = "vim-heritage";
-      rev = "cffa05c78c0991c998adc4504d761b3068547db6";
-      sha256 = "sha256-Lebe5V1XFxn4kSZ+ImZ69Vst9Nbc0N7eA9IzOCijFS0=";
-    };
-  };
-
-  vim-haml = pkgs.vimUtils.buildVimPlugin {
-    name = "vim-haml";
-    src = pkgs.fetchFromGitHub {
-      owner = "tpope";
-      repo = "vim-haml";
-      rev = "95a095a4d29eaf0ba0851dcee5635053ec0f9f74";
-      sha256 = "sha256-EebHAK/YMVzt1fiROVjBiuukRZLQgaCNNHqV2DBC3U4=";
-    };
-  };
-
-  vim-run-interactive = pkgs.vimUtils.buildVimPlugin {
-    name = "vim-run-interactive";
-    src = pkgs.fetchFromGitHub {
-      owner = "christoomey";
-      repo = "vim-run-interactive";
-      sha256 = "sha256-Dar5OOLRXutTHCIiDDjUEX0C3QnPWpDEnjnNcTctHUI=";
-      rev = "6ae33c719bdf185325c3c1836978bb4352157c82";
-    };
+    modules = [ nvfConfig ];
   };
 in
 {
-  options.modules.neovim = {
-    enable = mkOption {
-      type = types.bool;
-      default = true;
-      description = "Neovim editor configuration";
-    };
-
-    enableLlmTools = mkOption {
-      type = types.bool;
-      default = true;
-      description = "Enable LLM-related tools and plugins for Neovim";
-    };
-
-    extraPlugins = mkOption {
-      type = types.listOf types.package;
-      default = [ ];
-      description = "Additional packages to install for Neovim";
-    };
-
-    extraPackages = mkOption {
-      type = types.listOf types.package;
-      default = [ ];
-      description = "Additional packages to install for Neovim";
-    };
-
-    init.prepend = mkOption {
-      type = types.str;
-      default = "";
-      description = "Prepend to init.lua";
-    };
-
-    init.append = mkOption {
-      type = types.str;
-      default = "";
-      description = "Append to init.lua";
-    };
-
-    llmLuaOverride = mkOption {
-      type = types.nullOr types.path;
-      default = null;
-      description = "Override the default LLM configuration with custom Lua code";
-    };
-  };
-
-  config = mkIf cfg.enable {
-    programs.neovim = {
-      enable = true;
-      viAlias = true;
-      vimAlias = true;
-      vimdiffAlias = true;
-      defaultEditor = true;
-
-      # Conflicts with dev-managed Ruby and Gem paths
-      withRuby = false;
-
-      withPython3 = false;
-
-      plugins =
-        with pkgs.vimPlugins;
-        [
-          # UI and themes
-          lualine-nvim
-          nvim-web-devicons
-          dracula-nvim
-          twilight-nvim
-
-          # LSP and completion
-          nvim-lspconfig
-          rustaceanvim
-          nvim-treesitter.withAllGrammars
-          nvim-treesitter-textobjects
-          mason-tool-installer-nvim
-          fidget-nvim
-          nvim-cmp
-          cmp-nvim-lsp
-          cmp-nvim-lsp-signature-help
-          cmp-git
-          cmp-emoji
-          cmp-buffer
-          cmp-tmux
-          cmp-path
-          mini-nvim
-          conform-nvim
-
-          # Telescope
-          telescope-nvim
-          telescope-ui-select-nvim
-          telescope-fzf-native-nvim
-          plenary-nvim
-          which-key-nvim
-          trouble-nvim
-
-          # Custom tools
-          snacks-nvim
-          lazygit-nvim
-          oil-nvim
-
-          # Git integration
-          vim-fugitive
-          gitsigns-nvim
-
-          # Editing helpers
-          nvim-autopairs
-          vim-easy-align
-          vim-endwise
-          vim-eunuch
-          incsearch-vim
-          indent-blankline-nvim
-          mkdir-nvim
-          nerdcommenter
-          vim-projectionist
-          vim-repeat
-          vim-run-interactive
-          vim-surround
-          vim-test
-          tmux-complete-vim
-          tslime-vim
-          yescapsquit-vim
-
-          # Languages
-          emmet-vim
-          vim-haml
-          vim-javascript
-          vim-json
-          vim-nix
-          vim-rails
-          vim-ruby
-          sorbet-vim
-          json-nvim
-
-          # Tmux integration
-          vim-dispatch
-          vim-tmux-navigator
-          tmuxline-vim
-
-          # Utilities
-          vim-heritage
-          vim-sleuth
-          leap-nvim
-          vim-unimpaired
-          render-markdown-nvim
-        ]
-        ++ (
-          if cfg.enableLlmTools then
-            with pkgs.vimPlugins;
-            [
-              # AI and code assistance
-              codecompanion-nvim
-              copilot-lua
-              copilot-cmp
-              dressing-nvim
-              nui-nvim
-              coder-claude-code-nvim
-            ]
-          else
-            [ ]
-        )
-        ++ cfg.extraPlugins;
-
-      extraPackages =
-        with pkgs;
-        [
-          typescript-language-server
-          prettierd
-          rubyPackages.erb-formatter
-          nixd
-          rust-analyzer
-          nixfmt
-          lua-language-server
-          vscode-langservers-extracted
-        ]
-        ++ cfg.extraPackages;
-
-      extraConfig = ''
-        ${cfg.init.prepend}
-
-        source $HOME/.config/nvim/base_init.lua
-
-        ${cfg.init.append}
-      '';
-    };
-
-    # VIM config files
-    home.file.".config/nvim" = {
-      source = ../lib/nvim;
-      recursive = true;
-    };
-
-    # Create a simple flag function that is imported by lua/helpers
-    home.file.".config/nvim/lua/helpers/llms_enabled.lua".text =
-      if cfg.enableLlmTools then
-        ''
-          return function ()
-            return true
-          end
-        ''
-      else
-        ''
-          return function ()
-            return false
-          end
-        '';
-
-    home.file.".config/nvim/lua/plugin_config/custom_llms.lua" =
-      mkIf (cfg.llmLuaOverride != null)
-        {
-          source = cfg.llmLuaOverride;
-        };
-
-    home.file.".vim-spell" = {
-      source = ../lib/vim-spell;
-      recursive = true;
-    };
+  config = {
+    home.packages = [ configuredNeovim.neovim ];
   };
 }

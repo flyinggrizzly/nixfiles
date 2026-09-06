@@ -14,7 +14,6 @@ snacks.setup({
     },
   },
   explorer = { enabled = true },
-
   bigfile = { enabled = false },
   dashboard = { enabled = false },
   indent = { enabled = false },

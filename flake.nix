@@ -28,6 +28,7 @@
       nixpkgs,
       home-manager,
       tmuxinator-nix,
+      nvf,
       ...
     }@inputs:
     let
@@ -83,7 +84,6 @@
             stateVersion,
             platform,
             shell ? { },
-            neovim ? { },
             git ? { },
             desktop ? { },
             darwin ? { },
@@ -119,7 +119,6 @@
                 modules = {
                   inherit
                     shell
-                    neovim
                     git
                     desktop
                     darwin
@@ -133,9 +132,10 @@
             specialArgs = {
               # This is passed to the home-manager module through extraSpecialArgs for both nixos and
               # standalone cases, so that we can access the lib.constants data in our config
-              inherit tmuxinator-nix helpers;
+              inherit tmuxinator-nix nvf helpers;
             };
             hmModules = [
+              inputs.nvf.homeManagerModules.default
               homeConfig
               inputs.tmuxinator-nix.homeManagerModules.default
               inputs.gwt.homeManagerModules.default
@@ -178,17 +178,6 @@
     in
     {
       inherit lib home-manager helpers;
-
-      templates = {
-        standalone = {
-          path = ./templates/standalone;
-          description = "Standalone home-manager configuration template";
-        };
-        nixos = {
-          path = ./templates/nixos;
-          description = "NixOS configuration with home-manager integration";
-        };
-      };
 
       homeConfigurations = {
         "seandmr@m1-grizzly" = lib.standaloneHome {
