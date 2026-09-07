@@ -63,7 +63,6 @@ let
           setupOpts.buffers.write_to_disk = true;
         };
         trouble.enable = true;
-        lspSignature.enable = true;
         nvim-docs-view.enable = false; # lags *horribly* whenever l is pressed
       };
 
@@ -94,6 +93,11 @@ let
           enable = true;
           extraDiagnostics.enable = false;
         };
+      };
+
+      autocomplete.blink-cmp = {
+        enable = true;
+        sources.lsp.fallbacks = {};
       };
 
       statusline.lualine = {
