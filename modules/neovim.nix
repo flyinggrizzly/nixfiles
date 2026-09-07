@@ -25,7 +25,8 @@ let
   '';
 
   bindLuaKey =
-    mode: key: functionBody: opts@{ desc, ... }:
+    mode: key: functionBody:
+    opts@{ desc, ... }:
     (bindKey mode key (luaFn functionBody) (opts // { lua = true; }));
 
   nvfConfig = {
@@ -33,8 +34,15 @@ let
       viAlias = true;
       vimAlias = true;
 
+      globals = {
+        mapleader = " ";
+        maplocalleader = " ";
+      };
+
       theme.name = "dracula";
       theme.enable = true;
+
+      lineNumberMode = "number";
 
       extraPackages = with pkgs; [
         fzf
@@ -118,9 +126,38 @@ let
 
       };
 
+      binds = {
+        whichKey.enable = true;
+        cheatsheet.enable = true;
+      };
+
       keymaps = [
-        (bindLuaKey "n" "<C-p>" "require('snacks').picker.smart()" { desc = "CtrlP (via snacks smart file picker)"; })
-      ];
+        # jk/kj as escape/C-c
+        (bindKey "i" "jk" "<esc>" { desc = "jk as <esc>"; })
+        (bindKey "i" "kj" "<esc>" { desc = "kj as <esc>"; })
+        (bindKey "c" "jk" "<C-c>" { desc = "jk as <C-c>"; })
+        (bindKey "c" "kj" "<C-c>" { desc = "kj as <C-c>"; })
+
+        # Quick save
+        (bindKey "n" "<leader>f" ":update<CR>" { desc = "<leader>f quick save"; })
+
+        # Tab switching
+        (bindKey "n" "H" "gT" { desc = "H -> Tab Left"; })
+        (bindKey "n" "L" "gt" { desc = "L -> Tab Right"; })
+
+        # Exit terminal easily
+        (bindKey "t" "<esc><esc>" "<C-\\><C-n>" { desc = "Exit Terminal"; })
+
+        (bindLuaKey "n" "<C-p>" "require('snacks').picker.smart()" {
+          desc = "CtrlP (via snacks smart file picker)";
+        })
+      ]
+        ++ (import ./neovim/md-todos.nix).keymaps;
+
+      options = {
+        # Decrease delay before which-key opens
+        timeoutlen = 300;
+      };
 
       startPlugins = with pkgs.vimPlugins; [
         vim-tmux-navigator
