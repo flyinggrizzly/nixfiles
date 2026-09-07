@@ -25,8 +25,8 @@ let
   '';
 
   bindLuaKey =
-    mode: key: functionBody:
-    (bindKey mode key (luaFn functionBody) { lua = true; });
+    mode: key: functionBody: opts@{ desc, ... }:
+    (bindKey mode key (luaFn functionBody) (opts // { lua = true; }));
 
   nvfConfig = {
     config.vim = {
@@ -119,7 +119,7 @@ let
       };
 
       keymaps = [
-        (bindLuaKey "n" "<C-p>" "require('snacks').picker.smart()")
+        (bindLuaKey "n" "<C-p>" "require('snacks').picker.smart()" { desc = "CtrlP (via snacks smart file picker)"; })
       ];
 
       startPlugins = with pkgs.vimPlugins; [
