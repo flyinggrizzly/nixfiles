@@ -1,15 +1,40 @@
 {
   pkgs,
+  lib,
   nvf,
+  config,
   ...
 }:
 let
+  bindKey =
+    mode: key: action: opts:
+    (
+      {
+        inherit mode key action;
+        silent = true;
+        noremap = true;
+        unique = true;
+      }
+      // opts
+    );
+
+  luaFn = functionBody: ''
+    function()
+      ${functionBody}
+    end
+  '';
+
+  bindLuaKey =
+    mode: key: functionBody:
+    (bindKey mode key (luaFn functionBody) { lua = true; });
+
   nvfConfig = {
-    vim = {
+    config.vim = {
       viAlias = true;
       vimAlias = true;
 
       theme.name = "dracula";
+      theme.enable = true;
 
       extraPackages = with pkgs; [
         fzf
@@ -94,29 +119,29 @@ let
       };
 
       keymaps = [
-        {
-          mode = "n";
-          key = "<C-p>";
-          action = ''
-            function()
-              require('snacks').picker.smart()
-            end
-          '';
-          silent = true;
-          lua = true;
-        }
+        (bindLuaKey "n" "<C-p>" "require('snacks').picker.smart()")
+      ];
+
+      startPlugins = with pkgs.vimPlugins; [
+        vim-tmux-navigator
       ];
     };
   };
 
   configuredNeovim = nvf.lib.neovimConfiguration {
     inherit pkgs;
-
     modules = [ nvfConfig ];
   };
+
+  cfg = config.modules.neovim;
+  inherit (lib) mkIf mkEnableOption;
 in
 {
-  config = {
+  options.modules.neovim = {
+    enable = mkEnableOption "Enable neovim config";
+  };
+
+  config = mkIf cfg.enable {
     home.packages = [ configuredNeovim.neovim ];
   };
 }

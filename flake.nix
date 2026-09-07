@@ -83,6 +83,7 @@
             username,
             stateVersion,
             platform,
+            neovim ? { },
             shell ? { },
             git ? { },
             desktop ? { },
@@ -119,6 +120,7 @@
                 modules = {
                   inherit
                     shell
+                    neovim
                     git
                     desktop
                     darwin
@@ -185,6 +187,7 @@
           stateVersion = "24.11";
           platform = "aarch64-darwin";
           darwin.enable = true;
+          neovim.enable = true;
           desktop = {
             enable = true;
             ghostty.enable = true;
