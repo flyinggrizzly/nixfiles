@@ -29,6 +29,8 @@ let
     opts@{ desc, ... }:
     (bindKey mode key (luaFn functionBody) (opts // { lua = true; }));
 
+  mdTodos = import ./neovim/md-todos.nix;
+
   nvfConfig = {
     config.vim = {
       viAlias = true;
@@ -154,16 +156,80 @@ let
           desc = "CtrlP (via snacks smart file picker)";
         })
       ]
-        ++ (import ./neovim/md-todos.nix).keymaps;
+      ++ mdTodos.keymaps;
 
       options = {
         # Decrease delay before which-key opens
         timeoutlen = 300;
+        encoding = "utf-8";
+        backspace = "2";
+        ruler = true;
+        incsearch = true;
+        laststatus = 2;
+        autowrite = true;
+
+        # Be sane!
+        shiftwidth = 2;
+        tabstop = 2;
+        shiftround = true;
+        expandtab = true;
+
+        # Show invisibles nicely
+        list = true;
+        listchars = {
+          tab = "» ";
+          trail = "·";
+          nbsp = "␣";
+        };
+
+        # Always know where the end is
+        textwidth = 120;
+        colorcolumn = "+1";
+
+        # Mouse mode on; useful for splits
+        mouse = "a";
+
+        # Mode is already in statusline
+        showmode = false;
+
+        # Split better
+        splitright = true;
+        splitbelow = true;
+
+        breakindent = true;
+
+        undofile = true;
+
+        updatetime = 250;
+
+        inccommand = "split";
+
+        cursorline = true;
+        scrolloff = 10;
       };
 
       startPlugins = with pkgs.vimPlugins; [
         vim-tmux-navigator
+        vim-slime
       ];
+
+      lazy.plugins = with pkgs.vimPlugins; {
+        ${quarto-nvim.pname} = {
+          package = quarto-nvim;
+          lazy = true;
+          event = "BufEnter *.qmd";
+          setupOpts = {
+            lspFeatures = {
+              enabled = true;
+              chunks = "curly";
+            };
+            codeRunner = {
+              enabled = true;
+              default_method = "slime";
+            };
+          };
+        };
+      };
     };
   };
 

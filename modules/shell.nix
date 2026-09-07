@@ -70,15 +70,6 @@ in
       jetbrains-mono
       nerd-fonts.symbols-only
       nerd-fonts.jetbrains-mono
-
-      # Python with common packages
-      (python313.withPackages (
-        ps: with ps; [
-          jupyter
-          notebook
-          ipython
-        ]
-      ))
     ];
 
     home.file = {
