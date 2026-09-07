@@ -4,17 +4,6 @@
   ...
 }:
 let
-  luaMap =
-    key: action:
-    opts@{ mode ? "n",
-      ...
-    }:
-    {
-      inherit key action mode;
-      lua = true;
-    }
-    // opts;
-
   nvfConfig = {
     vim = {
       viAlias = true;
@@ -105,11 +94,17 @@ let
       };
 
       keymaps = [
-        (luaMap "<C-p>" ''
-          function()
-            require('snacks').picker.smart()
-          end
-        '')
+        {
+          mode = "n";
+          key = "<C-p>";
+          action = ''
+            function()
+              require('snacks').picker.smart()
+            end
+          '';
+          silent = true;
+          lua = true;
+        }
       ];
     };
   };
