@@ -98,6 +98,8 @@ let
         enable = true;
       };
 
+      git = (import ./neovim/git.nix).git;
+
       treesitter = {
         context.enable = true;
         grammars = with pkgs.vimPlugins.nvim-treesitter.builtGrammars; [
