@@ -278,6 +278,11 @@ let
             };
           };
         };
+        ${vim-ruby.pname} = {
+          package = vim-ruby;
+          lazy = true;
+          ft = [ "ruby" ];
+        };
       };
     };
   };
