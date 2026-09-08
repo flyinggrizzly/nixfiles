@@ -119,6 +119,14 @@ let
         };
       };
 
+      leap = {
+        enable = true;
+        mappings = {
+          leapForwardTo = "s";
+          leapBackwardTo = "S";
+        };
+      };
+
       statusline.lualine = {
         enable = true;
       };
