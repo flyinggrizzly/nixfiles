@@ -198,10 +198,6 @@ let
 
         # Exit terminal easily
         (bindKey "t" "<esc><esc>" "<C-\\><C-n>" { desc = "Exit Terminal"; })
-
-        (bindLuaKey "n" "<C-p>" "require('snacks').picker.smart()" {
-          desc = "CtrlP (via snacks smart file picker)";
-        })
       ]
       ++ mdTodos.keymaps;
 
