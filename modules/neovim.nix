@@ -121,7 +121,7 @@ let
         };
       };
 
-      leap = {
+      utility.motion.leap = {
         enable = true;
         mappings = {
           leapForwardTo = "s";
