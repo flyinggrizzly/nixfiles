@@ -159,6 +159,8 @@ let
       };
 
       keymaps = [
+        (bindKey "n" ";" ":" { desc = "; as :"; })
+
         # jk/kj as escape/C-c
         (bindKey "i" "jk" "<esc>" { desc = "jk as <esc>"; })
         (bindKey "i" "kj" "<esc>" { desc = "kj as <esc>"; })
