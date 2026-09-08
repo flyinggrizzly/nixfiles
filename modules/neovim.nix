@@ -29,6 +29,16 @@ let
     opts@{ desc, ... }:
     (bindKey mode key (luaFn functionBody) (opts // { lua = true; }));
 
+  vim-heritage = pkgs.vimUtils.buildVimPlugin {
+    name = "vim-heritage";
+    src = pkgs.fetchFromGitHub {
+      owner = "jessarcher";
+      repo = "vim-heritage";
+      rev = "cffa05c78c0991c998adc4504d761b3068547db6";
+      sha256 = "sha256-Lebe5V1XFxn4kSZ+ImZ69Vst9Nbc0N7eA9IzOCijFS0=";
+    };
+  };
+
   mdTodos = import ./neovim/md-todos.nix;
 
   nvfConfig = {
@@ -222,8 +232,9 @@ let
       };
 
       startPlugins = with pkgs.vimPlugins; [
-        vim-tmux-navigator
+        vim-heritage
         vim-slime
+        vim-tmux-navigator
       ];
 
       lazy.plugins = with pkgs.vimPlugins; {
