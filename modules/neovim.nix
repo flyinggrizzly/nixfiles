@@ -97,7 +97,16 @@ let
 
       autocomplete.blink-cmp = {
         enable = true;
-        sources.lsp.fallbacks = {};
+      };
+
+      comments.comment-nvim = {
+        enable = true;
+        mappings = {
+          toggleCurrentLine = "<leader>cc";
+          toggleCurrentBlock = "<leader>cb";
+          toggleSelectedLine = "<leader>cc";
+          toggleSelectedBlock = "<leader>cb";
+        };
       };
 
       statusline.lualine = {
