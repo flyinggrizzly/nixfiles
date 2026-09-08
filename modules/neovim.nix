@@ -118,6 +118,22 @@ let
 
       autocomplete.blink-cmp = {
         enable = true;
+        setupOpts = {
+          sources.default = [
+            "lsp"
+            "path"
+            "snippets"
+            "buffer"
+            "cmp-pandoc-references"
+          ];
+          sourcePlugins = {
+            pandoc_references = {
+              enable = true;
+              package = pkgs.vimPlugins.cmp-pandoc-references;
+              module = "cmp-pandoc-references.blink";
+            };
+          };
+        };
       };
 
       autopairs.nvim-autopairs.enable = true;
@@ -198,6 +214,8 @@ let
 
         # Exit terminal easily
         (bindKey "t" "<esc><esc>" "<C-\\><C-n>" { desc = "Exit Terminal"; })
+
+        (bindKey "n" "<leader>fz" ":Telescope zotero<CR>" { desc = "Find Zotero reference"; })
       ]
       ++ mdTodos.keymaps;
 
@@ -273,6 +291,10 @@ let
               default_method = "slime";
             };
           };
+        };
+        ${cmp-pandoc-references.pname} = {
+          package = cmp-pandoc-references;
+          lazy = true;
         };
         ${vim-ruby.pname} = {
           package = vim-ruby;
