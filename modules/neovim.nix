@@ -256,6 +256,7 @@ let
       };
 
       startPlugins = with pkgs.vimPlugins; [
+        vim-eunuch
         vim-heritage
         vim-slime
         vim-tmux-navigator
