@@ -29,6 +29,17 @@ let
     opts@{ desc, ... }:
     (bindKey mode key (luaFn functionBody) (opts // { lua = true; }));
 
+  telescope-zotero-nvim = pkgs.vimUtils.buildVimPlugin {
+    name = "telescope-zotero-nvim";
+    src = pkgs.fetchFromGitHub {
+      owner = "jmbuhr";
+      repo = "telescope-zotero.nvim";
+      rev = "376728bccfcbce95f59ef028d93bf0a33ee34bc2";
+      sha256 = "00y2mqx1dml46g5niasdzgwm4p1hswjm50kgcpq1ppzgdm6imcnd";
+    };
+    doCheck = false; # the require checks on telescope fail; it will be available in the runtime
+  };
+
   vim-heritage = pkgs.vimUtils.buildVimPlugin {
     name = "vim-heritage";
     src = pkgs.fetchFromGitHub {
@@ -148,19 +159,20 @@ let
         ];
       };
 
-      utility = {
-        snacks-nvim = {
-          enable = true;
-          setupOpts = {
-            picker = {
-              enabled = true;
-            };
-            explorer = {
-              enabled = true;
-            };
-          };
+      telescope = {
+        enable = true;
+        mappings = {
+          findFiles = "<C-p>";
         };
-
+        extensions = [
+          {
+            name = "zotero";
+            packages = with pkgs.vimPlugins; [
+              telescope-zotero-nvim
+              sqlite-lua
+            ];
+          }
+        ];
       };
 
       binds = {
