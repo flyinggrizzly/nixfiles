@@ -133,11 +133,12 @@ in
           root = "~/";
           windows = [
             (defaultTmuxWindow "main" "~/")
+            (defaultTmuxWindow "academics" "~/src/academics/")
             (defaultTmuxWindow "blog" "~/flying-grizzly")
-            (defaultTmuxWindow "plamotrack" "~/src/plamotrack")
             { name = "tty"; }
             (defaultTmuxWindow "nixfiles" "~/nixfiles")
             (defaultTmuxWindow "life-jam" "~/src/life-jam")
+            (defaultTmuxWindow "reading-notes-app" "~/src/reading-notes-app/")
           ];
         };
       };
