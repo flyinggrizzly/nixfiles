@@ -107,7 +107,6 @@ let
           enable = true;
           lsp.servers = [
             "ruby-lsp" # add rails extension
-            "stimulus-language-server"
           ];
         };
         typescript = {
@@ -119,19 +118,20 @@ let
       autocomplete.blink-cmp = {
         enable = true;
         setupOpts = {
-          sources.default = [
-            "lsp"
-            "path"
-            "snippets"
-            "buffer"
-            "cmp-pandoc-references"
-          ];
-          sourcePlugins = {
-            pandoc_references = {
-              enable = true;
-              package = pkgs.vimPlugins.cmp-pandoc-references;
-              module = "cmp-pandoc-references.blink";
-            };
+          sources = {
+            default = [
+              "lsp"
+              "path"
+              "buffer"
+              "references"
+            ];
+          };
+        };
+        sourcePlugins = {
+          references = {
+            enable = true;
+            package = pkgs.vimPlugins.cmp-pandoc-references;
+            module = "cmp-pandoc-references.blink";
           };
         };
       };
@@ -148,11 +148,17 @@ let
         };
       };
 
-      utility.motion.leap = {
-        enable = true;
-        mappings = {
-          leapForwardTo = "s";
-          leapBackwardTo = "S";
+      utility = {
+        motion.leap = {
+          enable = true;
+          mappings = {
+            leapForwardTo = "s";
+            leapBackwardTo = "S";
+          };
+        };
+        surround = {
+          enable = true;
+          useVendoredKeybindings = false;
         };
       };
 
@@ -291,10 +297,6 @@ let
               default_method = "slime";
             };
           };
-        };
-        ${cmp-pandoc-references.pname} = {
-          package = cmp-pandoc-references;
-          lazy = true;
         };
         ${vim-ruby.pname} = {
           package = vim-ruby;
