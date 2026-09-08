@@ -109,6 +109,8 @@ let
         enable = true;
       };
 
+      autopairs.nvim-autopairs.enable = true;
+
       comments.comment-nvim = {
         enable = true;
         mappings = {
