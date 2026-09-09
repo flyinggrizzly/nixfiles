@@ -237,7 +237,7 @@ let
 
         (bindKey "n" "<leader>tc<CR>" ":TSContext toggle" { desc = "Toggle TSContext"; })
       ]
-      ++ mdTodos.keymaps;
+        ++ mdTodos.keymaps;
 
       options = {
         # Decrease delay before which-key opens
