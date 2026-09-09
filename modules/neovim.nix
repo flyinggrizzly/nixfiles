@@ -278,6 +278,7 @@ let
       };
 
       startPlugins = with pkgs.vimPlugins; [
+        vim-endwise
         vim-eunuch
         vim-heritage
         vim-slime
