@@ -72,6 +72,18 @@ let
         ripgrep
       ];
 
+      formatter.conform = {
+        enable = true;
+        presets = {
+          jsonfmt.enable = true;
+          nixfmt-rs.enable = true;
+          prettier.enable = true;
+          rubocop.enable = true;
+          stylua.enable = true;
+          tex-fmt.enable = true;
+        };
+      };
+
       lsp = {
         enable = true;
         formatOnSave = false;
