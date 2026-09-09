@@ -62,8 +62,17 @@ let
         maplocalleader = " ";
       };
 
-      theme.name = "dracula";
-      theme.enable = true;
+      theme = {
+        enable = true;
+        name = "github";
+        style = "light_high_contrast";
+
+        # name = "catppuccin";
+        # style = "latte";
+
+        # name = "tokyonight";
+        # style = "night";
+      };
 
       lineNumberMode = "number";
 
