@@ -72,7 +72,7 @@ let
         ripgrep
       ];
 
-      formatter.conform = {
+      formatter.conform-nvim = {
         enable = true;
         presets = {
           jsonfmt.enable = true;
