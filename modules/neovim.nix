@@ -222,6 +222,8 @@ let
         (bindKey "t" "<esc><esc>" "<C-\\><C-n>" { desc = "Exit Terminal"; })
 
         (bindKey "n" "<leader>fz" ":Telescope zotero<CR>" { desc = "Find Zotero reference"; })
+
+        (bindKey "n" "<leader>tc<CR>" ":TSContext toggle" { desc = "Toggle TSContext"; })
       ]
       ++ mdTodos.keymaps;
 
