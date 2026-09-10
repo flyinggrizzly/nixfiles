@@ -48,6 +48,7 @@ in
       fzf
       tree
       exiftool
+      bat
 
       # Development tools
       libyaml.dev

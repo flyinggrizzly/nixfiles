@@ -214,6 +214,14 @@ let
               telescope-zotero-nvim
               sqlite-lua
             ];
+            setup.zotero.ft.quarto.locate_bib = lib.generators.mkLuaInline /* lua */ ''
+              function()
+                vim.notify("it's me")
+                local fpath = vim.fn.expand('%')
+                local dir = vim.fs.dirname(fname)
+                return dirname .. 'bibliography.bib'
+              end
+            '';
           }
         ];
       };
