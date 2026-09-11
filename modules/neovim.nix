@@ -32,10 +32,10 @@ let
   telescope-zotero-nvim = pkgs.vimUtils.buildVimPlugin {
     name = "telescope-zotero-nvim";
     src = pkgs.fetchFromGitHub {
-      owner = "jmbuhr";
+      owner = "flyinggrizzly";
       repo = "telescope-zotero.nvim";
-      rev = "376728bccfcbce95f59ef028d93bf0a33ee34bc2";
-      sha256 = "00y2mqx1dml46g5niasdzgwm4p1hswjm50kgcpq1ppzgdm6imcnd";
+      rev = "1a8dfaec7ec5783becbce5564a6f2586f39b7796";
+      sha256 = "0fzi52y7b4s696g1jwqzd4qrj6zhk4a5nai37z4673xfhrrvq4nh";
     };
     doCheck = false; # the require checks on telescope fail; it will be available in the runtime
   };
@@ -64,14 +64,8 @@ let
 
       theme = {
         enable = true;
-        name = "github";
-        style = "light_high_contrast";
-
-        # name = "catppuccin";
-        # style = "latte";
-
-        # name = "tokyonight";
-        # style = "night";
+        name = "everforest";
+        style = "medium";
       };
 
       lineNumberMode = "number";
@@ -98,7 +92,6 @@ let
         formatOnSave = false;
         lspkind.enable = false;
         lightbulb.enable = false;
-        lspsaga.enable = false;
         inlayHints.enable = true;
         otter-nvim = {
           enable = true;
@@ -129,6 +122,8 @@ let
           lsp.servers = [
             "ruby-lsp" # add rails extension
           ];
+          treesitter.enable = true;
+          format.enable = true;
         };
         typescript = {
           enable = true;
@@ -214,14 +209,6 @@ let
               telescope-zotero-nvim
               sqlite-lua
             ];
-            setup.zotero.ft.quarto.locate_bib = lib.generators.mkLuaInline /* lua */ ''
-              function()
-                vim.notify("it's me")
-                local fpath = vim.fn.expand('%')
-                local dir = vim.fs.dirname(fname)
-                return dirname .. 'bibliography.bib'
-              end
-            '';
           }
         ];
       };
