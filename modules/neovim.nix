@@ -52,6 +52,40 @@ let
 
   mdTodos = import ./neovim/md-todos.nix;
 
+  filetypeWithTextfileWordcount = lib.mkLuaInline /* lua */ ''
+    function()
+      local ext = "<ft:" .. vim.fs.ext(vim.fn.expand('%')) .. ">"
+
+      local function is_permitted_ft (tab)
+        for index, value in ipairs(tab) do
+          if value == vim.bo.filetype then
+            return true
+          end
+        end
+
+        return false
+      end
+
+      if not is_permitted_ft({
+        "markdown",
+        "quarto",
+        "text",
+      }) then
+         return ext
+      end
+
+      local function format_count(count)
+        return ext .. " WC:" .. count
+      end
+
+      if vim.fn.mode() == "v" or vim.fn.mode() == "V" or vim.fn.mode() == "" then
+        return format_count(vim.fn.wordcount().visual_words)
+      else
+        return format_count(vim.fn.wordcount().words)
+      end
+    end
+  '';
+
   nvfConfig = {
     config.vim = {
       viAlias = true;
@@ -180,6 +214,18 @@ let
 
       statusline.lualine = {
         enable = true;
+        setupOpts = {
+          sections = {
+            lualine_z = [
+              { "@1" = ""; draw_empty = true; separator = { left = ""; right = ""; }; }
+              [ "location" ]
+              [ filetypeWithTextfileWordcount ]
+            ];
+          };
+          inactive_sections = {
+            lualine_z = [ "fileformat" ];
+          };
+        };
       };
 
       git = (import ./neovim/git.nix).git;
