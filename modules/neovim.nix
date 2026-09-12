@@ -171,6 +171,9 @@ let
 
       autocomplete.blink-cmp = {
         enable = true;
+        mappings = {
+          confirm = "<C-y>";
+        };
         setupOpts = {
           sources = {
             default = [
