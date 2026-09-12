@@ -6,6 +6,8 @@
   ...
 }:
 let
+  inherit (pkgs.vimUtils) buildVimPlugin;
+  inherit (pkgs) fetchFromGitHub;
   inherit (pkgs.stdenv) isDarwin;
   addIf = condition: package: if condition then (lib.toList package) else [ ];
   addForDarwin = package: addIf isDarwin package;
@@ -33,9 +35,9 @@ let
     opts@{ desc, ... }:
     (bindKey mode key (luaFn functionBody) (opts // { lua = true; }));
 
-  telescope-zotero-nvim = pkgs.vimUtils.buildVimPlugin {
+  telescope-zotero-nvim = buildVimPlugin {
     name = "telescope-zotero-nvim";
-    src = pkgs.fetchFromGitHub {
+    src = fetchFromGitHub {
       owner = "flyinggrizzly";
       repo = "telescope-zotero.nvim";
       rev = "1a8dfaec7ec5783becbce5564a6f2586f39b7796";
@@ -44,13 +46,23 @@ let
     doCheck = false; # the require checks on telescope fail; it will be available in the runtime
   };
 
-  vim-heritage = pkgs.vimUtils.buildVimPlugin {
+  vim-heritage = buildVimPlugin {
     name = "vim-heritage";
-    src = pkgs.fetchFromGitHub {
+    src = fetchFromGitHub {
       owner = "jessarcher";
       repo = "vim-heritage";
       rev = "cffa05c78c0991c998adc4504d761b3068547db6";
       sha256 = "sha256-Lebe5V1XFxn4kSZ+ImZ69Vst9Nbc0N7eA9IzOCijFS0=";
+    };
+  };
+
+  markdown-plus-nvim = buildVimPlugin {
+    name = "markdown-plus.nvim";
+    src = fetchFromGitHub {
+      owner = "YousefHadder";
+      repo = "markdown-plus.nvim";
+      rev = "1d98f6d633b0bcdb5c55aedd705fcd6b67cc0ed8";
+      sha256 = "00kliyvismvnlsfabv8anpicr790krhz10brqinzrbkckm7sb75d";
     };
   };
 
@@ -378,6 +390,10 @@ let
           package = vim-ruby;
           lazy = true;
           ft = [ "ruby" ];
+        };
+        ${markdown-plus-nvim.name} = {
+          package = markdown-plus-nvim;
+          ft = [ "markdown" "quarto" ];
         };
       };
     };
