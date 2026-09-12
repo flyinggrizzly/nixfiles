@@ -202,6 +202,9 @@ let
         mappings = {
           findFiles = "<C-p>";
         };
+        setupOpts = {
+          defaults.path_display = [ "smart" ];
+        };
         extensions = [
           {
             name = "zotero";
