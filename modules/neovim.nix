@@ -6,6 +6,10 @@
   ...
 }:
 let
+  inherit (pkgs.stdenv) isDarwin;
+  addIf = condition: package: if condition then (lib.toList package) else [ ];
+  addForDarwin = package: addIf isDarwin package;
+
   bindKey =
     mode: key: action: opts:
     (
@@ -199,6 +203,7 @@ let
       };
 
       utility = {
+        images.img-clip.enable = true;
         motion.leap = {
           enable = true;
           mappings = {
@@ -389,6 +394,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    home.packages = [ configuredNeovim.neovim ];
+    home.packages = [ configuredNeovim.neovim ]
+      ++ addForDarwin pkgs.pngpaste;
   };
 }

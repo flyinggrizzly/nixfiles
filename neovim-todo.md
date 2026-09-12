@@ -1,1 +1,2 @@
 - [ ] check out navbuddy
+- [ ] get nix to self-close attrsets and add semicolon
