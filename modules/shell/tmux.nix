@@ -133,7 +133,7 @@ in
           root = "~/";
           windows = [
             (defaultTmuxWindow "main" "~/")
-            (defaultTmuxWindow "academics" "~/src/academics/")
+            (defaultTmuxWindow "academics" "~/academics/")
             (defaultTmuxWindow "blog" "~/flying-grizzly")
             { name = "tty"; }
             (defaultTmuxWindow "nixfiles" "~/nixfiles")

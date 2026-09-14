@@ -56,16 +56,6 @@ let
     };
   };
 
-  markdown-plus-nvim = buildVimPlugin {
-    name = "markdown-plus.nvim";
-    src = fetchFromGitHub {
-      owner = "YousefHadder";
-      repo = "markdown-plus.nvim";
-      rev = "1d98f6d633b0bcdb5c55aedd705fcd6b67cc0ed8";
-      sha256 = "00kliyvismvnlsfabv8anpicr790krhz10brqinzrbkckm7sb75d";
-    };
-  };
-
   mdTodos = import ./neovim/md-todos.nix;
 
   filetypeWithTextfileWordcount = lib.mkLuaInline /* lua */ ''
@@ -159,7 +149,16 @@ let
         bash.enable = true;
         css.enable = true;
         lua.enable = true;
-        markdown.enable = true;
+        markdown = {
+          enable = true;
+          treesitter.enable = true;
+          extensions.markview-nvim = {
+            enable = true;
+            setupOpts = {
+              latex.enable = true;
+            };
+          };
+        };
         nix = {
           enable = true;
           lsp.servers = [
@@ -313,6 +312,8 @@ let
         ++ mdTodos.keymaps;
 
       options = {
+        exrc = true;
+
         # Decrease delay before which-key opens
         timeoutlen = 300;
         encoding = "utf-8";
@@ -385,15 +386,16 @@ let
               default_method = "slime";
             };
           };
+          after = "require('quarto').setup()";
         };
         ${vim-ruby.pname} = {
           package = vim-ruby;
           lazy = true;
           ft = [ "ruby" ];
         };
-        ${markdown-plus-nvim.name} = {
-          package = markdown-plus-nvim;
-          ft = [ "markdown" "quarto" ];
+        ${vim-table-mode.pname} = {
+          package = vim-table-mode;
+          ft = [ "quarto" "markdown" ];
         };
       };
     };
