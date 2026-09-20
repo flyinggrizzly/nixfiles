@@ -107,6 +107,7 @@ let
         name = "everforest";
         style = "medium";
       };
+      opts.background = "light";
 
       lineNumberMode = "number";
 
@@ -307,9 +308,18 @@ let
 
         (bindKey "n" "<leader>fz" ":Telescope zotero<CR>" { desc = "Find Zotero reference"; })
 
-        (bindKey "n" "<leader>tc<CR>" ":TSContext toggle" { desc = "Toggle TSContext"; })
+        (bindKey "n" "<leader>tc<CR>" ":TSContext toggle<CR>" { desc = "Toggle TSContext"; })
+
+        (bindKey "n" "<leader>tT<CR>" ":TableModeToggle<CR>" { desc = "Toggle table mode"; })
+
+        (bindKey "n" "<leader>bl" ":set background=light<cr>" { desc = "Set light background"; })
+        (bindKey "n" "<leader>bd" ":set background=dark<cr>" { desc = "Set dark background"; })
       ]
         ++ mdTodos.keymaps;
+
+      globals = {
+        table_mode_disable_mappings = true;
+      };
 
       options = {
         exrc = true;

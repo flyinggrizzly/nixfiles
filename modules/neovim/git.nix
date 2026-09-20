@@ -1,7 +1,7 @@
 let
   bindToLeader = keys: "<leader>${keys}";
   bindHunkKey = key: bindToLeader "h${key}";
-  bindBlameKey = key: bindToLeader "b${key}";
+  bindGitKey = key: bindToLeader "g${key}";
 in
 {
   git = {
@@ -18,8 +18,8 @@ in
         stageBuffer = bindHunkKey "S";
         resetBuffer = bindHunkKey "R";
         previewHunk = bindHunkKey "p";
-        blameLine = bindBlameKey "l";
-        toggleBlame = bindToLeader "b";
+        blameLine = bindGitKey "b";
+        toggleBlame = bindGitKey "B";
         nextHunk = "]h";
         previousHunk = "[h";
       };
