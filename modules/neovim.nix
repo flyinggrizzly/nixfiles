@@ -153,12 +153,6 @@ let
         markdown = {
           enable = true;
           treesitter.enable = true;
-          extensions.markview-nvim = {
-            enable = true;
-            setupOpts = {
-              latex.enable = true;
-            };
-          };
         };
         nix = {
           enable = true;
