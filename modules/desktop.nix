@@ -42,6 +42,7 @@ in
       with pkgs;
       [
         logseq
+        openlogi
         zotero
         jdk25 # supports zotero-libreoffice plugin
         google-chrome
