@@ -134,6 +134,7 @@ in
           windows = [
             (defaultTmuxWindow "main" "~/")
             (defaultTmuxWindow "academics" "~/academics/")
+            (defaultTmuxWindow "reflection-log" "~/reflective-log/")
             (defaultTmuxWindow "blog" "~/flying-grizzly")
             { name = "tty"; }
             (defaultTmuxWindow "nixfiles" "~/nixfiles")
