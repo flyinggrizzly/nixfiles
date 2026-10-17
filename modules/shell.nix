@@ -2,12 +2,11 @@
   config,
   lib,
   pkgs,
-  tmuxinator-nix,
   helpers,
   ...
 }:
 let
-  inherit (lib) mkIf mkOption types;
+  inherit (lib) mkOption types;
 
   cfg = config.modules.shell;
   baseZshrc = builtins.readFile ../lib/zshrc;
@@ -26,7 +25,7 @@ in
     };
   };
 
-  imports = [ ./shell/tmux.nix ];
+  imports = [ ./shell/tmux.nix ./shell/pi.nix ];
 
   config = {
     home.packages = with pkgs; [
