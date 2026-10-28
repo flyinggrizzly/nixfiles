@@ -9,6 +9,7 @@ cask "keepingyouawake"
 cask "libreoffice"
 brew "nvm"
 cask "nordvpn"
+cask "openlogi"
 cask "pdf-expert"
 cask "tailscale"
 # TODO: Remove when nixpkg is fixed
